@@ -1,0 +1,44 @@
+{
+  "scope": "Finite sampled Gaussian centers and six approximate orthographic preview views per latent. The preview is not the upstream renderer or a ground-truth visual-quality evaluation.",
+  "case_count": 5,
+  "gaussians": 16384,
+  "level": 8,
+  "activation_kernel": "float",
+  "summary": {
+    "reference_other_seed": {
+      "median_case_mean_foreground_rgb_difference": 0.027960525548453297,
+      "worst_view_foreground_rgb_difference": 0.045231852927930485,
+      "median_case_mean_silhouette_overlap": 0.9902450905138708,
+      "median_mean_reference_center_distance": 0.0077340568844743085,
+      "median_voxel_overlap_32": 0.7237491190979564
+    },
+    "baseline": {
+      "median_case_mean_foreground_rgb_difference": 0.026367813802309542,
+      "worst_view_foreground_rgb_difference": 0.04798103788120625,
+      "median_case_mean_silhouette_overlap": 0.9904401968357116,
+      "median_mean_reference_center_distance": 0.007661199017938372,
+      "median_voxel_overlap_32": 0.7195035460992908
+    },
+    "priority16": {
+      "median_case_mean_foreground_rgb_difference": 0.02519600138887604,
+      "worst_view_foreground_rgb_difference": 0.04831367662045572,
+      "median_case_mean_silhouette_overlap": 0.9900363025805974,
+      "median_mean_reference_center_distance": 0.007825163101090054,
+      "median_voxel_overlap_32": 0.7225167903852951
+    },
+    "float_octree4": {
+      "median_case_mean_foreground_rgb_difference": 0.00385064850917092,
+      "worst_view_foreground_rgb_difference": 0.010896005419560558,
+      "median_case_mean_silhouette_overlap": 0.9985938249011047,
+      "median_mean_reference_center_distance": 0.0010025270174970763,
+      "median_voxel_overlap_32": 0.9541839007317849
+    },
+    "float_octree8": {
+      "median_case_mean_foreground_rgb_difference": 0.0010656485452052574,
+      "worst_view_foreground_rgb_difference": 0.0022173571566316656,
+      "median_case_mean_silhouette_overlap": 0.999835804842361,
+      "median_mean_reference_center_distance": 0.00024153430952458246,
+      "median_voxel_overlap_32": 0.987444309437019
+    }
+  }
+}

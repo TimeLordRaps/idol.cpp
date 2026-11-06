@@ -1,0 +1,20 @@
+{
+  "model_sha256": "131ab560a8646bf4cff5fe61b1dcb6ae564443df15081a9d1e722f8c6c24f711",
+  "components": {
+    "denoiser": {
+      "source_sha256": "ded2cacf671bf3978ebc62729087abdbd318ef4752e6805b4c9fc8ffa51fe716",
+      "count": 560,
+      "exact_dtype_and_values": true
+    },
+    "octree": {
+      "source_sha256": "9da4d7676bfcadb1c3fdfbff796e6257dadf82d26ec05be7717c79b2b13a1c4e",
+      "count": 60,
+      "exact_dtype_and_values": true
+    },
+    "background": {
+      "source_sha256": "44bbc97b041f879975d0d6d538b8e66a25eb04d1f49aab40697544cdd97eaa8e",
+      "count": 742,
+      "exact_dtype_and_values": true
+    }
+  }
+}

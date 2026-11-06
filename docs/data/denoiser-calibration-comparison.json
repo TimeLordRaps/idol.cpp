@@ -1,0 +1,93 @@
+{
+  "scope": "Development comparison of original-runtime versus quantized denoiser latents. Both calibration settings use the same three training images; Chelsea is a calibration image, while astronaut, lamp and axolotl are development images used in other experiments. Both compare the same original model, image encoders, image bytes, denoising seed and 50-step evaluation. Gaussian and octree decoders are not evaluated. Differences compare against the original latent, not ground-truth 3D.",
+  "metric": "Euclidean norm of candidate minus original latent divided by Euclidean norm of original latent; unitless. Smaller is closer to the original.",
+  "comparison_limit": "Calibration changes both sampling steps and tokens per forward, so differences cannot be attributed to step count alone. These inputs influenced development and are not a held-out release evaluation.",
+  "source_denoiser_sha256": "ded2cacf671bf3978ebc62729087abdbd318ef4752e6805b4c9fc8ffa51fe716",
+  "reference_model_sha256": "80707a85bcd4242453bd7a1ed390f5a8410efe8ab8812ad8327ef31863a9b483",
+  "image_sha256": {
+    "armchair": "8c30a0cbed2931aebb7ba5fe9082ccc87a01ab7c24ddf48faceb650921b5b29f",
+    "avocado": "b7dd1f8863bbca337bd71635ca8f5499cade479aa71faec5a136f13798a9d0ee",
+    "chelsea": "adbb6c59da5251983dfca65bd3d055e3d2cb9d49f85af5d473852a9033e42f24",
+    "astronaut": "b8c8afe36141c45dd06f55d257d6b951b4c77a1a2c31fe09e78452cdda2dfcd4",
+    "lamp": "184bb44d9abd5590b6b804877e6c32278387d40339150d96eca8a55c782f36d0",
+    "axolotl": "907d771e241396b47d364f3dd9382dc30d1ed4bb569618f148dac40d67c07fea"
+  },
+  "calibration": {
+    "earlier": {
+      "steps": 10,
+      "samples_per_forward": 64,
+      "hessians_sha256": "dbbbbe2baa27503e62afcc447e150502fb17f77f6473d669ac5a31177343e137"
+    },
+    "revised": {
+      "steps": 50,
+      "samples_per_forward": 16,
+      "hessians_sha256": "60ec0f58b55478ee5513a74a2cea0ea681c013ff24dd85ed158a67c66ea0dea9"
+    }
+  },
+  "variants": {
+    "q4_unweighted": {
+      "earlier_encoded_sha256": "9cb5607ff67359ecbb16c9e0bb9b0cfb27da2af7d0eb8bdc5bded86dd140831e",
+      "revised_encoded_sha256": "ae81345e31497b923ed4fb03afda65ac7d2f08dba09fb74decee095a3e0d27cd",
+      "earlier_fifty_step": {
+        "chelsea": 0.507491368136405,
+        "astronaut": 0.3158706199799691,
+        "lamp": 0.15055915228978828,
+        "axolotl": 0.32437329401015086
+      },
+      "revised_fifty_step": {
+        "chelsea": 0.5303359040571445,
+        "astronaut": 0.39555376707097634,
+        "lamp": 0.19144695854788574,
+        "axolotl": 0.28745690776729593
+      }
+    },
+    "q4_weighted": {
+      "earlier_encoded_sha256": "f9ae8b3ea5546afb0856e26abbbcf2990d69b1f3f5bcf28992f2515c95536a6f",
+      "revised_encoded_sha256": "1dcb0fb9f9a1f402d8a4bc656e580e050140655f453dd24aaa66174b56f5683f",
+      "earlier_fifty_step": {
+        "chelsea": 0.4095520568567961,
+        "astronaut": 0.39436387655785726,
+        "lamp": 0.16358076816534325,
+        "axolotl": 0.24561029554669792
+      },
+      "revised_fifty_step": {
+        "chelsea": 0.6803749226584993,
+        "astronaut": 0.3031172014981696,
+        "lamp": 0.21708441811458884,
+        "axolotl": 0.2477961301124387
+      }
+    },
+    "q6_unweighted": {
+      "earlier_encoded_sha256": "bb27318ad14f3660c2318a2f96fcc6ce6e12929daeef7329702fc88fd9497154",
+      "revised_encoded_sha256": "f279124ca064035374beff80805e6e4c2c55a04f66d8a3165f282f9ea571cb25",
+      "earlier_fifty_step": {
+        "chelsea": 0.19301657509948508,
+        "astronaut": 0.13729558045417675,
+        "lamp": 0.05683958516829924,
+        "axolotl": 0.11597517721171251
+      },
+      "revised_fifty_step": {
+        "chelsea": 0.23166103116945427,
+        "astronaut": 0.13809595344482573,
+        "lamp": 0.0638690493466257,
+        "axolotl": 0.14607493828360826
+      }
+    },
+    "q6_weighted": {
+      "earlier_encoded_sha256": "dde2d7139594dcd683b97d5ce6a642b8893a825b9ee1e5a47593d33b0183126d",
+      "revised_encoded_sha256": "7a99907dfc8603a4cdec2a6e7b812cc07edc758309449ad48b4e5d9634bee949",
+      "earlier_fifty_step": {
+        "chelsea": 0.4045446827513232,
+        "astronaut": 0.1700158240855388,
+        "lamp": 0.07210120642426136,
+        "axolotl": 0.11883504427508879
+      },
+      "revised_fifty_step": {
+        "chelsea": 0.16416069785397502,
+        "astronaut": 0.1612972136490152,
+        "lamp": 0.06416396580290297,
+        "axolotl": 0.135366592437061
+      }
+    }
+  }
+}

@@ -1,0 +1,2544 @@
+{
+ "points": [
+  {
+   "label": "mixed 3.481 bpw gptq",
+   "target_bpw": 3.5,
+   "actual_bpw": 3.4809772526186604,
+   "packed_bytes": 124890112,
+   "quantized_weights": 287023104,
+   "method": "gptq",
+   "plan": {
+    "4b/g64": 21,
+    "5b/g64": 4,
+    "3b/g32": 19,
+    "6b/g64": 3,
+    "2b/g32": 70,
+    "4b/g32": 2
+   },
+   "assignments": {
+    "oct.adaLN_modulation.1.weight": [
+     4,
+     64
+    ],
+    "oct.blocks.0.cross_attn.to_out.weight": [
+     5,
+     64
+    ],
+    "oct.blocks.0.cross_attn.to_q.weight": [
+     3,
+     32
+    ],
+    "oct.blocks.0.mlp.mlp.0.weight": [
+     4,
+     64
+    ],
+    "oct.blocks.0.mlp.mlp.2.weight": [
+     4,
+     64
+    ],
+    "oct.blocks.1.cross_attn.to_out.weight": [
+     6,
+     64
+    ],
+    "oct.blocks.1.cross_attn.to_q.weight": [
+     5,
+     64
+    ],
+    "oct.blocks.1.mlp.mlp.0.weight": [
+     4,
+     64
+    ],
+    "oct.blocks.1.mlp.mlp.2.weight": [
+     3,
+     32
+    ],
+    "oct.blocks.2.cross_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "oct.blocks.2.cross_attn.to_q.weight": [
+     3,
+     32
+    ],
+    "oct.blocks.2.mlp.mlp.0.weight": [
+     3,
+     32
+    ],
+    "oct.blocks.2.mlp.mlp.2.weight": [
+     3,
+     32
+    ],
+    "oct.blocks.3.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "oct.blocks.3.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "oct.blocks.3.mlp.mlp.0.weight": [
+     3,
+     32
+    ],
+    "oct.blocks.3.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "oct.input_layer.weight": [
+     6,
+     64
+    ],
+    "oct.l_embedder.mlp.0.weight": [
+     4,
+     64
+    ],
+    "oct.l_embedder.mlp.2.weight": [
+     4,
+     64
+    ],
+    "oct.out_proj.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.0.cross_attn.to_out.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.0.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.0.mlp.mlp.0.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.0.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.0.self_attn.to_out.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.0.self_attn.to_qkv.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.1.cross_attn.to_out.weight": [
+     4,
+     32
+    ],
+    "gs.blocks.1.cross_attn.to_q.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.1.mlp.mlp.0.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.1.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.1.self_attn.to_out.weight": [
+     4,
+     32
+    ],
+    "gs.blocks.1.self_attn.to_qkv.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.10.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.10.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.10.mlp.mlp.0.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.10.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.10.self_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.10.self_attn.to_qkv.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.11.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.11.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.11.mlp.mlp.0.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.11.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.11.self_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.11.self_attn.to_qkv.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.12.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.12.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.12.mlp.mlp.0.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.12.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.12.self_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.12.self_attn.to_qkv.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.13.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.13.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.13.mlp.mlp.0.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.13.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.13.self_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.13.self_attn.to_qkv.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.14.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.14.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.14.mlp.mlp.0.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.14.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.14.self_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.14.self_attn.to_qkv.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.15.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.15.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.15.mlp.mlp.0.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.15.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.15.self_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.15.self_attn.to_qkv.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.2.cross_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.2.cross_attn.to_q.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.2.mlp.mlp.0.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.2.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.2.self_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.2.self_attn.to_qkv.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.3.cross_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.3.cross_attn.to_q.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.3.mlp.mlp.0.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.3.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.3.self_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.3.self_attn.to_qkv.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.4.cross_attn.to_out.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.4.cross_attn.to_q.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.4.mlp.mlp.0.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.4.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.4.self_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.4.self_attn.to_qkv.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.5.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.5.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.5.mlp.mlp.0.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.5.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.5.self_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.5.self_attn.to_qkv.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.6.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.6.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.6.mlp.mlp.0.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.6.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.6.self_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.6.self_attn.to_qkv.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.7.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.7.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.7.mlp.mlp.0.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.7.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.7.self_attn.to_out.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.7.self_attn.to_qkv.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.8.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.8.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.8.mlp.mlp.0.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.8.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.8.self_attn.to_out.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.8.self_attn.to_qkv.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.9.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.9.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.9.mlp.mlp.0.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.9.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.9.self_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.9.self_attn.to_qkv.weight": [
+     2,
+     32
+    ],
+    "gs.input_layer.weight": [
+     5,
+     64
+    ],
+    "gs.out_proj.weight": [
+     4,
+     64
+    ]
+   },
+   "cases_count": 6,
+   "oct_rel": 0.09998762,
+   "gs_rel": 0.10237929500000001,
+   "oct_rel_max": 0.1284007,
+   "gs_rel_max": 0.1265843,
+   "oct_s": 1.42,
+   "gs_s": 12.8035,
+   "resident_mb": 128.59,
+   "peak_mb": 375.4,
+   "pos": 0.00174259,
+   "col": 0.101937505,
+   "opa": 0.03521624,
+   "lsc": 0.16615010000000002
+  },
+  {
+   "label": "mixed 3.988 bpw gptq",
+   "target_bpw": 4.0,
+   "actual_bpw": 3.987869966035905,
+   "packed_bytes": 143076352,
+   "quantized_weights": 287023104,
+   "method": "gptq",
+   "plan": {
+    "4b/g64": 31,
+    "6b/g64": 7,
+    "5b/g64": 18,
+    "8b/g64": 2,
+    "2b/g32": 49,
+    "3b/g32": 12
+   },
+   "assignments": {
+    "oct.adaLN_modulation.1.weight": [
+     4,
+     64
+    ],
+    "oct.blocks.0.cross_attn.to_out.weight": [
+     6,
+     64
+    ],
+    "oct.blocks.0.cross_attn.to_q.weight": [
+     4,
+     64
+    ],
+    "oct.blocks.0.mlp.mlp.0.weight": [
+     5,
+     64
+    ],
+    "oct.blocks.0.mlp.mlp.2.weight": [
+     4,
+     64
+    ],
+    "oct.blocks.1.cross_attn.to_out.weight": [
+     8,
+     64
+    ],
+    "oct.blocks.1.cross_attn.to_q.weight": [
+     6,
+     64
+    ],
+    "oct.blocks.1.mlp.mlp.0.weight": [
+     4,
+     64
+    ],
+    "oct.blocks.1.mlp.mlp.2.weight": [
+     4,
+     64
+    ],
+    "oct.blocks.2.cross_attn.to_out.weight": [
+     5,
+     64
+    ],
+    "oct.blocks.2.cross_attn.to_q.weight": [
+     4,
+     64
+    ],
+    "oct.blocks.2.mlp.mlp.0.weight": [
+     4,
+     64
+    ],
+    "oct.blocks.2.mlp.mlp.2.weight": [
+     4,
+     64
+    ],
+    "oct.blocks.3.cross_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "oct.blocks.3.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "oct.blocks.3.mlp.mlp.0.weight": [
+     4,
+     64
+    ],
+    "oct.blocks.3.mlp.mlp.2.weight": [
+     3,
+     32
+    ],
+    "oct.input_layer.weight": [
+     6,
+     64
+    ],
+    "oct.l_embedder.mlp.0.weight": [
+     5,
+     64
+    ],
+    "oct.l_embedder.mlp.2.weight": [
+     4,
+     64
+    ],
+    "oct.out_proj.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.0.cross_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.0.cross_attn.to_q.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.0.mlp.mlp.0.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.0.mlp.mlp.2.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.0.self_attn.to_out.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.0.self_attn.to_qkv.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.1.cross_attn.to_out.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.1.cross_attn.to_q.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.1.mlp.mlp.0.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.1.mlp.mlp.2.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.1.self_attn.to_out.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.1.self_attn.to_qkv.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.10.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.10.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.10.mlp.mlp.0.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.10.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.10.self_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.10.self_attn.to_qkv.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.11.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.11.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.11.mlp.mlp.0.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.11.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.11.self_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.11.self_attn.to_qkv.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.12.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.12.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.12.mlp.mlp.0.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.12.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.12.self_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.12.self_attn.to_qkv.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.13.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.13.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.13.mlp.mlp.0.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.13.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.13.self_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.13.self_attn.to_qkv.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.14.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.14.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.14.mlp.mlp.0.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.14.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.14.self_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.14.self_attn.to_qkv.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.15.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.15.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.15.mlp.mlp.0.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.15.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.15.self_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.15.self_attn.to_qkv.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.2.cross_attn.to_out.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.2.cross_attn.to_q.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.2.mlp.mlp.0.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.2.mlp.mlp.2.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.2.self_attn.to_out.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.2.self_attn.to_qkv.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.3.cross_attn.to_out.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.3.cross_attn.to_q.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.3.mlp.mlp.0.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.3.mlp.mlp.2.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.3.self_attn.to_out.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.3.self_attn.to_qkv.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.4.cross_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.4.cross_attn.to_q.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.4.mlp.mlp.0.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.4.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.4.self_attn.to_out.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.4.self_attn.to_qkv.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.5.cross_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.5.cross_attn.to_q.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.5.mlp.mlp.0.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.5.mlp.mlp.2.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.5.self_attn.to_out.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.5.self_attn.to_qkv.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.6.cross_attn.to_out.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.6.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.6.mlp.mlp.0.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.6.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.6.self_attn.to_out.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.6.self_attn.to_qkv.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.7.cross_attn.to_out.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.7.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.7.mlp.mlp.0.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.7.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.7.self_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.7.self_attn.to_qkv.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.8.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.8.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.8.mlp.mlp.0.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.8.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.8.self_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.8.self_attn.to_qkv.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.9.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.9.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.9.mlp.mlp.0.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.9.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.9.self_attn.to_out.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.9.self_attn.to_qkv.weight": [
+     3,
+     32
+    ],
+    "gs.input_layer.weight": [
+     6,
+     64
+    ],
+    "gs.out_proj.weight": [
+     5,
+     64
+    ]
+   },
+   "cases_count": 6,
+   "oct_rel": 0.073682445,
+   "gs_rel": 0.07807206,
+   "oct_rel_max": 0.09457721,
+   "gs_rel_max": 0.1052569,
+   "oct_s": 1.513,
+   "gs_s": 13.0225,
+   "resident_mb": 146.77,
+   "peak_mb": 393.6,
+   "pos": 0.0013369394999999998,
+   "col": 0.08050937999999999,
+   "opa": 0.027865135,
+   "lsc": 0.1201386
+  },
+  {
+   "label": "mixed 4.499 bpw gptq",
+   "target_bpw": 4.5,
+   "actual_bpw": 4.499329280474926,
+   "packed_bytes": 161426432,
+   "quantized_weights": 287023104,
+   "method": "gptq",
+   "plan": {
+    "5b/g64": 30,
+    "6b/g64": 13,
+    "8b/g64": 6,
+    "4b/g64": 20,
+    "3b/g32": 9,
+    "2b/g32": 41
+   },
+   "assignments": {
+    "oct.adaLN_modulation.1.weight": [
+     5,
+     64
+    ],
+    "oct.blocks.0.cross_attn.to_out.weight": [
+     6,
+     64
+    ],
+    "oct.blocks.0.cross_attn.to_q.weight": [
+     5,
+     64
+    ],
+    "oct.blocks.0.mlp.mlp.0.weight": [
+     5,
+     64
+    ],
+    "oct.blocks.0.mlp.mlp.2.weight": [
+     5,
+     64
+    ],
+    "oct.blocks.1.cross_attn.to_out.weight": [
+     8,
+     64
+    ],
+    "oct.blocks.1.cross_attn.to_q.weight": [
+     6,
+     64
+    ],
+    "oct.blocks.1.mlp.mlp.0.weight": [
+     5,
+     64
+    ],
+    "oct.blocks.1.mlp.mlp.2.weight": [
+     5,
+     64
+    ],
+    "oct.blocks.2.cross_attn.to_out.weight": [
+     6,
+     64
+    ],
+    "oct.blocks.2.cross_attn.to_q.weight": [
+     5,
+     64
+    ],
+    "oct.blocks.2.mlp.mlp.0.weight": [
+     5,
+     64
+    ],
+    "oct.blocks.2.mlp.mlp.2.weight": [
+     4,
+     64
+    ],
+    "oct.blocks.3.cross_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "oct.blocks.3.cross_attn.to_q.weight": [
+     3,
+     32
+    ],
+    "oct.blocks.3.mlp.mlp.0.weight": [
+     5,
+     64
+    ],
+    "oct.blocks.3.mlp.mlp.2.weight": [
+     4,
+     64
+    ],
+    "oct.input_layer.weight": [
+     8,
+     64
+    ],
+    "oct.l_embedder.mlp.0.weight": [
+     5,
+     64
+    ],
+    "oct.l_embedder.mlp.2.weight": [
+     5,
+     64
+    ],
+    "oct.out_proj.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.0.cross_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.0.cross_attn.to_q.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.0.mlp.mlp.0.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.0.mlp.mlp.2.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.0.self_attn.to_out.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.0.self_attn.to_qkv.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.1.cross_attn.to_out.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.1.cross_attn.to_q.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.1.mlp.mlp.0.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.1.mlp.mlp.2.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.1.self_attn.to_out.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.1.self_attn.to_qkv.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.10.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.10.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.10.mlp.mlp.0.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.10.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.10.self_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.10.self_attn.to_qkv.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.11.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.11.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.11.mlp.mlp.0.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.11.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.11.self_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.11.self_attn.to_qkv.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.12.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.12.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.12.mlp.mlp.0.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.12.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.12.self_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.12.self_attn.to_qkv.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.13.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.13.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.13.mlp.mlp.0.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.13.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.13.self_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.13.self_attn.to_qkv.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.14.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.14.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.14.mlp.mlp.0.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.14.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.14.self_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.14.self_attn.to_qkv.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.15.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.15.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.15.mlp.mlp.0.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.15.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.15.self_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.15.self_attn.to_qkv.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.2.cross_attn.to_out.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.2.cross_attn.to_q.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.2.mlp.mlp.0.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.2.mlp.mlp.2.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.2.self_attn.to_out.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.2.self_attn.to_qkv.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.3.cross_attn.to_out.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.3.cross_attn.to_q.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.3.mlp.mlp.0.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.3.mlp.mlp.2.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.3.self_attn.to_out.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.3.self_attn.to_qkv.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.4.cross_attn.to_out.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.4.cross_attn.to_q.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.4.mlp.mlp.0.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.4.mlp.mlp.2.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.4.self_attn.to_out.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.4.self_attn.to_qkv.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.5.cross_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.5.cross_attn.to_q.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.5.mlp.mlp.0.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.5.mlp.mlp.2.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.5.self_attn.to_out.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.5.self_attn.to_qkv.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.6.cross_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.6.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.6.mlp.mlp.0.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.6.mlp.mlp.2.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.6.self_attn.to_out.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.6.self_attn.to_qkv.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.7.cross_attn.to_out.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.7.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.7.mlp.mlp.0.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.7.mlp.mlp.2.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.7.self_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.7.self_attn.to_qkv.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.8.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.8.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.8.mlp.mlp.0.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.8.mlp.mlp.2.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.8.self_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.8.self_attn.to_qkv.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.9.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.9.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.9.mlp.mlp.0.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.9.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.9.self_attn.to_out.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.9.self_attn.to_qkv.weight": [
+     4,
+     64
+    ],
+    "gs.input_layer.weight": [
+     8,
+     64
+    ],
+    "gs.out_proj.weight": [
+     5,
+     64
+    ]
+   },
+   "cases_count": 6,
+   "oct_rel": 0.03182354,
+   "gs_rel": 0.059051405,
+   "oct_rel_max": 0.03734911,
+   "gs_rel_max": 0.08248445,
+   "oct_s": 1.4535,
+   "gs_s": 6.9345,
+   "resident_mb": 165.12,
+   "peak_mb": 412.1,
+   "pos": 0.0009997856,
+   "col": 0.055526315,
+   "opa": 0.021702545,
+   "lsc": 0.096679515
+  },
+  {
+   "label": "mixed 4.989 bpw gptq",
+   "target_bpw": 5.0,
+   "actual_bpw": 4.988754744983874,
+   "packed_bytes": 178985984,
+   "quantized_weights": 287023104,
+   "method": "gptq",
+   "plan": {
+    "5b/g64": 25,
+    "8b/g64": 9,
+    "6b/g64": 25,
+    "4b/g64": 15,
+    "4b/g32": 4,
+    "2b/g32": 25,
+    "3b/g32": 16
+   },
+   "assignments": {
+    "oct.adaLN_modulation.1.weight": [
+     5,
+     64
+    ],
+    "oct.blocks.0.cross_attn.to_out.weight": [
+     8,
+     64
+    ],
+    "oct.blocks.0.cross_attn.to_q.weight": [
+     5,
+     64
+    ],
+    "oct.blocks.0.mlp.mlp.0.weight": [
+     6,
+     64
+    ],
+    "oct.blocks.0.mlp.mlp.2.weight": [
+     6,
+     64
+    ],
+    "oct.blocks.1.cross_attn.to_out.weight": [
+     8,
+     64
+    ],
+    "oct.blocks.1.cross_attn.to_q.weight": [
+     8,
+     64
+    ],
+    "oct.blocks.1.mlp.mlp.0.weight": [
+     6,
+     64
+    ],
+    "oct.blocks.1.mlp.mlp.2.weight": [
+     5,
+     64
+    ],
+    "oct.blocks.2.cross_attn.to_out.weight": [
+     6,
+     64
+    ],
+    "oct.blocks.2.cross_attn.to_q.weight": [
+     5,
+     64
+    ],
+    "oct.blocks.2.mlp.mlp.0.weight": [
+     6,
+     64
+    ],
+    "oct.blocks.2.mlp.mlp.2.weight": [
+     5,
+     64
+    ],
+    "oct.blocks.3.cross_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "oct.blocks.3.cross_attn.to_q.weight": [
+     4,
+     64
+    ],
+    "oct.blocks.3.mlp.mlp.0.weight": [
+     5,
+     64
+    ],
+    "oct.blocks.3.mlp.mlp.2.weight": [
+     4,
+     32
+    ],
+    "oct.input_layer.weight": [
+     8,
+     64
+    ],
+    "oct.l_embedder.mlp.0.weight": [
+     5,
+     64
+    ],
+    "oct.l_embedder.mlp.2.weight": [
+     5,
+     64
+    ],
+    "oct.out_proj.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.0.cross_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.0.cross_attn.to_q.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.0.mlp.mlp.0.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.0.mlp.mlp.2.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.0.self_attn.to_out.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.0.self_attn.to_qkv.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.1.cross_attn.to_out.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.1.cross_attn.to_q.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.1.mlp.mlp.0.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.1.mlp.mlp.2.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.1.self_attn.to_out.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.1.self_attn.to_qkv.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.10.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.10.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.10.mlp.mlp.0.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.10.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.10.self_attn.to_out.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.10.self_attn.to_qkv.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.11.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.11.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.11.mlp.mlp.0.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.11.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.11.self_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.11.self_attn.to_qkv.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.12.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.12.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.12.mlp.mlp.0.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.12.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.12.self_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.12.self_attn.to_qkv.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.13.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.13.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.13.mlp.mlp.0.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.13.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.13.self_attn.to_out.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.13.self_attn.to_qkv.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.14.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.14.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.14.mlp.mlp.0.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.14.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.14.self_attn.to_out.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.14.self_attn.to_qkv.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.15.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.15.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.15.mlp.mlp.0.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.15.mlp.mlp.2.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.15.self_attn.to_out.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.15.self_attn.to_qkv.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.2.cross_attn.to_out.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.2.cross_attn.to_q.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.2.mlp.mlp.0.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.2.mlp.mlp.2.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.2.self_attn.to_out.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.2.self_attn.to_qkv.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.3.cross_attn.to_out.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.3.cross_attn.to_q.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.3.mlp.mlp.0.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.3.mlp.mlp.2.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.3.self_attn.to_out.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.3.self_attn.to_qkv.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.4.cross_attn.to_out.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.4.cross_attn.to_q.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.4.mlp.mlp.0.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.4.mlp.mlp.2.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.4.self_attn.to_out.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.4.self_attn.to_qkv.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.5.cross_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.5.cross_attn.to_q.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.5.mlp.mlp.0.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.5.mlp.mlp.2.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.5.self_attn.to_out.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.5.self_attn.to_qkv.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.6.cross_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.6.cross_attn.to_q.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.6.mlp.mlp.0.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.6.mlp.mlp.2.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.6.self_attn.to_out.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.6.self_attn.to_qkv.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.7.cross_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.7.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.7.mlp.mlp.0.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.7.mlp.mlp.2.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.7.self_attn.to_out.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.7.self_attn.to_qkv.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.8.cross_attn.to_out.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.8.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.8.mlp.mlp.0.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.8.mlp.mlp.2.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.8.self_attn.to_out.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.8.self_attn.to_qkv.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.9.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.9.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.9.mlp.mlp.0.weight": [
+     4,
+     32
+    ],
+    "gs.blocks.9.mlp.mlp.2.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.9.self_attn.to_out.weight": [
+     4,
+     32
+    ],
+    "gs.blocks.9.self_attn.to_qkv.weight": [
+     4,
+     32
+    ],
+    "gs.input_layer.weight": [
+     8,
+     64
+    ],
+    "gs.out_proj.weight": [
+     6,
+     64
+    ]
+   },
+   "cases_count": 6,
+   "oct_rel": 0.023315545,
+   "gs_rel": 0.037263085,
+   "oct_rel_max": 0.02710061,
+   "gs_rel_max": 0.04589143,
+   "oct_s": 1.4725,
+   "gs_s": 12.1585,
+   "resident_mb": 182.68,
+   "peak_mb": 429.7,
+   "pos": 0.0006634838499999999,
+   "col": 0.036660445,
+   "opa": 0.0122646465,
+   "lsc": 0.065517585
+  },
+  {
+   "label": "mixed 5.988 bpw gptq",
+   "target_bpw": 6.0,
+   "actual_bpw": 5.9876987184975885,
+   "packed_bytes": 214825984,
+   "quantized_weights": 287023104,
+   "method": "gptq",
+   "plan": {
+    "6b/g64": 29,
+    "8b/g64": 32,
+    "5b/g64": 13,
+    "4b/g64": 25,
+    "2b/g32": 14,
+    "3b/g32": 6
+   },
+   "assignments": {
+    "oct.adaLN_modulation.1.weight": [
+     6,
+     64
+    ],
+    "oct.blocks.0.cross_attn.to_out.weight": [
+     8,
+     64
+    ],
+    "oct.blocks.0.cross_attn.to_q.weight": [
+     6,
+     64
+    ],
+    "oct.blocks.0.mlp.mlp.0.weight": [
+     8,
+     64
+    ],
+    "oct.blocks.0.mlp.mlp.2.weight": [
+     8,
+     64
+    ],
+    "oct.blocks.1.cross_attn.to_out.weight": [
+     8,
+     64
+    ],
+    "oct.blocks.1.cross_attn.to_q.weight": [
+     8,
+     64
+    ],
+    "oct.blocks.1.mlp.mlp.0.weight": [
+     8,
+     64
+    ],
+    "oct.blocks.1.mlp.mlp.2.weight": [
+     6,
+     64
+    ],
+    "oct.blocks.2.cross_attn.to_out.weight": [
+     8,
+     64
+    ],
+    "oct.blocks.2.cross_attn.to_q.weight": [
+     6,
+     64
+    ],
+    "oct.blocks.2.mlp.mlp.0.weight": [
+     6,
+     64
+    ],
+    "oct.blocks.2.mlp.mlp.2.weight": [
+     6,
+     64
+    ],
+    "oct.blocks.3.cross_attn.to_out.weight": [
+     5,
+     64
+    ],
+    "oct.blocks.3.cross_attn.to_q.weight": [
+     5,
+     64
+    ],
+    "oct.blocks.3.mlp.mlp.0.weight": [
+     6,
+     64
+    ],
+    "oct.blocks.3.mlp.mlp.2.weight": [
+     5,
+     64
+    ],
+    "oct.input_layer.weight": [
+     8,
+     64
+    ],
+    "oct.l_embedder.mlp.0.weight": [
+     5,
+     64
+    ],
+    "oct.l_embedder.mlp.2.weight": [
+     6,
+     64
+    ],
+    "oct.out_proj.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.0.cross_attn.to_out.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.0.cross_attn.to_q.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.0.mlp.mlp.0.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.0.mlp.mlp.2.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.0.self_attn.to_out.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.0.self_attn.to_qkv.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.1.cross_attn.to_out.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.1.cross_attn.to_q.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.1.mlp.mlp.0.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.1.mlp.mlp.2.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.1.self_attn.to_out.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.1.self_attn.to_qkv.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.10.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.10.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.10.mlp.mlp.0.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.10.mlp.mlp.2.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.10.self_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.10.self_attn.to_qkv.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.11.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.11.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.11.mlp.mlp.0.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.11.mlp.mlp.2.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.11.self_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.11.self_attn.to_qkv.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.12.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.12.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.12.mlp.mlp.0.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.12.mlp.mlp.2.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.12.self_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.12.self_attn.to_qkv.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.13.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.13.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.13.mlp.mlp.0.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.13.mlp.mlp.2.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.13.self_attn.to_out.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.13.self_attn.to_qkv.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.14.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.14.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.14.mlp.mlp.0.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.14.mlp.mlp.2.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.14.self_attn.to_out.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.14.self_attn.to_qkv.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.15.cross_attn.to_out.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.15.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.15.mlp.mlp.0.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.15.mlp.mlp.2.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.15.self_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.15.self_attn.to_qkv.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.2.cross_attn.to_out.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.2.cross_attn.to_q.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.2.mlp.mlp.0.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.2.mlp.mlp.2.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.2.self_attn.to_out.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.2.self_attn.to_qkv.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.3.cross_attn.to_out.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.3.cross_attn.to_q.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.3.mlp.mlp.0.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.3.mlp.mlp.2.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.3.self_attn.to_out.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.3.self_attn.to_qkv.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.4.cross_attn.to_out.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.4.cross_attn.to_q.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.4.mlp.mlp.0.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.4.mlp.mlp.2.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.4.self_attn.to_out.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.4.self_attn.to_qkv.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.5.cross_attn.to_out.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.5.cross_attn.to_q.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.5.mlp.mlp.0.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.5.mlp.mlp.2.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.5.self_attn.to_out.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.5.self_attn.to_qkv.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.6.cross_attn.to_out.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.6.cross_attn.to_q.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.6.mlp.mlp.0.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.6.mlp.mlp.2.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.6.self_attn.to_out.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.6.self_attn.to_qkv.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.7.cross_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.7.cross_attn.to_q.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.7.mlp.mlp.0.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.7.mlp.mlp.2.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.7.self_attn.to_out.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.7.self_attn.to_qkv.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.8.cross_attn.to_out.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.8.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.8.mlp.mlp.0.weight": [
+     6,
+     64
+    ],
+    "gs.blocks.8.mlp.mlp.2.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.8.self_attn.to_out.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.8.self_attn.to_qkv.weight": [
+     8,
+     64
+    ],
+    "gs.blocks.9.cross_attn.to_out.weight": [
+     3,
+     32
+    ],
+    "gs.blocks.9.cross_attn.to_q.weight": [
+     2,
+     32
+    ],
+    "gs.blocks.9.mlp.mlp.0.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.9.mlp.mlp.2.weight": [
+     4,
+     64
+    ],
+    "gs.blocks.9.self_attn.to_out.weight": [
+     5,
+     64
+    ],
+    "gs.blocks.9.self_attn.to_qkv.weight": [
+     6,
+     64
+    ],
+    "gs.input_layer.weight": [
+     8,
+     64
+    ],
+    "gs.out_proj.weight": [
+     8,
+     64
+    ]
+   },
+   "cases_count": 6,
+   "oct_rel": 0.011505635,
+   "gs_rel": 0.015226665,
+   "oct_rel_max": 0.01346052,
+   "gs_rel_max": 0.03870916,
+   "oct_s": 1.443,
+   "gs_s": 7.1085,
+   "resident_mb": 218.52,
+   "peak_mb": 465.4,
+   "pos": 0.0002876003,
+   "col": 0.016668219999999997,
+   "opa": 0.004968126,
+   "lsc": 0.030285899999999998
+  }
+ ],
+ "unattainable_targets": [
+  2.5,
+  3.0
+ ]
+}

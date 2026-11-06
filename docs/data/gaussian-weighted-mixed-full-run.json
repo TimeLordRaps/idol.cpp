@@ -1,0 +1,19 @@
+{
+  "scope": "One 50-step complete image-to-Gaussian-point-cloud run on one development photograph, original gated image encoders, staged models and graphics-device decoder. The executable imported its Python dependencies before timing began. This is a single measurement, not a latency distribution or a real-time claim.",
+  "precision": "Original runtime denoiser and octree; weighted covariance mixed two-/four-bit Gaussian matrices; other components preserved.",
+  "model_sha256": "ed8c6285a3e4aaf17f7b1bce68f2e1a58a981701cd7dc718d6bd63425eac4788",
+  "model_bytes": 1527204384,
+  "input_image_sha256": "adbb6c59da5251983dfca65bd3d055e3d2cb9d49f85af5d473852a9033e42f24",
+  "seed": 42,
+  "sampling_steps": 50,
+  "gaussian_points": 262144,
+  "latent_sha256": "d8abb278742517634fbc275eca1e7fd2b9164b01ed29a51fbb1f10dffa5be178",
+  "latent_equals_original_pipeline": true,
+  "point_cloud_sha256": "9b7d4f2e9677e204046bc162018f763a96d41c2c06855f2514aa8f45ad72cd3d",
+  "point_cloud_equals_expanded_experiment": true,
+  "elapsed_seconds": 49.85913559999608,
+  "pytorch_peak_allocated_bytes": 3556051968,
+  "pytorch_peak_reserved_bytes": 4617928704,
+  "environment": "Windows; NVIDIA GeForce RTX 4090; PyTorch 2.10.0+cu128; local incompatible xFormers disabled.",
+  "limits": "PyTorch memory counters do not measure total system graphics memory or host memory. One photo and one seed do not establish general fidelity; this does not compare with ground-truth 3D."
+}

@@ -1,0 +1,89 @@
+{
+  "model_sha256": "1f6875979bac8c8aecacf0c698662b7c63ff54ae1b6d7c06755297a05607e983",
+  "input_sha256": "907d771e241396b47d364f3dd9382dc30d1ed4bb569618f148dac40d67c07fea",
+  "point_cloud_sha256": "ed96f3101c311b3debe8ef3a1ec8dd51a189d441d3d140e0e5bfe563538607a9",
+  "point_cloud_bytes": 17826208,
+  "point_count": 262144,
+  "all_float_point_properties_finite": true,
+  "load_inclusive_http_seconds": 58.29472886700023,
+  "torch": "2.10.0+cu128",
+  "cuda": "12.8",
+  "gpu": "NVIDIA GeForce RTX 4090",
+  "package_versions": {
+    "torch": "2.10.0+cu128",
+    "triton": "3.6.0",
+    "transformers": "4.57.6",
+    "diffusers": "0.36.0",
+    "gradio": "5.49.1",
+    "numpy": "2.3.5",
+    "scipy": "1.18.1",
+    "trimesh": "5.2.0",
+    "rtree": "1.4.1",
+    "huggingface_hub": "0.36.2",
+    "tensordict": "0.8.3"
+  },
+  "runtime_sha256": {
+    "idol_encoder_gguf.py": "2959223b744131f555861873f1b39a722ebaa00d81707c1e968f6bca5801895c",
+    "idol_session.py": "3ac203165f46cfaee879d9232b1c8a610dabec4c66f5f443054502e4b46d0a9f",
+    "idol_triton.py": "1e9c78d48da62bfcd8dbfbe4ab389e20e30d56edbe24d6de4d2fbca302d3744a",
+    "idol_server.py": "53d4ee0b557699dcf1aeed24df2ae932d3bb9a07586e033cbc53e457bfa413d3",
+    "idol_generate.py": "6d27a27a5e0d0cf03c58be5246c9a6f0a1823b92302fa8c5e3e38afe54ce95d7",
+    "idol_packed.py": "5f16197339272294f801a1d3ec8fb3894d45a2e29b4b66b14ce9adb95bb88b82",
+    "idol_image.py": "b61ea0120762717e90e442eb1d2d857965a8789a95c59d0290e26915752d0271",
+    "idol_gguf.py": "7d7c2e472c3470f822b7c1fff50d4a63547728100c74fab21e402d9121d400ce",
+    "idol_mesh_tools.py": "e85d0a071f23f7bb3b820bf784b46714004cbee784b001372ab14af1b78f051d"
+  },
+  "encoder_parameter_dtypes": {
+    "dinov3": {
+      "torch.bfloat16": 615
+    },
+    "flux2_autoencoder": {
+      "torch.bfloat16": 248
+    }
+  },
+  "mesh_sha256": "9f1dd688f3324d4d3d550fca589dc9d99260ba1dffa7ae2b72ed0f70e00fa327",
+  "mesh_triangles": 80660,
+  "saved_cloud_mesh_sha256": "9f1dd688f3324d4d3d550fca589dc9d99260ba1dffa7ae2b72ed0f70e00fa327",
+  "saved_cloud_mesh_triangles": 80660,
+  "native_mesh_executable_sha256": "33b511dbaab32e4bc0bc1ab3b7ee491bd02327c75a0d03db14f29967974f933c",
+  "peak_pytorch_allocated_bytes": 3511637504,
+  "peak_linux_process_resident_bytes": 7375101952,
+  "pip_check": "No broken requirements found.",
+  "memory_scope": "PyTorch allocation excludes reserved unused memory, graphics context and other processes. Linux maximum resident set is this process only; it is not total Windows or Docker memory.",
+  "status": "REAL_RECONSTRUCTION_AND_MESH_API_PASSED",
+  "image_id": "sha256:d57169f88efc5ab5ded6789c8ca64b84e221cbd83dab130ebbf54ff47a28ddaa",
+  "image_size_bytes": 13600095656,
+  "dockerfile_sha256": "05e372ac7960352bd706e4d6c099d92b2a56e4a3e6d8349287eba6ef4dcf0ab5",
+  "probe_sha256": "aee7db0cc06447047b95aaafecfdae826b8ceb2b68446d215d1be5db01e1281c",
+  "scope": "Fresh Dockerfile build using cached intermediate stages; exported image was audited and executed with an isolated virtual environment. Released model and original separately gated encoder files were read-only mounts. One real 50-step, seed-42 image-to-3D request was followed by mesh API checks. Host packages and source were not mounted.",
+  "excluded": "Prompt image generation, network downloads, other GPUs, and an empty-cache rebuild were not tested by this receipt. Later changes to the build context change the image coordinate.",
+  "settings": {
+    "steps": 50,
+    "seed": 42,
+    "gaussians": 262144,
+    "mode": "real",
+    "container_cpu_limit": 4,
+    "container_memory_limit_gib": 12
+  },
+  "package_integrity": {
+    "status": "PASS",
+    "packages": 97,
+    "hashed_files": 31144,
+    "unhashed_record_entries": 13546,
+    "checker_sha256": "41fe9323270e54082e99e7d7d03d0fe5402eae8ff2486ccfb35abc6c0f08f884",
+    "scope": "Host-mounted checker compared installed files against package installation records and imported runtime components; package records themselves are not authenticated."
+  },
+  "mesh_self_comparison_symmetric_mean_distance": 2.1032098861435096e-08,
+  "browser_validation": {
+    "scope": "Separate test against the same image, using headless Chromium and a real model; no inference replay.",
+    "status": "REAL_BROWSER_RECONSTRUCTION_AND_MESH_PASSED",
+    "real_browser_reconstruction_seconds": 30.39099999999962,
+    "saved_cloud_mesh": true,
+    "reference_comparison": true,
+    "new_reconstruction_clears_previous_mesh": true,
+    "new_mesh_uses_current_cloud": true,
+    "page_errors": [],
+    "screenshot": "CAPTURED",
+    "limitation": "A prior headless run with explicitly requested software rendering created the mesh but timed out waiting for its status; browser acceleration for the successful run was not established."
+  }
+}

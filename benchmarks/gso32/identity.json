@@ -1,0 +1,42 @@
+{
+  "protocol_sha256": "e7999d448303ed355489bc48e9283c9ecd1c5f67121e504c721d3e07a25665ed",
+  "candidate_sha256": "1f6875979bac8c8aecacf0c698662b7c63ff54ae1b6d7c06755297a05607e983",
+  "source_sha256": {
+    "benchmark_idol.py": "291c51254ed1f7afe874010a764047af97915659b313fbbdbb3851bcbfe2058a",
+    "benchmark_render.py": "b59b77700bab9507451ef70b90b47fb058dbe64c9fc4f0112faeed6f56f6677d",
+    "idol_session.py": "3ac203165f46cfaee879d9232b1c8a610dabec4c66f5f443054502e4b46d0a9f",
+    "idol_generate.py": "6d27a27a5e0d0cf03c58be5246c9a6f0a1823b92302fa8c5e3e38afe54ce95d7",
+    "idol_gguf.py": "7d7c2e472c3470f822b7c1fff50d4a63547728100c74fab21e402d9121d400ce",
+    "idol_packed.py": "5f16197339272294f801a1d3ec8fb3894d45a2e29b4b66b14ce9adb95bb88b82",
+    "idol_triton.py": "1e9c78d48da62bfcd8dbfbe4ab389e20e30d56edbe24d6de4d2fbca302d3744a",
+    "idol_mesh_tools.py": "e85d0a071f23f7bb3b820bf784b46714004cbee784b001372ab14af1b78f051d",
+    "compare_meshes.py": "6e3cd25054d59b9a032b26e6942c7cea13942b5a745677c003215c281f6d5e0a",
+    "render_splats_preview.py": "0acb0999b112825802a521d4c998e001b9a3a2f046ea42efbe16aba3b9ecb0b5"
+  },
+  "original_component_sha256": {
+    "birefnet.safetensors": "44bbc97b041f879975d0d6d538b8e66a25eb04d1f49aab40697544cdd97eaa8e",
+    "decoder.safetensors": "9da4d7676bfcadb1c3fdfbff796e6257dadf82d26ec05be7717c79b2b13a1c4e",
+    "decoder_gs.safetensors": "3087eb8ee5763206a53e4078acf2a1bf382dab5147d407ec13a2cf39c04cc544",
+    "denoiser.safetensors": "ded2cacf671bf3978ebc62729087abdbd318ef4752e6805b4c9fc8ffa51fe716"
+  },
+  "sdk_revision": "4702a7f00850e34b6e83a2170cc123c3e9570744",
+  "sdk_source_sha256": {
+    "idol/camera.py": "53baeb98cdb8f6d5d173d796279f44621063e7ad64279cee42c6933ea8f2a95e",
+    "idol/conditioning.py": "97443730c61cc76366da43dcf71f05fa4092f7f9d1bbb5ed6a8f0cbdd05ca0be",
+    "idol/gaussian.py": "a604fbe1c04e47827f6a7e6c544dd44aa603e37d52a97bb4dcd5776358c49f56",
+    "idol/pipeline.py": "b1b9c231fc4d37396bbc02e5c0aea86e9f40b997cd1aa8aa632d2e174166ab21",
+    "idol/preprocess.py": "6156fc8fa5c5c1b2278c11a75e87e465571670db1ef79c711f6688acb07340d4",
+    "idol/sample.py": "3e731b1956caf2dc30e4965a8326c07ec6378a77266187d1c411944d1f27d627",
+    "idol/sampler.py": "16ca2ba1fa7f90c134dd4e1d044b5fc75bd808c39c6c3ce850260d52d8bfc7bd",
+    "idol/__init__.py": "8360662771574bc76241da02af5964d2795e0541c13666bbd77abdf11ef6a1a5",
+    "idol/models/birefnet.py": "3caf6ad8c136768bc13e176e0f22ce397bbbbe94795125bb8e50d57384679282",
+    "idol/models/decoder.py": "40acabab1e597b5732a208bcc76b8e4d85e3398d22bd64913eb6e977f1e09006",
+    "idol/models/dit.py": "af972cb9fda7f3350691b77f53bc3fdfc99d561c7d59fcf1213181613470eb61",
+    "idol/models/layers.py": "b7ce95917fc88b056ae5e5e933c7747543a8e9e96e48cae14773041894b00cea",
+    "idol/models/__init__.py": "8e0f01a978ed73f572847a5b027e1d6e71fd35e961cfa620a3f76ceecfe9a70d"
+  },
+  "source_config_sha256": "ddd89dcc6dcf4a5ac8d951b8c59afa1eceafe377615c5912c59f4e1f5ae35b32",
+  "extractor_sha256": "d43743c539242afa141d905f9a3238d8f79c66f34baad1f97606ff1ddd9bac09",
+  "render_size": 256,
+  "render_extent": 0.75
+}

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mesh conversion · idol.cpp</title>
+  <meta name="description" content="How idol.cpp turns splats into a triangle mesh: density, blur, marching cubes, the piece filter, and the options.">
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <a class="name" href="index.html">idol.cpp</a>
+    <nav>
+      <a href="getting-started.html">Getting started</a>
+      <a href="architecture.html">Architecture</a>
+      <a href="format.html">Format</a>
+      <a href="mesh.html" aria-current="page">Mesh</a>
+      <a href="benchmarks.html">Benchmarks</a>
+      <a href="status.html">Status</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1>Mesh conversion</h1>
+  <p class="lead"><code>idol::splats_to_mesh</code> turns a set of splats into a triangle mesh in the same units as the
+  splats. It is a port of the sprite pipeline's conversion, which is now part of the library.</p>
+
+  <h2>Browser extraction and comparison</h2>
+  <p>The local server now includes a Mesh tab. Generate a reconstruction or upload a saved Gaussian PLY file, then
+  choose Generate mesh to preview and download the native OBJ output. Upload an original-model OBJ reference to compare
+  geometry and download a JSON report. Set <code>--mesh-executable</code> when the built tool is outside the default
+  build directories or executable search path.</p>
+  <p>The comparison samples each surface by triangle area and measures distance to the closest triangles of the other
+  mesh, without alignment. It reports bidirectional mean distances, the larger directional 95th percentile, the sampled
+  maximum, and F1 scores within recorded fractions of the reference bounding-box diagonal. F1 combines precision and
+  recall by their harmonic mean. Source sampling limits coverage; these are agreement measurements, not ground-truth
+  reconstruction accuracy. Use matching image, sampling, coordinate, and extraction settings.</p>
+  <p>The <a href="../README.md#mesh-generation-and-comparison">user guide</a> records measured examples;
+  the <a href="data/q8-mesh-fidelity.json">measurement record</a> binds the source clouds, meshes, and tools by digest.</p>
+
+  <h2>The pipeline</h2>
+  <ol>
+    <li><strong>Check the input.</strong> The options must be in range, the four columns must have the same length, and
+    at least one splat must fall inside the grid.</li>
+    <li><strong>Scatter.</strong> Each splat adds its opacity, after a sigmoid, to the voxel that contains its centre.
+    The grid has <code>resolution</code> voxels along each axis, covering <code>[lo, hi]</code>. Splats outside the grid
+    are ignored. The sums run in float32, in splat order, on one thread, so the result does not depend on the thread count.</li>
+    <li><strong>Crop.</strong> Only the box of occupied voxels, plus the blur radius on every side, is kept. Outside that
+    box the blurred density is zero, so the crop does not change the result.</li>
+    <li><strong>Blur.</strong> A separable Gaussian with sigma <code>blur_sigma</code> voxels, truncated at
+    <code>floor(4 σ + 0.5)</code> voxels. Past the edge of the array the index is reflected back in, which is how
+    scipy's <code>gaussian_filter</code> handles edges by default.</li>
+    <li><strong>Level.</strong> The surface sits at <code>iso_fraction</code> times the 99th percentile of the positive
+    density values. The percentile is computed with linear interpolation, as numpy does.</li>
+    <li><strong>Marching cubes.</strong> Each grid cell is classified by which corners are at or above the level. Each
+    grid edge that crosses the level gets one vertex, shared by the cells around it. Vertex positions are
+    grid index × voxel size, offset to the grid's lower corner.</li>
+    <li><strong>Piece filter.</strong> Triangles are grouped into connected pieces by their shared vertices. Pieces with
+    fewer than <code>min_piece</code> times the largest piece's faces are removed, and the vertices are renumbered.</li>
+  </ol>
+
+  <h2>Options</h2>
+  <table>
+    <thead><tr><th>Option</th><th>Default</th><th>Command line</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td><code>lo</code>, <code>hi</code></td><td><code>-0.55</code>, <code>0.55</code></td><td><code>--lo</code>, <code>--hi</code></td><td>The grid's extent on each axis. Must have <code>hi &gt; lo</code>.</td></tr>
+      <tr><td><code>resolution</code></td><td><code>176</code></td><td><code>--resolution</code></td><td>Voxels per axis. Must be at least 2.</td></tr>
+      <tr><td><code>blur_sigma</code></td><td><code>1.5</code></td><td><code>--sigma</code></td><td>Gaussian sigma in voxels. Must be positive.</td></tr>
+      <tr><td><code>iso_fraction</code></td><td><code>0.2</code></td><td><code>--iso</code></td><td>Level as a fraction of the 99th percentile density. Must be positive.</td></tr>
+      <tr><td><code>min_piece</code></td><td><code>0.05</code></td><td><code>--min-piece</code></td><td>Smallest kept piece, as a fraction of the largest piece's faces. Must not be negative.</td></tr>
+    </tbody>
+  </table>
+  <p>Splat coordinates in the sprite pipeline sit inside about ±0.5, which is why the default grid covers ±0.55.</p>
+
+  <h2>Output</h2>
+  <p><code>idol::write_obj</code> writes a Wavefront OBJ file: a <code>v</code> line for each vertex with six decimal
+  places, then an <code>f</code> line for each triangle. Face indices are 1-based, as OBJ requires. The file is written
+  as text, so it can be read by any mesh tool.</p>
+
+  <h2>Verification</h2>
+  <p>The unit tests check the blur against its closed form, check that a filled ball becomes a closed surface in which
+  every edge is shared by two triangles with opposite orientation, check the piece filter and the percentile, and check
+  the input rules. Against scikit-image:</p>
+  <ul>
+    <li>Vertex positions agree with its classic marching-cubes output to about 10<sup>−7</sup>.</li>
+    <li>Vertex and face counts agree with the classic output.</li>
+    <li>Against the default Lewiner output, which the sprite pipeline used before this port, the face sets differ by 16
+    faces out of 205,116 on one sprite and by 468 out of 349,984 on another. Lewiner's rules for ambiguous cells were
+    not ported, so cells with an ambiguous configuration can be split differently.</li>
+  </ul>
+  <p>On the shapes the tests use, the surface is closed and consistently oriented. It is not guaranteed to match the
+  Lewiner output face for face.</p>
+</main>
+
+<footer>
+  <div class="wrap">
+    idol.cpp 0.1.0. Project source is available under the Apache License 2.0. Third-party notices are in <a href="notice.html">notice.html</a>.
+  </div>
+</footer>
+</body>
+</html>

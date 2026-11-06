@@ -1,0 +1,76 @@
+{
+  "scope": "Pilot comparing 15- and 20-step second-order predictor-corrector integration with the pinned upstream 50-step first-order sampler and 20-step first-order sampler on two development photographs. Original model and image encoders, same seed and cached conditioning. Differences measure proximity to the original latent, not ground-truth object quality. Timing measures sampling only, not image preprocessing or model loading. Each predictor-corrector step invokes the guided denoiser twice.",
+  "model_sha256": "80707a85bcd4242453bd7a1ed390f5a8410efe8ab8812ad8327ef31863a9b483",
+  "script_sha256": "09ce01bc440fcf5a0192b63e3c38849a4df559af6e902323d3225865bbd648ea",
+  "cases": {
+    "chelsea": {
+      "image_sha256": "adbb6c59da5251983dfca65bd3d055e3d2cb9d49f85af5d473852a9033e42f24",
+      "variants": {
+        "euler50": {
+          "steps": 50,
+          "seconds": 25.69951819999551,
+          "latent_sha256": "cda3f2375b4a21e9c63f7123bce90a1d52f40f8e8de188e7c1c808637e16f6b2",
+          "relative_latent_difference": 0.0,
+          "denoiser_forwards": 100
+        },
+        "euler20": {
+          "steps": 20,
+          "seconds": 10.274319099989953,
+          "latent_sha256": "eb4d09faefd01f69c3105d85e5133252ffeb071a03f334c860d7ac9204e5790a",
+          "relative_latent_difference": 0.8933768230291368,
+          "denoiser_forwards": 40
+        },
+        "heun15": {
+          "steps": 15,
+          "seconds": 15.426775400002953,
+          "latent_sha256": "c70cef382c945dc558510079fc63995ca7405e6b48334bda255667c6b448b66b",
+          "relative_latent_difference": 0.8422479059115506,
+          "denoiser_forwards": 60
+        },
+        "heun20": {
+          "steps": 20,
+          "seconds": 20.593749400009983,
+          "latent_sha256": "03a103d99a50d6a65381923b72eb54ec4efc276918b37410d86c64e6929efa3d",
+          "relative_latent_difference": 0.8593760698979804,
+          "denoiser_forwards": 80
+        }
+      }
+    },
+    "astronaut": {
+      "image_sha256": "b8c8afe36141c45dd06f55d257d6b951b4c77a1a2c31fe09e78452cdda2dfcd4",
+      "variants": {
+        "euler50": {
+          "steps": 50,
+          "seconds": 25.438951599993743,
+          "latent_sha256": "c14e5fe1423dee0be1d89ee60c815dc72f316a3d545310f5822db5604c8721c0",
+          "relative_latent_difference": 0.0,
+          "denoiser_forwards": 100
+        },
+        "euler20": {
+          "steps": 20,
+          "seconds": 10.001863299999968,
+          "latent_sha256": "ff138a2b39a185131df93470f4b15dca26e48fe500123618f5fec8b03a0aee8d",
+          "relative_latent_difference": 0.34270909255766463,
+          "denoiser_forwards": 40
+        },
+        "heun15": {
+          "steps": 15,
+          "seconds": 15.389672799996333,
+          "latent_sha256": "d547dcf6c197eba1b94a281839932ee95400cf413e3f17e5f9b00de7f83a4c93",
+          "relative_latent_difference": 0.3393470102880033,
+          "denoiser_forwards": 60
+        },
+        "heun20": {
+          "steps": 20,
+          "seconds": 20.62778339999204,
+          "latent_sha256": "e941d2682ee65952238284f7e200e158c25c5b02daa2b8d235137bc956820a45",
+          "relative_latent_difference": 0.3867954132426372,
+          "denoiser_forwards": 80
+        }
+      }
+    }
+  },
+  "metric": "Euclidean norm of candidate minus original 50-step latent divided by the original latent norm; unitless. This does not measure ground-truth object quality.",
+  "timing_limit": "One run per input and variant, in a fixed order, with conditioning cached; no cold-start time or latency distribution is measured.",
+  "environment": "Windows; NVIDIA GeForce RTX 4090; PyTorch 2.10.0+cu128; local incompatible xFormers disabled."
+}

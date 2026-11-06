@@ -1,0 +1,1829 @@
+{
+  "scope": "Local development comparisons against the original model, not ground-truth 3D reconstruction. The image-encoder layer allocation was selected using Chelsea and astronaut; coffee was not used for that selection. Denoiser calibration used armchair, avocado and Chelsea. The combined Idol model uses original image encoders; encoder and denoiser errors have not been jointly evaluated in these reports.",
+  "image_provenance": {
+    "chelsea": {
+      "sha256": "adbb6c59da5251983dfca65bd3d055e3d2cb9d49f85af5d473852a9033e42f24",
+      "attribution": "CC0 photo by Stefan van der Walt, distributed with scikit-image"
+    },
+    "astronaut": {
+      "sha256": "b8c8afe36141c45dd06f55d257d6b951b4c77a1a2c31fe09e78452cdda2dfcd4",
+      "attribution": "NASA photograph of Eileen Collins, described as public domain by scikit-image"
+    }
+  },
+  "encoder_q8": {
+    "scope": "Two real photographs not used for DINO conversion or Gaussian calibration, original FLUX.2 autoencoder, runtime-half Idol denoiser; 50 steps seed42. DINO linear matrices packed on GPU and expanded per call; stage_encoders enabled. Compares latents to original DINO, not ground-truth 3D. Local xFormers disabled due incompatible environment.",
+    "encoder_sha256": "984e75d1fef7acfa8f0cb54c22a4bced7453e113874f7dc5187f5fdd80bf2545",
+    "model_sha256": "bef68803d8e56a462262dfa4a8c4931d8d66a71e819b050f40121e385d7ad22f",
+    "cases": {
+      "chelsea": {
+        "image_sha256": "adbb6c59da5251983dfca65bd3d055e3d2cb9d49f85af5d473852a9033e42f24",
+        "latent_sha256": "a67e25bc51c959c17b257714f5264472bd77a5574f67b4e702ba927ee465cf26",
+        "relative_latent_l2": 0.5305576705120384,
+        "elapsed_seconds": 28.027323200003593,
+        "gpu_peak_allocated_bytes": 2777566208,
+        "gpu_peak_reserved_bytes": 3762290688,
+        "camera": {
+          "yaw": 1.9523129978965414,
+          "pitch": 0.03346259991683303,
+          "radius": 1.5878786330052466,
+          "fov": 73.13102680904832
+        }
+      },
+      "astronaut": {
+        "image_sha256": "b8c8afe36141c45dd06f55d257d6b951b4c77a1a2c31fe09e78452cdda2dfcd4",
+        "latent_sha256": "02ae86459c67a1da08ce0f2f7f197d77a69e0450c7f2952d982a854b78818bd0",
+        "relative_latent_l2": 0.06977420182996648,
+        "elapsed_seconds": 27.30569860000105,
+        "gpu_peak_allocated_bytes": 2729527808,
+        "gpu_peak_reserved_bytes": 3678404608,
+        "camera": {
+          "yaw": 2.1287476862466246,
+          "pitch": 0.012341449400941132,
+          "radius": 2.8595229905960964,
+          "fov": 35.68929809899935
+        }
+      }
+    }
+  },
+  "encoder_q6": {
+    "scope": "Two real photographs not used for DINO conversion or Gaussian calibration, original FLUX.2 autoencoder, runtime-half Idol denoiser; 50 steps seed42. DINO linear matrices packed on GPU and expanded per call; stage_encoders enabled. Compares latents to original DINO, not ground-truth 3D. Local xFormers disabled due incompatible environment.",
+    "encoder_sha256": "27ab7086b6164fdb4c29fcb5857d9097e1afd861a052d58f1fc5dfd7fb380d3f",
+    "model_sha256": "bef68803d8e56a462262dfa4a8c4931d8d66a71e819b050f40121e385d7ad22f",
+    "cases": {
+      "chelsea": {
+        "image_sha256": "adbb6c59da5251983dfca65bd3d055e3d2cb9d49f85af5d473852a9033e42f24",
+        "latent_sha256": "129afa443e17b2c3c9892a3b9045bd2d98db910b33fea5289b8b47d69bf37638",
+        "relative_latent_l2": 0.5040504867808879,
+        "elapsed_seconds": 27.852412399995956,
+        "gpu_peak_allocated_bytes": 2592184832,
+        "gpu_peak_reserved_bytes": 3523215360,
+        "camera": {
+          "yaw": 1.9440455629364715,
+          "pitch": -0.030172912073538928,
+          "radius": 1.6521613423054606,
+          "fov": 70.69467880024978
+        }
+      },
+      "astronaut": {
+        "image_sha256": "b8c8afe36141c45dd06f55d257d6b951b4c77a1a2c31fe09e78452cdda2dfcd4",
+        "latent_sha256": "50eb401ad2a67cb84e2b4950ea6341ea224d578d213f6e36381dca26fc18b602",
+        "relative_latent_l2": 0.17915760254032895,
+        "elapsed_seconds": 27.27906559999974,
+        "gpu_peak_allocated_bytes": 2541050368,
+        "gpu_peak_reserved_bytes": 3479175168,
+        "camera": {
+          "yaw": 2.1353779450639117,
+          "pitch": 0.0028733410828892685,
+          "radius": 2.835269131208303,
+          "fov": 36.64752696575595
+        }
+      }
+    }
+  },
+  "encoder_conditioning": {
+    "scope": "Same image, model, preprocessing, random seed and runtime; original encoder versus independently converted packed DINOv3 encoders. Original FLUX.2 autoencoder retained. Relative errors are against original outputs, not ground truth. Local incompatible xFormers disabled.",
+    "image_sha256": "adbb6c59da5251983dfca65bd3d055e3d2cb9d49f85af5d473852a9033e42f24",
+    "model_sha256": "bef68803d8e56a462262dfa4a8c4931d8d66a71e819b050f40121e385d7ad22f",
+    "variants": {
+      "original": {
+        "encoder_sha256": "original cached encoder",
+        "relative_latent_l2_against_prior_run": 0.0,
+        "camera": {
+          "yaw": 1.9669408612646526,
+          "pitch": 0.029427673988231522,
+          "radius": 1.695044103212783,
+          "fov": 69.48259742680432
+        }
+      },
+      "Q8_0": {
+        "encoder_sha256": "984e75d1fef7acfa8f0cb54c22a4bced7453e113874f7dc5187f5fdd80bf2545",
+        "relative_latent_l2_against_prior_run": 0.5305576705120384,
+        "camera": {
+          "yaw": 1.9523129978965414,
+          "pitch": 0.03346259991683303,
+          "radius": 1.5878786330052466,
+          "fov": 73.13102680904832
+        },
+        "features_relative_l2": {
+          "feature1": 0.01190591797431158,
+          "feature2": 0.0
+        },
+        "features_max_abs": {
+          "feature1": 0.49643707275390625,
+          "feature2": 0.0
+        }
+      },
+      "Q6_K": {
+        "encoder_sha256": "27ab7086b6164fdb4c29fcb5857d9097e1afd861a052d58f1fc5dfd7fb380d3f",
+        "relative_latent_l2_against_prior_run": 0.5040504867808879,
+        "camera": {
+          "yaw": 1.9440455629364715,
+          "pitch": -0.030172912073538928,
+          "radius": 1.6521613423054606,
+          "fov": 70.69467880024978
+        },
+        "features_relative_l2": {
+          "feature1": 0.024884659046745104,
+          "feature2": 0.0
+        },
+        "features_max_abs": {
+          "feature1": 0.6998724937438965,
+          "feature2": 0.0
+        }
+      }
+    }
+  },
+  "encoder_selection": {
+    "scope": "DINOv3 Q8_0 sensitivity experiment: restore each consecutive group of eight transformer layers to original runtime bfloat16 while all other eligible linear weights remain Q8_0. Same preprocessed image for each variant. Measures relative final image-feature difference against original DINOv3; both photos are development inputs, not held out. No reconstruction or latency claim. Local incompatible xFormers disabled.",
+    "source_sha256": "3e1d4d18b9bfa9f28fad8e9de6a783f1313532d3460efa4cd0b12521d81d1a4d",
+    "idol_model_sha256": "bef68803d8e56a462262dfa4a8c4931d8d66a71e819b050f40121e385d7ad22f",
+    "encoder_sha256": "984e75d1fef7acfa8f0cb54c22a4bced7453e113874f7dc5187f5fdd80bf2545",
+    "images_sha256": {
+      "chelsea": "adbb6c59da5251983dfca65bd3d055e3d2cb9d49f85af5d473852a9033e42f24",
+      "astronaut": "b8c8afe36141c45dd06f55d257d6b951b4c77a1a2c31fe09e78452cdda2dfcd4"
+    },
+    "variants": {
+      "all-q8": {
+        "restored_layers": [
+          0,
+          0
+        ],
+        "restored_matrix_count": 0,
+        "relative_feature_l2": {
+          "chelsea": 0.01190591797431158,
+          "astronaut": 0.01382004407262786
+        }
+      },
+      "layers-0-7": {
+        "restored_layers": [
+          0,
+          8
+        ],
+        "restored_matrix_count": 56,
+        "relative_feature_l2": {
+          "chelsea": 0.010513728363838256,
+          "astronaut": 0.012113002734457451
+        }
+      },
+      "layers-8-15": {
+        "restored_layers": [
+          8,
+          16
+        ],
+        "restored_matrix_count": 56,
+        "relative_feature_l2": {
+          "chelsea": 0.011666966862346178,
+          "astronaut": 0.01388771544910149
+        }
+      },
+      "layers-16-23": {
+        "restored_layers": [
+          16,
+          24
+        ],
+        "restored_matrix_count": 56,
+        "relative_feature_l2": {
+          "chelsea": 0.012239198324400855,
+          "astronaut": 0.013834314521361874
+        }
+      },
+      "layers-24-31": {
+        "restored_layers": [
+          24,
+          32
+        ],
+        "restored_matrix_count": 56,
+        "relative_feature_l2": {
+          "chelsea": 0.00967662244964361,
+          "astronaut": 0.011316617186497792
+        }
+      }
+    }
+  },
+  "encoder_selective": {
+    "scope": "Q8_0 DINOv3 with selected groups of original runtime-bfloat16 matrices; groups chosen using Chelsea and astronaut feature errors. Fifty denoising steps, seed 42; same original FLUX.2 autoencoder and Idol denoiser. Coffee was not used to select encoder groups. Latent differences are not ground-truth 3D. Weights are replaced in memory, not exported. Local incompatible xFormers disabled.",
+    "source_sha256": "3e1d4d18b9bfa9f28fad8e9de6a783f1313532d3460efa4cd0b12521d81d1a4d",
+    "idol_model_sha256": "bef68803d8e56a462262dfa4a8c4931d8d66a71e819b050f40121e385d7ad22f",
+    "encoder_sha256": "984e75d1fef7acfa8f0cb54c22a4bced7453e113874f7dc5187f5fdd80bf2545",
+    "selection_sha256": "ed974e42bd2ab69ef3c9bc6188d386b2d90b6b81dbd3505b1a5034bc4602d325",
+    "variants": {
+      "last8": {
+        "restored_layers": [
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31
+        ],
+        "restored_matrix_count": 56,
+        "cases": {
+          "chelsea": {
+            "image_sha256": "adbb6c59da5251983dfca65bd3d055e3d2cb9d49f85af5d473852a9033e42f24",
+            "latent_sha256": "f44b62608a724ed8e12f21674f33f52577f4dcbedc0ba55af735c0dab889cc0f",
+            "relative_latent_l2": 0.2218818861714674,
+            "elapsed_seconds": 28.02498659999401,
+            "gpu_peak_allocated_bytes": 3196980224,
+            "camera": {
+              "yaw": 1.9603653240459908,
+              "pitch": 0.044224628643983056,
+              "radius": 1.66732449789602,
+              "fov": 70.23139576884053
+            }
+          },
+          "astronaut": {
+            "image_sha256": "b8c8afe36141c45dd06f55d257d6b951b4c77a1a2c31fe09e78452cdda2dfcd4",
+            "latent_sha256": "89868da053858bebd6f28f8540c83bd7090848cdba538c6f468494f2f75660b6",
+            "relative_latent_l2": 0.08949517312076317,
+            "elapsed_seconds": 27.238205100002233,
+            "gpu_peak_allocated_bytes": 3151694336,
+            "camera": {
+              "yaw": 2.1285195957184984,
+              "pitch": 0.012034928373569226,
+              "radius": 2.746846414672362,
+              "fov": 37.37141710171016
+            }
+          },
+          "coffee": {
+            "image_sha256": "bc7c679e93a04b35aef5c5d644f0293d6aac8df7ccbba06f1d5bdddc0285050b",
+            "latent_sha256": "3a3606656ed9933d94da125b040209e2b12eada2a91b291d9b62f10ede3f3313",
+            "relative_latent_l2": 0.061896000875719906,
+            "elapsed_seconds": 27.25359860000026,
+            "gpu_peak_allocated_bytes": 3151563264,
+            "camera": {
+              "yaw": 1.0740676857405729,
+              "pitch": 0.8495532810295614,
+              "radius": 1.47755865044981,
+              "fov": 75.84662620988311
+            }
+          }
+        }
+      },
+      "first8-last8": {
+        "restored_layers": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31
+        ],
+        "restored_matrix_count": 112,
+        "cases": {
+          "chelsea": {
+            "image_sha256": "adbb6c59da5251983dfca65bd3d055e3d2cb9d49f85af5d473852a9033e42f24",
+            "latent_sha256": "057c0b99e237b50609cb76554bfec1e64d059951fd6fed88038faf20a2e218b9",
+            "relative_latent_l2": 0.19616726793545586,
+            "elapsed_seconds": 27.612636699996074,
+            "gpu_peak_allocated_bytes": 3349883392,
+            "camera": {
+              "yaw": 1.9593697329674988,
+              "pitch": 0.04633011553527612,
+              "radius": 1.6656140846572183,
+              "fov": 70.34301933076415
+            }
+          },
+          "astronaut": {
+            "image_sha256": "b8c8afe36141c45dd06f55d257d6b951b4c77a1a2c31fe09e78452cdda2dfcd4",
+            "latent_sha256": "4c9560b418d521c3169cafc3f7bfdedfe9defeac1bd9e04a4845e89da0c7a812",
+            "relative_latent_l2": 0.04842348356563178,
+            "elapsed_seconds": 26.96485560000292,
+            "gpu_peak_allocated_bytes": 3352611328,
+            "camera": {
+              "yaw": 2.1287997677981174,
+              "pitch": 0.012667827113193808,
+              "radius": 2.8242486323562277,
+              "fov": 36.39103547050738
+            }
+          },
+          "coffee": {
+            "image_sha256": "bc7c679e93a04b35aef5c5d644f0293d6aac8df7ccbba06f1d5bdddc0285050b",
+            "latent_sha256": "36ac1c4f1ddb7ab81c7cbe3ad71f966da659de5710c9c37dcc235a9a67b81780",
+            "relative_latent_l2": 0.05010974577083871,
+            "elapsed_seconds": 26.9686098999955,
+            "gpu_peak_allocated_bytes": 3353061888,
+            "camera": {
+              "yaw": 1.072982820770433,
+              "pitch": 0.8501412026792428,
+              "radius": 1.4644991624869577,
+              "fov": 76.37016131994646
+            }
+          }
+        }
+      }
+    }
+  },
+  "encoder_q8_coffee": {
+    "scope": "One coffee photograph; all eligible DINOv3 linear matrices Q8_0, original FLUX.2 autoencoder and Idol denoiser; 50 steps, seed42. Compared with original DINOv3; not a ground-truth 3D comparison. Local incompatible xFormers disabled.",
+    "encoder_sha256": "984e75d1fef7acfa8f0cb54c22a4bced7453e113874f7dc5187f5fdd80bf2545",
+    "model_sha256": "bef68803d8e56a462262dfa4a8c4931d8d66a71e819b050f40121e385d7ad22f",
+    "image_sha256": "bc7c679e93a04b35aef5c5d644f0293d6aac8df7ccbba06f1d5bdddc0285050b",
+    "latent_sha256": "22f7d2cdfb206132e3769fc5080282aeda90b2fe4dff3b3ea875d13427f079f4",
+    "relative_latent_l2": 0.08414390147890963,
+    "elapsed_seconds": 29.548709900001995,
+    "gpu_peak_allocated_bytes": 2777566208,
+    "camera": {
+      "yaw": 1.0741021617680109,
+      "pitch": 0.8476894472151433,
+      "radius": 1.4847855907648357,
+      "fov": 75.59011471638748
+    }
+  },
+  "encoder_mixed_bf16_tensors": {
+    "source_sha256": "3e1d4d18b9bfa9f28fad8e9de6a783f1313532d3460efa4cd0b12521d81d1a4d",
+    "encoder_sha256": "aabf6094de60b6bf5fa723f90ca982fd358b44c4116f3b4399d1915643da635f",
+    "baseline_encoder_sha256": "984e75d1fef7acfa8f0cb54c22a4bced7453e113874f7dc5187f5fdd80bf2545",
+    "preserved_runtime_equal": 112,
+    "quantized_identical": 112,
+    "other_tensors_identical": 391,
+    "mismatches": [],
+    "scope": "All encoder tensor values compared with either source at original runtime bfloat16 or all-Q8 baseline; this is not an end-to-end output test."
+  },
+  "encoder_mixed_bf16_pipeline": {
+    "scope": "Actual mixed-precision DINOv3 file versus previously measured in-memory selective encoder, original FLUX.2 autoencoder and Idol denoiser. Fifty steps, seed42, same photos. One run per case; memory and elapsed time are process-local and not paired benchmarks. Local incompatible xFormers disabled.",
+    "encoder_sha256": "aabf6094de60b6bf5fa723f90ca982fd358b44c4116f3b4399d1915643da635f",
+    "idol_model_sha256": "bef68803d8e56a462262dfa4a8c4931d8d66a71e819b050f40121e385d7ad22f",
+    "cases": {
+      "chelsea": {
+        "image_sha256": "adbb6c59da5251983dfca65bd3d055e3d2cb9d49f85af5d473852a9033e42f24",
+        "latent_equals_in_memory_experiment": true,
+        "relative_l2_to_in_memory_experiment": 0.0,
+        "elapsed_seconds": 28.028155199994217,
+        "gpu_peak_allocated_bytes": 3172420608,
+        "gpu_peak_reserved_bytes": 4143972352,
+        "camera": {
+          "yaw": 1.9593697329674988,
+          "pitch": 0.04633011553527612,
+          "radius": 1.6656140846572183,
+          "fov": 70.34301933076415
+        }
+      },
+      "astronaut": {
+        "image_sha256": "b8c8afe36141c45dd06f55d257d6b951b4c77a1a2c31fe09e78452cdda2dfcd4",
+        "latent_equals_in_memory_experiment": true,
+        "relative_l2_to_in_memory_experiment": 0.0,
+        "elapsed_seconds": 27.207910500001162,
+        "gpu_peak_allocated_bytes": 3127130624,
+        "gpu_peak_reserved_bytes": 4018143232,
+        "camera": {
+          "yaw": 2.1287997677981174,
+          "pitch": 0.012667827113193808,
+          "radius": 2.8242486323562277,
+          "fov": 36.39103547050738
+        }
+      },
+      "coffee": {
+        "image_sha256": "bc7c679e93a04b35aef5c5d644f0293d6aac8df7ccbba06f1d5bdddc0285050b",
+        "latent_equals_in_memory_experiment": true,
+        "relative_l2_to_in_memory_experiment": 0.0,
+        "elapsed_seconds": 27.374357900000177,
+        "gpu_peak_allocated_bytes": 3127740928,
+        "gpu_peak_reserved_bytes": 4013948928,
+        "camera": {
+          "yaw": 1.072982820770433,
+          "pitch": 0.8501412026792428,
+          "radius": 1.4644991624869577,
+          "fov": 76.37016131994646
+        }
+      }
+    }
+  },
+  "encoder_geometry": {
+    "chelsea": {
+      "q8_0": {
+        "scope": "Same calibrated Gaussian decoder and octree, seed and image; original DINOv3 conditioning versus quantized DINOv3 conditioning. Compares sampled Gaussian centers and attributes, not ground-truth surfaces or rendered quality.",
+        "reference_sha256": "911875243f154761275760f444487221f610c9538eb8b3403fcd2c98093a10c5",
+        "candidate_sha256": "9132ab31a3d1823573edbcdb4bbe587790b15e61d84148f784ff07972d2e673f",
+        "latent_sha256": "a67e25bc51c959c17b257714f5264472bd77a5574f67b4e702ba927ee465cf26",
+        "idol_model_sha256": "bef68803d8e56a462262dfa4a8c4931d8d66a71e819b050f40121e385d7ad22f",
+        "measurements": {
+          "reference_count": 262144,
+          "candidate_count": 262144,
+          "reference_to_candidate": {
+            "mean_center_distance": 0.01009329405245225,
+            "p95_center_distance": 0.02099831298633341,
+            "opacity_weighted_mean_center_distance": 0.011543092293334226,
+            "nearest_color_mean_absolute_difference": 0.10299386665726412
+          },
+          "candidate_to_reference": {
+            "mean_center_distance": 0.00920088679610933,
+            "p95_center_distance": 0.019340970611520566,
+            "opacity_weighted_mean_center_distance": 0.010514909080964733,
+            "nearest_color_mean_absolute_difference": 0.10645740897128754
+          },
+          "center_voxel_iou": {
+            "16": 0.7355072463768116,
+            "32": 0.5838739573679332,
+            "64": 0.3386470468015532
+          },
+          "orthographic_center_occupancy_iou": {
+            "16": {
+              "xy": 0.6888888888888889,
+              "xz": 0.75,
+              "yz": 0.9705882352941176
+            },
+            "32": {
+              "xy": 0.7,
+              "xz": 0.7047619047619048,
+              "yz": 0.9673202614379085
+            },
+            "64": {
+              "xy": 0.7257383966244726,
+              "xz": 0.659375,
+              "yz": 0.9651762682717111
+            }
+          }
+        }
+      },
+      "q6_k": {
+        "scope": "Same calibrated Gaussian decoder and octree, seed and image; original DINOv3 conditioning versus quantized DINOv3 conditioning. Compares sampled Gaussian centers and attributes, not ground-truth surfaces or rendered quality.",
+        "reference_sha256": "911875243f154761275760f444487221f610c9538eb8b3403fcd2c98093a10c5",
+        "candidate_sha256": "6100c8a3600dceac6af92d07b86051a1c6f184d7ef8a4a19430872dd05152fda",
+        "latent_sha256": "129afa443e17b2c3c9892a3b9045bd2d98db910b33fea5289b8b47d69bf37638",
+        "idol_model_sha256": "bef68803d8e56a462262dfa4a8c4931d8d66a71e819b050f40121e385d7ad22f",
+        "measurements": {
+          "reference_count": 262144,
+          "candidate_count": 262144,
+          "reference_to_candidate": {
+            "mean_center_distance": 0.007308939403081966,
+            "p95_center_distance": 0.02062599654686021,
+            "opacity_weighted_mean_center_distance": 0.007537849819654634,
+            "nearest_color_mean_absolute_difference": 0.09971130216394312
+          },
+          "candidate_to_reference": {
+            "mean_center_distance": 0.008458876532750452,
+            "p95_center_distance": 0.021918563637905,
+            "opacity_weighted_mean_center_distance": 0.008711435397331616,
+            "nearest_color_mean_absolute_difference": 0.10549057082281026
+          },
+          "center_voxel_iou": {
+            "16": 0.7950530035335689,
+            "32": 0.6366874443455031,
+            "64": 0.44929317762753535
+          },
+          "orthographic_center_occupancy_iou": {
+            "16": {
+              "xy": 0.88,
+              "xz": 0.7837837837837838,
+              "yz": 0.9824561403508771
+            },
+            "32": {
+              "xy": 0.8121212121212121,
+              "xz": 0.7843137254901961,
+              "yz": 0.9462025316455697
+            },
+            "64": {
+              "xy": 0.7857142857142857,
+              "xz": 0.7350157728706624,
+              "yz": 0.9361351462711166
+            }
+          }
+        }
+      },
+      "selective8": {
+        "scope": "Same calibrated Gaussian decoder and octree, seed and image; original DINOv3 conditioning versus mixed original-precision and Q8_0 DINOv3 conditioning. Compares sampled Gaussian centers and attributes, not ground-truth surfaces or rendered quality.",
+        "reference_sha256": "911875243f154761275760f444487221f610c9538eb8b3403fcd2c98093a10c5",
+        "candidate_sha256": "e4815679e2362c2ae4771cc029eb55438ea49798dc67c9fbeb787d14afbb375e",
+        "latent_sha256": "057c0b99e237b50609cb76554bfec1e64d059951fd6fed88038faf20a2e218b9",
+        "idol_model_sha256": "bef68803d8e56a462262dfa4a8c4931d8d66a71e819b050f40121e385d7ad22f",
+        "measurements": {
+          "reference_count": 262144,
+          "candidate_count": 262144,
+          "reference_to_candidate": {
+            "mean_center_distance": 0.0021075274563168134,
+            "p95_center_distance": 0.004249250014322443,
+            "opacity_weighted_mean_center_distance": 0.002241889825195326,
+            "nearest_color_mean_absolute_difference": 0.07460791399152372
+          },
+          "candidate_to_reference": {
+            "mean_center_distance": 0.0019925629165283027,
+            "p95_center_distance": 0.004108761327457857,
+            "opacity_weighted_mean_center_distance": 0.002050970695737791,
+            "nearest_color_mean_absolute_difference": 0.07509149488448506
+          },
+          "center_voxel_iou": {
+            "16": 0.9015151515151515,
+            "32": 0.856404958677686,
+            "64": 0.8058870326173428
+          },
+          "orthographic_center_occupancy_iou": {
+            "16": {
+              "xy": 0.8666666666666667,
+              "xz": 0.8918918918918919,
+              "yz": 0.9766081871345029
+            },
+            "32": {
+              "xy": 0.8936170212765957,
+              "xz": 0.8910891089108911,
+              "yz": 0.9803921568627451
+            },
+            "64": {
+              "xy": 0.9056603773584906,
+              "xz": 0.9103448275862069,
+              "yz": 0.9831678895123004
+            }
+          }
+        }
+      }
+    },
+    "astronaut": {
+      "q8_0": {
+        "scope": "Same calibrated Gaussian decoder and octree, seed and image; original DINOv3 conditioning versus quantized DINOv3 conditioning. Compares sampled Gaussian centers and attributes, not ground-truth surfaces or rendered quality.",
+        "reference_sha256": "afadbc3d524ca32a67b76c6030f8de95db8a2ebe8e0de41b61275a76525b0a2a",
+        "candidate_sha256": "0f3ece9e1f117c94ad06c4abe04b24f32ab42e8604645c51bfe65408419275a5",
+        "latent_sha256": "02ae86459c67a1da08ce0f2f7f197d77a69e0450c7f2952d982a854b78818bd0",
+        "idol_model_sha256": "bef68803d8e56a462262dfa4a8c4931d8d66a71e819b050f40121e385d7ad22f",
+        "measurements": {
+          "reference_count": 262144,
+          "candidate_count": 262144,
+          "reference_to_candidate": {
+            "mean_center_distance": 0.0018447605349371783,
+            "p95_center_distance": 0.003927563304200181,
+            "opacity_weighted_mean_center_distance": 0.0016228805600589367,
+            "nearest_color_mean_absolute_difference": 0.06158891680530446
+          },
+          "candidate_to_reference": {
+            "mean_center_distance": 0.001847173776290501,
+            "p95_center_distance": 0.004027642905074054,
+            "opacity_weighted_mean_center_distance": 0.0016360041288083077,
+            "nearest_color_mean_absolute_difference": 0.061182529440527156
+          },
+          "center_voxel_iou": {
+            "16": 0.8943488943488943,
+            "32": 0.8560539431251832,
+            "64": 0.7788621262458472
+          },
+          "orthographic_center_occupancy_iou": {
+            "16": {
+              "xy": 0.959731543624161,
+              "xz": 0.9801324503311258,
+              "yz": 0.9699248120300752
+            },
+            "32": {
+              "xy": 0.9703557312252964,
+              "xz": 0.9850467289719627,
+              "yz": 0.9807280513918629
+            },
+            "64": {
+              "xy": 0.9789075175770687,
+              "xz": 0.9900596421471173,
+              "yz": 0.990104772991851
+            }
+          }
+        }
+      },
+      "q6_k": {
+        "scope": "Same calibrated Gaussian decoder and octree, seed and image; original DINOv3 conditioning versus quantized DINOv3 conditioning. Compares sampled Gaussian centers and attributes, not ground-truth surfaces or rendered quality.",
+        "reference_sha256": "afadbc3d524ca32a67b76c6030f8de95db8a2ebe8e0de41b61275a76525b0a2a",
+        "candidate_sha256": "50d2a2b7f36f64d7bc95dcd94fa5b20fc0ac56b032e0a46b427be447626236dd",
+        "latent_sha256": "50eb401ad2a67cb84e2b4950ea6341ea224d578d213f6e36381dca26fc18b602",
+        "idol_model_sha256": "bef68803d8e56a462262dfa4a8c4931d8d66a71e819b050f40121e385d7ad22f",
+        "measurements": {
+          "reference_count": 262144,
+          "candidate_count": 262144,
+          "reference_to_candidate": {
+            "mean_center_distance": 0.002837074718036658,
+            "p95_center_distance": 0.006302691509379523,
+            "opacity_weighted_mean_center_distance": 0.0027154061486988922,
+            "nearest_color_mean_absolute_difference": 0.0800536668046429
+          },
+          "candidate_to_reference": {
+            "mean_center_distance": 0.0029249601971190363,
+            "p95_center_distance": 0.0067513433639538835,
+            "opacity_weighted_mean_center_distance": 0.002793491607841787,
+            "nearest_color_mean_absolute_difference": 0.08362133654972259
+          },
+          "center_voxel_iou": {
+            "16": 0.861244019138756,
+            "32": 0.8116642958748221,
+            "64": 0.702953975998945
+          },
+          "orthographic_center_occupancy_iou": {
+            "16": {
+              "xy": 0.94,
+              "xz": 0.9866666666666667,
+              "yz": 0.9703703703703703
+            },
+            "32": {
+              "xy": 0.9587426326129665,
+              "xz": 0.9795158286778398,
+              "yz": 0.9641350210970464
+            },
+            "64": {
+              "xy": 0.9650912996777659,
+              "xz": 0.9846382556987116,
+              "yz": 0.9769717904432931
+            }
+          }
+        }
+      },
+      "selective8": {
+        "scope": "Same calibrated Gaussian decoder and octree, seed and image; original DINOv3 conditioning versus mixed original-precision and Q8_0 DINOv3 conditioning. Compares sampled Gaussian centers and attributes, not ground-truth surfaces or rendered quality.",
+        "reference_sha256": "afadbc3d524ca32a67b76c6030f8de95db8a2ebe8e0de41b61275a76525b0a2a",
+        "candidate_sha256": "112dad916b68ea33cb623c9a9617a39e16a6431614af4cf7a05c66fe0b3ed8d4",
+        "latent_sha256": "4c9560b418d521c3169cafc3f7bfdedfe9defeac1bd9e04a4845e89da0c7a812",
+        "idol_model_sha256": "bef68803d8e56a462262dfa4a8c4931d8d66a71e819b050f40121e385d7ad22f",
+        "measurements": {
+          "reference_count": 262144,
+          "candidate_count": 262144,
+          "reference_to_candidate": {
+            "mean_center_distance": 0.0017913010265239928,
+            "p95_center_distance": 0.0038708381389824095,
+            "opacity_weighted_mean_center_distance": 0.0015651352937399924,
+            "nearest_color_mean_absolute_difference": 0.05953947155204359
+          },
+          "candidate_to_reference": {
+            "mean_center_distance": 0.0017659727672012016,
+            "p95_center_distance": 0.0038466404593046908,
+            "opacity_weighted_mean_center_distance": 0.0015644195190332257,
+            "nearest_color_mean_absolute_difference": 0.05903734347432049
+          },
+          "center_voxel_iou": {
+            "16": 0.9006211180124224,
+            "32": 0.8519281719163968,
+            "64": 0.7789736823831679
+          },
+          "orthographic_center_occupancy_iou": {
+            "16": {
+              "xy": 0.9795918367346939,
+              "xz": 0.9735099337748344,
+              "yz": 0.9849624060150376
+            },
+            "32": {
+              "xy": 0.9723320158102767,
+              "xz": 0.983177570093458,
+              "yz": 0.9786780383795309
+            },
+            "64": {
+              "xy": 0.9762290653700703,
+              "xz": 0.9890601690701144,
+              "yz": 0.9866511897852582
+            }
+          }
+        }
+      }
+    }
+  },
+  "denoiser_q8": {
+    "scope": "All 24 denoiser blocks; blockwise covariance compensation keeps standard Q8_0 tensor encoding. Covariance uses sampled layer inputs from armchair, avocado and Chelsea, 10 steps, seed42; all listed images are development checks following previous experiments. Encoded tensors are expanded to half precision for evaluation, not an implemented runtime/exporter. No ground-truth 3D comparison.",
+    "counts": {
+      "source": "see original Q4 covariance experiment report"
+    },
+    "matrix_errors": {
+      "blocks.0.attn.out.weight": {
+        "plain": 0.037934526801109314,
+        "damp_0.3": 0.016440177336335182
+      },
+      "blocks.0.attn.qkv.weight": {
+        "plain": 0.1718636155128479,
+        "damp_0.3": 0.055689457803964615
+      },
+      "blocks.0.mlp.mlp.0.weight": {
+        "plain": 0.0604490265250206,
+        "damp_0.3": 0.019957639276981354
+      },
+      "blocks.0.mlp.mlp.2.weight": {
+        "plain": 0.021528169512748718,
+        "damp_0.3": 0.0019573550671339035
+      },
+      "blocks.1.attn.out.weight": {
+        "plain": 0.023996157571673393,
+        "damp_0.3": 0.007070223800837994
+      },
+      "blocks.1.attn.qkv.weight": {
+        "plain": 0.09521365165710449,
+        "damp_0.3": 0.03345578536391258
+      },
+      "blocks.1.mlp.mlp.0.weight": {
+        "plain": 0.03249669075012207,
+        "damp_0.3": 0.013673296198248863
+      },
+      "blocks.1.mlp.mlp.2.weight": {
+        "plain": 0.006084423046559095,
+        "damp_0.3": 0.0006151614943519235
+      },
+      "blocks.10.attn.out.weight": {
+        "plain": 0.03687572479248047,
+        "damp_0.3": 0.006283370777964592
+      },
+      "blocks.10.attn.qkv.weight": {
+        "plain": 0.3654105067253113,
+        "damp_0.3": 0.2504827678203583
+      },
+      "blocks.10.mlp.mlp.0.weight": {
+        "plain": 0.12363499402999878,
+        "damp_0.3": 0.08361309766769409
+      },
+      "blocks.10.mlp.mlp.2.weight": {
+        "plain": 0.04093225672841072,
+        "damp_0.3": 0.0024081943556666374
+      },
+      "blocks.11.attn.out.weight": {
+        "plain": 0.08534565567970276,
+        "damp_0.3": 0.020308926701545715
+      },
+      "blocks.11.attn.qkv.weight": {
+        "plain": 0.3886790871620178,
+        "damp_0.3": 0.24406610429286957
+      },
+      "blocks.11.mlp.mlp.0.weight": {
+        "plain": 0.1234060525894165,
+        "damp_0.3": 0.0786329060792923
+      },
+      "blocks.11.mlp.mlp.2.weight": {
+        "plain": 0.029404977336525917,
+        "damp_0.3": 0.0024133764673024416
+      },
+      "blocks.12.attn.out.weight": {
+        "plain": 0.10407418012619019,
+        "damp_0.3": 0.07424858212471008
+      },
+      "blocks.12.attn.qkv.weight": {
+        "plain": 0.3886844515800476,
+        "damp_0.3": 0.2413746416568756
+      },
+      "blocks.12.mlp.mlp.0.weight": {
+        "plain": 0.1201707124710083,
+        "damp_0.3": 0.07823947817087173
+      },
+      "blocks.12.mlp.mlp.2.weight": {
+        "plain": 0.02336602658033371,
+        "damp_0.3": 0.002535025356337428
+      },
+      "blocks.13.attn.out.weight": {
+        "plain": 0.06443957984447479,
+        "damp_0.3": 0.025033481419086456
+      },
+      "blocks.13.attn.qkv.weight": {
+        "plain": 0.40357983112335205,
+        "damp_0.3": 0.25968417525291443
+      },
+      "blocks.13.mlp.mlp.0.weight": {
+        "plain": 0.13173115253448486,
+        "damp_0.3": 0.08547233045101166
+      },
+      "blocks.13.mlp.mlp.2.weight": {
+        "plain": 0.022631973028182983,
+        "damp_0.3": 0.0021841416601091623
+      },
+      "blocks.14.attn.out.weight": {
+        "plain": 0.07989930361509323,
+        "damp_0.3": 0.04567035287618637
+      },
+      "blocks.14.attn.qkv.weight": {
+        "plain": 0.3582352101802826,
+        "damp_0.3": 0.22517918050289154
+      },
+      "blocks.14.mlp.mlp.0.weight": {
+        "plain": 0.12129136919975281,
+        "damp_0.3": 0.07977177202701569
+      },
+      "blocks.14.mlp.mlp.2.weight": {
+        "plain": 0.019346579909324646,
+        "damp_0.3": 0.0020061025861650705
+      },
+      "blocks.15.attn.out.weight": {
+        "plain": 0.1677682101726532,
+        "damp_0.3": 0.0866660475730896
+      },
+      "blocks.15.attn.qkv.weight": {
+        "plain": 0.4365646243095398,
+        "damp_0.3": 0.26806363463401794
+      },
+      "blocks.15.mlp.mlp.0.weight": {
+        "plain": 0.11550324410200119,
+        "damp_0.3": 0.07413341850042343
+      },
+      "blocks.15.mlp.mlp.2.weight": {
+        "plain": 0.020953070372343063,
+        "damp_0.3": 0.0026320430915802717
+      },
+      "blocks.16.attn.out.weight": {
+        "plain": 0.08944651484489441,
+        "damp_0.3": 0.03901010379195213
+      },
+      "blocks.16.attn.qkv.weight": {
+        "plain": 0.40602847933769226,
+        "damp_0.3": 0.24197246134281158
+      },
+      "blocks.16.mlp.mlp.0.weight": {
+        "plain": 0.12231042981147766,
+        "damp_0.3": 0.07968242466449738
+      },
+      "blocks.16.mlp.mlp.2.weight": {
+        "plain": 0.02292567491531372,
+        "damp_0.3": 0.002591780386865139
+      },
+      "blocks.17.attn.out.weight": {
+        "plain": 0.06633605808019638,
+        "damp_0.3": 0.021209781989455223
+      },
+      "blocks.17.attn.qkv.weight": {
+        "plain": 0.39729419350624084,
+        "damp_0.3": 0.23583275079727173
+      },
+      "blocks.17.mlp.mlp.0.weight": {
+        "plain": 0.11656077206134796,
+        "damp_0.3": 0.07445763796567917
+      },
+      "blocks.17.mlp.mlp.2.weight": {
+        "plain": 0.027190908789634705,
+        "damp_0.3": 0.0030022384598851204
+      },
+      "blocks.18.attn.out.weight": {
+        "plain": 0.1889011412858963,
+        "damp_0.3": 0.068769171833992
+      },
+      "blocks.18.attn.qkv.weight": {
+        "plain": 0.4127500355243683,
+        "damp_0.3": 0.24063125252723694
+      },
+      "blocks.18.mlp.mlp.0.weight": {
+        "plain": 0.11797565221786499,
+        "damp_0.3": 0.07298354059457779
+      },
+      "blocks.18.mlp.mlp.2.weight": {
+        "plain": 0.03565958887338638,
+        "damp_0.3": 0.003496692981570959
+      },
+      "blocks.19.attn.out.weight": {
+        "plain": 0.08918292075395584,
+        "damp_0.3": 0.02299950085580349
+      },
+      "blocks.19.attn.qkv.weight": {
+        "plain": 0.40492913126945496,
+        "damp_0.3": 0.2227439284324646
+      },
+      "blocks.19.mlp.mlp.0.weight": {
+        "plain": 0.1244996190071106,
+        "damp_0.3": 0.07549932599067688
+      },
+      "blocks.19.mlp.mlp.2.weight": {
+        "plain": 0.060257889330387115,
+        "damp_0.3": 0.006088884547352791
+      },
+      "blocks.2.attn.out.weight": {
+        "plain": 0.016349496319890022,
+        "damp_0.3": 0.004607447423040867
+      },
+      "blocks.2.attn.qkv.weight": {
+        "plain": 0.08258910477161407,
+        "damp_0.3": 0.028986427932977676
+      },
+      "blocks.2.mlp.mlp.0.weight": {
+        "plain": 0.03602255880832672,
+        "damp_0.3": 0.01506235171109438
+      },
+      "blocks.2.mlp.mlp.2.weight": {
+        "plain": 0.008158262819051743,
+        "damp_0.3": 0.0008262752089649439
+      },
+      "blocks.20.attn.out.weight": {
+        "plain": 0.10123477876186371,
+        "damp_0.3": 0.026961617171764374
+      },
+      "blocks.20.attn.qkv.weight": {
+        "plain": 0.32581520080566406,
+        "damp_0.3": 0.1706366240978241
+      },
+      "blocks.20.mlp.mlp.0.weight": {
+        "plain": 0.10469160974025726,
+        "damp_0.3": 0.0585135892033577
+      },
+      "blocks.20.mlp.mlp.2.weight": {
+        "plain": 0.04443754255771637,
+        "damp_0.3": 0.004193078726530075
+      },
+      "blocks.21.attn.out.weight": {
+        "plain": 0.08724541962146759,
+        "damp_0.3": 0.03078732267022133
+      },
+      "blocks.21.attn.qkv.weight": {
+        "plain": 0.32521143555641174,
+        "damp_0.3": 0.1558828353881836
+      },
+      "blocks.21.mlp.mlp.0.weight": {
+        "plain": 0.10427041351795197,
+        "damp_0.3": 0.05451679974794388
+      },
+      "blocks.21.mlp.mlp.2.weight": {
+        "plain": 0.0460054874420166,
+        "damp_0.3": 0.004999498836696148
+      },
+      "blocks.22.attn.out.weight": {
+        "plain": 0.3125098943710327,
+        "damp_0.3": 0.13023772835731506
+      },
+      "blocks.22.attn.qkv.weight": {
+        "plain": 0.46864205598831177,
+        "damp_0.3": 0.20615212619304657
+      },
+      "blocks.22.mlp.mlp.0.weight": {
+        "plain": 0.11399385333061218,
+        "damp_0.3": 0.054786425083875656
+      },
+      "blocks.22.mlp.mlp.2.weight": {
+        "plain": 0.0450187586247921,
+        "damp_0.3": 0.005135100334882736
+      },
+      "blocks.23.attn.out.weight": {
+        "plain": 0.17560918629169464,
+        "damp_0.3": 0.06764870882034302
+      },
+      "blocks.23.attn.qkv.weight": {
+        "plain": 0.4145163297653198,
+        "damp_0.3": 0.1673152595758438
+      },
+      "blocks.23.mlp.mlp.0.weight": {
+        "plain": 0.11125490069389343,
+        "damp_0.3": 0.0529925599694252
+      },
+      "blocks.23.mlp.mlp.2.weight": {
+        "plain": 0.022293435409665108,
+        "damp_0.3": 0.002512774197384715
+      },
+      "blocks.3.attn.out.weight": {
+        "plain": 0.014067418873310089,
+        "damp_0.3": 0.0059311906807124615
+      },
+      "blocks.3.attn.qkv.weight": {
+        "plain": 0.10182580351829529,
+        "damp_0.3": 0.0361754447221756
+      },
+      "blocks.3.mlp.mlp.0.weight": {
+        "plain": 0.042337026447057724,
+        "damp_0.3": 0.018032729625701904
+      },
+      "blocks.3.mlp.mlp.2.weight": {
+        "plain": 0.016583267599344254,
+        "damp_0.3": 0.0016845052596181631
+      },
+      "blocks.4.attn.out.weight": {
+        "plain": 0.03540748357772827,
+        "damp_0.3": 0.006320183631032705
+      },
+      "blocks.4.attn.qkv.weight": {
+        "plain": 0.15167413651943207,
+        "damp_0.3": 0.06468227505683899
+      },
+      "blocks.4.mlp.mlp.0.weight": {
+        "plain": 0.05761689692735672,
+        "damp_0.3": 0.02840990014374256
+      },
+      "blocks.4.mlp.mlp.2.weight": {
+        "plain": 0.03261428698897362,
+        "damp_0.3": 0.002400479279458523
+      },
+      "blocks.5.attn.out.weight": {
+        "plain": 0.04793290048837662,
+        "damp_0.3": 0.014796880073845387
+      },
+      "blocks.5.attn.qkv.weight": {
+        "plain": 0.2352137714624405,
+        "damp_0.3": 0.12716342508792877
+      },
+      "blocks.5.mlp.mlp.0.weight": {
+        "plain": 0.07689571380615234,
+        "damp_0.3": 0.042954105883836746
+      },
+      "blocks.5.mlp.mlp.2.weight": {
+        "plain": 0.028053583577275276,
+        "damp_0.3": 0.002768607111647725
+      },
+      "blocks.6.attn.out.weight": {
+        "plain": 0.03939681127667427,
+        "damp_0.3": 0.010818107053637505
+      },
+      "blocks.6.attn.qkv.weight": {
+        "plain": 0.2567123472690582,
+        "damp_0.3": 0.15175612270832062
+      },
+      "blocks.6.mlp.mlp.0.weight": {
+        "plain": 0.09000106155872345,
+        "damp_0.3": 0.05338246747851372
+      },
+      "blocks.6.mlp.mlp.2.weight": {
+        "plain": 0.05443805456161499,
+        "damp_0.3": 0.005908007733523846
+      },
+      "blocks.7.attn.out.weight": {
+        "plain": 0.06642448902130127,
+        "damp_0.3": 0.03500714898109436
+      },
+      "blocks.7.attn.qkv.weight": {
+        "plain": 0.30297642946243286,
+        "damp_0.3": 0.1932837963104248
+      },
+      "blocks.7.mlp.mlp.0.weight": {
+        "plain": 0.09976339340209961,
+        "damp_0.3": 0.06503649055957794
+      },
+      "blocks.7.mlp.mlp.2.weight": {
+        "plain": 0.06370045244693756,
+        "damp_0.3": 0.0028910920955240726
+      },
+      "blocks.8.attn.out.weight": {
+        "plain": 0.06612871587276459,
+        "damp_0.3": 0.02407694421708584
+      },
+      "blocks.8.attn.qkv.weight": {
+        "plain": 0.34669432044029236,
+        "damp_0.3": 0.22343024611473083
+      },
+      "blocks.8.mlp.mlp.0.weight": {
+        "plain": 0.11294786632061005,
+        "damp_0.3": 0.07373174279928207
+      },
+      "blocks.8.mlp.mlp.2.weight": {
+        "plain": 0.027922146022319794,
+        "damp_0.3": 0.0020321940537542105
+      },
+      "blocks.9.attn.out.weight": {
+        "plain": 0.04173177480697632,
+        "damp_0.3": 0.012337197549641132
+      },
+      "blocks.9.attn.qkv.weight": {
+        "plain": 0.352988600730896,
+        "damp_0.3": 0.2348952293395996
+      },
+      "blocks.9.mlp.mlp.0.weight": {
+        "plain": 0.12004128098487854,
+        "damp_0.3": 0.07966440916061401
+      },
+      "blocks.9.mlp.mlp.2.weight": {
+        "plain": 0.02531534992158413,
+        "damp_0.3": 0.0019864889327436686
+      }
+    },
+    "variants": {
+      "plain": {
+        "ten_step": {
+          "armchair": 0.1316738502447261,
+          "avocado": 0.046921818618137996,
+          "chelsea": 0.24239212557779463,
+          "astronaut": 0.0786120157288126,
+          "coffee": 0.04464309338647263,
+          "castle": 0.1244835523459391,
+          "rocket": 0.05777597615028462,
+          "grandma": 0.21791170721744704,
+          "grapes": 0.16374390106927342
+        },
+        "development_50step": {
+          "chelsea": 0.12096943471936865,
+          "astronaut": 0.07117996768401287,
+          "grandma": 0.2326471788544569,
+          "grapes": 0.06926096083058184
+        }
+      },
+      "damp_0.3": {
+        "ten_step": {
+          "armchair": 0.07918310688986432,
+          "avocado": 0.03588890942168314,
+          "chelsea": 0.11766308246580348,
+          "astronaut": 0.07324389488684534,
+          "coffee": 0.0499072107572149,
+          "castle": 0.12779182784517748,
+          "rocket": 0.03931035712363284,
+          "grandma": 0.2169893019046569,
+          "grapes": 0.059441485516574105
+        },
+        "development_50step": {
+          "chelsea": 0.09864050318367451,
+          "astronaut": 0.06451022078491811,
+          "grandma": 0.14709131110864823,
+          "grapes": 0.06863811200853064
+        }
+      }
+    },
+    "encoded_sha256": "c8052e7a412190f6742f6d37a70dd693fe862ed6f9e44f0e241b5ea39bacdf9c",
+    "hessians_sha256": "bc89d491e5f275f29c039eba7bed87e3a94a84b73354059779486f2aa71d1ebe",
+    "inputs_sha256": {
+      "source_sha256": "ded2cacf671bf3978ebc62729087abdbd318ef4752e6805b4c9fc8ffa51fe716",
+      "model_sha256": "80707a85bcd4242453bd7a1ed390f5a8410efe8ab8812ad8327ef31863a9b483",
+      "hessians_sha256": "bc89d491e5f275f29c039eba7bed87e3a94a84b73354059779486f2aa71d1ebe",
+      "ggml_sha256": "323095706b0b18fb2411f044c02e765174b6d6f650f54deaa4e7d7f0b2aeaa4b",
+      "script_sha256": "80d733a7f9ae956dd4d6dad89e8cb90fdf2876aff9e43862e5ba427f164bac16",
+      "torch_version": "2.10.0+cu128",
+      "cuda_version": "12.8",
+      "gpu": "NVIDIA GeForce RTX 4090",
+      "training_images_sha256": {
+        "armchair": "8c30a0cbed2931aebb7ba5fe9082ccc87a01ab7c24ddf48faceb650921b5b29f",
+        "avocado": "b7dd1f8863bbca337bd71635ca8f5499cade479aa71faec5a136f13798a9d0ee",
+        "chelsea": "adbb6c59da5251983dfca65bd3d055e3d2cb9d49f85af5d473852a9033e42f24"
+      },
+      "training_steps": 10,
+      "seed": 42,
+      "damping": 0.3
+    }
+  },
+  "denoiser_q6": {
+    "scope": "All 24 denoiser blocks; blockwise covariance compensation keeps standard Q6_K tensor encoding. Covariance uses sampled layer inputs from armchair, avocado and Chelsea, 10 steps, seed42; astronaut, coffee, castle and rocket are development checks; grandma and grapes are newly reserved held-out inputs. Encoded tensors are expanded to half precision for evaluation, not an implemented runtime/exporter. No ground-truth 3D comparison.",
+    "counts": {
+      "source": "see original Q4 covariance experiment report"
+    },
+    "matrix_errors": {
+      "blocks.0.attn.out.weight": {
+        "plain": 0.4258643388748169,
+        "damp_0.3": 0.18386279046535492
+      },
+      "blocks.0.attn.qkv.weight": {
+        "plain": 1.907289743423462,
+        "damp_0.3": 0.6123069524765015
+      },
+      "blocks.0.mlp.mlp.0.weight": {
+        "plain": 0.6750324368476868,
+        "damp_0.3": 0.22272831201553345
+      },
+      "blocks.0.mlp.mlp.2.weight": {
+        "plain": 0.23290881514549255,
+        "damp_0.3": 0.02175380475819111
+      },
+      "blocks.1.attn.out.weight": {
+        "plain": 0.26582151651382446,
+        "damp_0.3": 0.07870286703109741
+      },
+      "blocks.1.attn.qkv.weight": {
+        "plain": 1.0329837799072266,
+        "damp_0.3": 0.362822562456131
+      },
+      "blocks.1.mlp.mlp.0.weight": {
+        "plain": 0.3585045635700226,
+        "damp_0.3": 0.15207356214523315
+      },
+      "blocks.1.mlp.mlp.2.weight": {
+        "plain": 0.06577828526496887,
+        "damp_0.3": 0.006690760143101215
+      },
+      "blocks.10.attn.out.weight": {
+        "plain": 0.4027642607688904,
+        "damp_0.3": 0.0694928914308548
+      },
+      "blocks.10.attn.qkv.weight": {
+        "plain": 3.9745404720306396,
+        "damp_0.3": 2.667299747467041
+      },
+      "blocks.10.mlp.mlp.0.weight": {
+        "plain": 1.3741798400878906,
+        "damp_0.3": 0.9181451797485352
+      },
+      "blocks.10.mlp.mlp.2.weight": {
+        "plain": 0.44270622730255127,
+        "damp_0.3": 0.026162030175328255
+      },
+      "blocks.11.attn.out.weight": {
+        "plain": 1.0128827095031738,
+        "damp_0.3": 0.23210346698760986
+      },
+      "blocks.11.attn.qkv.weight": {
+        "plain": 4.238312721252441,
+        "damp_0.3": 2.729921579360962
+      },
+      "blocks.11.mlp.mlp.0.weight": {
+        "plain": 1.3057914972305298,
+        "damp_0.3": 0.8846886157989502
+      },
+      "blocks.11.mlp.mlp.2.weight": {
+        "plain": 0.3067113161087036,
+        "damp_0.3": 0.02665751427412033
+      },
+      "blocks.12.attn.out.weight": {
+        "plain": 1.1661639213562012,
+        "damp_0.3": 0.8226951360702515
+      },
+      "blocks.12.attn.qkv.weight": {
+        "plain": 4.235405445098877,
+        "damp_0.3": 2.7230405807495117
+      },
+      "blocks.12.mlp.mlp.0.weight": {
+        "plain": 1.3171836137771606,
+        "damp_0.3": 0.8375231623649597
+      },
+      "blocks.12.mlp.mlp.2.weight": {
+        "plain": 0.25275635719299316,
+        "damp_0.3": 0.02743196301162243
+      },
+      "blocks.13.attn.out.weight": {
+        "plain": 0.7022249102592468,
+        "damp_0.3": 0.2781439423561096
+      },
+      "blocks.13.attn.qkv.weight": {
+        "plain": 4.594570159912109,
+        "damp_0.3": 2.9103145599365234
+      },
+      "blocks.13.mlp.mlp.0.weight": {
+        "plain": 1.4356260299682617,
+        "damp_0.3": 0.9219065308570862
+      },
+      "blocks.13.mlp.mlp.2.weight": {
+        "plain": 0.2510950267314911,
+        "damp_0.3": 0.02355336770415306
+      },
+      "blocks.14.attn.out.weight": {
+        "plain": 0.9299446940422058,
+        "damp_0.3": 0.47675836086273193
+      },
+      "blocks.14.attn.qkv.weight": {
+        "plain": 3.902432680130005,
+        "damp_0.3": 2.488929271697998
+      },
+      "blocks.14.mlp.mlp.0.weight": {
+        "plain": 1.2920480966567993,
+        "damp_0.3": 0.8575122356414795
+      },
+      "blocks.14.mlp.mlp.2.weight": {
+        "plain": 0.21302756667137146,
+        "damp_0.3": 0.021000931039452553
+      },
+      "blocks.15.attn.out.weight": {
+        "plain": 1.753906011581421,
+        "damp_0.3": 0.8875187635421753
+      },
+      "blocks.15.attn.qkv.weight": {
+        "plain": 4.713142395019531,
+        "damp_0.3": 2.9424397945404053
+      },
+      "blocks.15.mlp.mlp.0.weight": {
+        "plain": 1.2837145328521729,
+        "damp_0.3": 0.8154218196868896
+      },
+      "blocks.15.mlp.mlp.2.weight": {
+        "plain": 0.23919519782066345,
+        "damp_0.3": 0.027631666511297226
+      },
+      "blocks.16.attn.out.weight": {
+        "plain": 0.9828011989593506,
+        "damp_0.3": 0.42032402753829956
+      },
+      "blocks.16.attn.qkv.weight": {
+        "plain": 4.295007705688477,
+        "damp_0.3": 2.64835786819458
+      },
+      "blocks.16.mlp.mlp.0.weight": {
+        "plain": 1.3338613510131836,
+        "damp_0.3": 0.868976354598999
+      },
+      "blocks.16.mlp.mlp.2.weight": {
+        "plain": 0.2555919289588928,
+        "damp_0.3": 0.028342874720692635
+      },
+      "blocks.17.attn.out.weight": {
+        "plain": 0.7797731757164001,
+        "damp_0.3": 0.23600855469703674
+      },
+      "blocks.17.attn.qkv.weight": {
+        "plain": 4.423346519470215,
+        "damp_0.3": 2.6940765380859375
+      },
+      "blocks.17.mlp.mlp.0.weight": {
+        "plain": 1.2602572441101074,
+        "damp_0.3": 0.8135992288589478
+      },
+      "blocks.17.mlp.mlp.2.weight": {
+        "plain": 0.3047558665275574,
+        "damp_0.3": 0.0330398827791214
+      },
+      "blocks.18.attn.out.weight": {
+        "plain": 2.17636775970459,
+        "damp_0.3": 0.8016488552093506
+      },
+      "blocks.18.attn.qkv.weight": {
+        "plain": 4.617998123168945,
+        "damp_0.3": 2.7086424827575684
+      },
+      "blocks.18.mlp.mlp.0.weight": {
+        "plain": 1.278979778289795,
+        "damp_0.3": 0.785586416721344
+      },
+      "blocks.18.mlp.mlp.2.weight": {
+        "plain": 0.42058658599853516,
+        "damp_0.3": 0.039501212537288666
+      },
+      "blocks.19.attn.out.weight": {
+        "plain": 1.0013517141342163,
+        "damp_0.3": 0.25623956322669983
+      },
+      "blocks.19.attn.qkv.weight": {
+        "plain": 4.589285850524902,
+        "damp_0.3": 2.579320192337036
+      },
+      "blocks.19.mlp.mlp.0.weight": {
+        "plain": 1.3000009059906006,
+        "damp_0.3": 0.8100095391273499
+      },
+      "blocks.19.mlp.mlp.2.weight": {
+        "plain": 0.7291423678398132,
+        "damp_0.3": 0.06480513513088226
+      },
+      "blocks.2.attn.out.weight": {
+        "plain": 0.1880078911781311,
+        "damp_0.3": 0.049729399383068085
+      },
+      "blocks.2.attn.qkv.weight": {
+        "plain": 0.9092718362808228,
+        "damp_0.3": 0.30910056829452515
+      },
+      "blocks.2.mlp.mlp.0.weight": {
+        "plain": 0.39637279510498047,
+        "damp_0.3": 0.16533534228801727
+      },
+      "blocks.2.mlp.mlp.2.weight": {
+        "plain": 0.09000234305858612,
+        "damp_0.3": 0.00908300094306469
+      },
+      "blocks.20.attn.out.weight": {
+        "plain": 1.1194013357162476,
+        "damp_0.3": 0.3004980683326721
+      },
+      "blocks.20.attn.qkv.weight": {
+        "plain": 3.6449503898620605,
+        "damp_0.3": 1.8989744186401367
+      },
+      "blocks.20.mlp.mlp.0.weight": {
+        "plain": 1.1372084617614746,
+        "damp_0.3": 0.6221932768821716
+      },
+      "blocks.20.mlp.mlp.2.weight": {
+        "plain": 0.43982669711112976,
+        "damp_0.3": 0.046994730830192566
+      },
+      "blocks.21.attn.out.weight": {
+        "plain": 0.9941158294677734,
+        "damp_0.3": 0.3503805994987488
+      },
+      "blocks.21.attn.qkv.weight": {
+        "plain": 3.6623897552490234,
+        "damp_0.3": 1.7460206747055054
+      },
+      "blocks.21.mlp.mlp.0.weight": {
+        "plain": 1.163750410079956,
+        "damp_0.3": 0.6287373304367065
+      },
+      "blocks.21.mlp.mlp.2.weight": {
+        "plain": 0.48438021540641785,
+        "damp_0.3": 0.052653878927230835
+      },
+      "blocks.22.attn.out.weight": {
+        "plain": 3.569746971130371,
+        "damp_0.3": 1.5159634351730347
+      },
+      "blocks.22.attn.qkv.weight": {
+        "plain": 5.108081817626953,
+        "damp_0.3": 2.2447383403778076
+      },
+      "blocks.22.mlp.mlp.0.weight": {
+        "plain": 1.260711431503296,
+        "damp_0.3": 0.6024457216262817
+      },
+      "blocks.22.mlp.mlp.2.weight": {
+        "plain": 0.4821646511554718,
+        "damp_0.3": 0.05526599660515785
+      },
+      "blocks.23.attn.out.weight": {
+        "plain": 1.9030097723007202,
+        "damp_0.3": 0.7498288154602051
+      },
+      "blocks.23.attn.qkv.weight": {
+        "plain": 4.548327922821045,
+        "damp_0.3": 1.8549959659576416
+      },
+      "blocks.23.mlp.mlp.0.weight": {
+        "plain": 1.2402000427246094,
+        "damp_0.3": 0.6002335548400879
+      },
+      "blocks.23.mlp.mlp.2.weight": {
+        "plain": 0.2455054223537445,
+        "damp_0.3": 0.024965863674879074
+      },
+      "blocks.3.attn.out.weight": {
+        "plain": 0.15976712107658386,
+        "damp_0.3": 0.06599897146224976
+      },
+      "blocks.3.attn.qkv.weight": {
+        "plain": 1.105806589126587,
+        "damp_0.3": 0.38640210032463074
+      },
+      "blocks.3.mlp.mlp.0.weight": {
+        "plain": 0.46223485469818115,
+        "damp_0.3": 0.19871699810028076
+      },
+      "blocks.3.mlp.mlp.2.weight": {
+        "plain": 0.17269587516784668,
+        "damp_0.3": 0.020078027620911598
+      },
+      "blocks.4.attn.out.weight": {
+        "plain": 0.4118272066116333,
+        "damp_0.3": 0.06933128833770752
+      },
+      "blocks.4.attn.qkv.weight": {
+        "plain": 1.5970830917358398,
+        "damp_0.3": 0.6957482695579529
+      },
+      "blocks.4.mlp.mlp.0.weight": {
+        "plain": 0.6408908367156982,
+        "damp_0.3": 0.3124832510948181
+      },
+      "blocks.4.mlp.mlp.2.weight": {
+        "plain": 0.3690611720085144,
+        "damp_0.3": 0.027098076418042183
+      },
+      "blocks.5.attn.out.weight": {
+        "plain": 0.5312151312828064,
+        "damp_0.3": 0.1633249819278717
+      },
+      "blocks.5.attn.qkv.weight": {
+        "plain": 2.575465202331543,
+        "damp_0.3": 1.4137579202651978
+      },
+      "blocks.5.mlp.mlp.0.weight": {
+        "plain": 0.8404383659362793,
+        "damp_0.3": 0.47106146812438965
+      },
+      "blocks.5.mlp.mlp.2.weight": {
+        "plain": 0.3075282871723175,
+        "damp_0.3": 0.031608425080776215
+      },
+      "blocks.6.attn.out.weight": {
+        "plain": 0.43280962109565735,
+        "damp_0.3": 0.12848353385925293
+      },
+      "blocks.6.attn.qkv.weight": {
+        "plain": 2.942103862762451,
+        "damp_0.3": 1.702061414718628
+      },
+      "blocks.6.mlp.mlp.0.weight": {
+        "plain": 1.0031921863555908,
+        "damp_0.3": 0.6041091084480286
+      },
+      "blocks.6.mlp.mlp.2.weight": {
+        "plain": 0.5886967778205872,
+        "damp_0.3": 0.0655638799071312
+      },
+      "blocks.7.attn.out.weight": {
+        "plain": 0.7232629060745239,
+        "damp_0.3": 0.3920276165008545
+      },
+      "blocks.7.attn.qkv.weight": {
+        "plain": 3.371605634689331,
+        "damp_0.3": 2.139394760131836
+      },
+      "blocks.7.mlp.mlp.0.weight": {
+        "plain": 1.1074435710906982,
+        "damp_0.3": 0.7217777967453003
+      },
+      "blocks.7.mlp.mlp.2.weight": {
+        "plain": 0.7095340490341187,
+        "damp_0.3": 0.029873276129364967
+      },
+      "blocks.8.attn.out.weight": {
+        "plain": 0.7314729690551758,
+        "damp_0.3": 0.26945725083351135
+      },
+      "blocks.8.attn.qkv.weight": {
+        "plain": 3.844411611557007,
+        "damp_0.3": 2.46755051612854
+      },
+      "blocks.8.mlp.mlp.0.weight": {
+        "plain": 1.2744731903076172,
+        "damp_0.3": 0.8379840850830078
+      },
+      "blocks.8.mlp.mlp.2.weight": {
+        "plain": 0.29559439420700073,
+        "damp_0.3": 0.022826572880148888
+      },
+      "blocks.9.attn.out.weight": {
+        "plain": 0.47069695591926575,
+        "damp_0.3": 0.1412568986415863
+      },
+      "blocks.9.attn.qkv.weight": {
+        "plain": 3.8061177730560303,
+        "damp_0.3": 2.575169801712036
+      },
+      "blocks.9.mlp.mlp.0.weight": {
+        "plain": 1.2906367778778076,
+        "damp_0.3": 0.8614041805267334
+      },
+      "blocks.9.mlp.mlp.2.weight": {
+        "plain": 0.29318562150001526,
+        "damp_0.3": 0.02264966070652008
+      }
+    },
+    "variants": {
+      "plain": {
+        "ten_step": {
+          "armchair": 0.3032353791138133,
+          "avocado": 0.1357371726985938,
+          "chelsea": 0.3483240903717593,
+          "astronaut": 0.18001289313752208,
+          "coffee": 0.10224176011698707,
+          "castle": 0.34428007790040105,
+          "rocket": 0.18570735240662573,
+          "grandma": 0.2581043837438767,
+          "grapes": 0.2515215284746191
+        },
+        "development_and_holdout_50step": {
+          "castle": 0.26781985705268335,
+          "rocket": 0.12259503841998697,
+          "grandma": 0.2843112076763861,
+          "grapes": 0.16915106729573037
+        }
+      },
+      "damp_0.3": {
+        "ten_step": {
+          "armchair": 0.14125692470152637,
+          "avocado": 0.11826140513616612,
+          "chelsea": 0.24233105622668116,
+          "astronaut": 0.18593020165118607,
+          "coffee": 0.07034714708931504,
+          "castle": 0.26409480039208033,
+          "rocket": 0.12764640068184868,
+          "grandma": 0.2623962425535948,
+          "grapes": 0.1760511562049671
+        },
+        "development_and_holdout_50step": {
+          "castle": 0.10795363172621548,
+          "rocket": 0.08307506063520102,
+          "grandma": 0.08644901196590524,
+          "grapes": 0.17505744819921465
+        }
+      }
+    },
+    "encoded_sha256": "5c1c9152677dcf5efed1d981488d31f179ecc8ffd352109d9b47a5d745099128",
+    "hessians_sha256": "bc89d491e5f275f29c039eba7bed87e3a94a84b73354059779486f2aa71d1ebe",
+    "inputs_sha256": {
+      "source_sha256": "ded2cacf671bf3978ebc62729087abdbd318ef4752e6805b4c9fc8ffa51fe716",
+      "model_sha256": "80707a85bcd4242453bd7a1ed390f5a8410efe8ab8812ad8327ef31863a9b483",
+      "hessians_sha256": "bc89d491e5f275f29c039eba7bed87e3a94a84b73354059779486f2aa71d1ebe",
+      "ggml_sha256": "323095706b0b18fb2411f044c02e765174b6d6f650f54deaa4e7d7f0b2aeaa4b",
+      "script_sha256": "703858368c0be5983f7006babc66ce58f4c1c5cccdaadac9cfc440b17751585d",
+      "torch_version": "2.10.0+cu128",
+      "cuda_version": "12.8",
+      "gpu": "NVIDIA GeForce RTX 4090",
+      "training_images_sha256": {
+        "armchair": "8c30a0cbed2931aebb7ba5fe9082ccc87a01ab7c24ddf48faceb650921b5b29f",
+        "avocado": "b7dd1f8863bbca337bd71635ca8f5499cade479aa71faec5a136f13798a9d0ee",
+        "chelsea": "adbb6c59da5251983dfca65bd3d055e3d2cb9d49f85af5d473852a9033e42f24"
+      },
+      "training_steps": 10,
+      "seed": 42,
+      "damping": 0.3
+    }
+  },
+  "denoiser_q4_q6": {
+    "scope": "Experimental mixed precision: covariance-compensated Q4_K matrices except the 8 or 16 blocks ranked most sensitive on two earlier 10-step training images, which use compensated Q6_K. Other weights retain original runtime precision. Lamp and lollipop are reserved 50-step gallery comparisons. Encoded matrices expanded to half; not a production exporter or ground-truth 3D comparison.",
+    "ranking_sha256": "38676eae9350bb72bb25c377e26354b88a552ca4d6ccf94c99ab3a201505dc7d",
+    "encoded_sha256": {
+      "4": "7d2a2223c7d8d9dabbe7dd887ee2a13364552c83e4cd9fe749ef325ea2a647cb",
+      "6": "5c1c9152677dcf5efed1d981488d31f179ecc8ffd352109d9b47a5d745099128"
+    },
+    "images_sha256": {
+      "armchair": "8c30a0cbed2931aebb7ba5fe9082ccc87a01ab7c24ddf48faceb650921b5b29f",
+      "avocado": "b7dd1f8863bbca337bd71635ca8f5499cade479aa71faec5a136f13798a9d0ee",
+      "chelsea": "adbb6c59da5251983dfca65bd3d055e3d2cb9d49f85af5d473852a9033e42f24",
+      "astronaut": "b8c8afe36141c45dd06f55d257d6b951b4c77a1a2c31fe09e78452cdda2dfcd4",
+      "coffee": "bc7c679e93a04b35aef5c5d644f0293d6aac8df7ccbba06f1d5bdddc0285050b",
+      "lamp": "184bb44d9abd5590b6b804877e6c32278387d40339150d96eca8a55c782f36d0",
+      "lollipop": "43c756f3fe6eb340381f9250f9aa720c6751085095dc7a7912dac79f9456299d"
+    },
+    "ranking": [
+      17,
+      10,
+      18,
+      9,
+      19,
+      0,
+      12,
+      1,
+      15,
+      5,
+      13,
+      14,
+      7,
+      11,
+      22,
+      16,
+      8,
+      6,
+      20,
+      23,
+      4,
+      21,
+      2,
+      3
+    ],
+    "variants": {
+      "0": {
+        "q6_blocks": [],
+        "ten_step": {},
+        "heldout_50step": {
+          "lamp": 0.15055915228978964,
+          "lollipop": 0.3281391902194465
+        }
+      },
+      "8": {
+        "q6_blocks": [
+          0,
+          1,
+          9,
+          10,
+          12,
+          17,
+          18,
+          19
+        ],
+        "ten_step": {
+          "armchair": 0.46614436641290996,
+          "avocado": 0.23395230359789032,
+          "chelsea": 0.5741779961039141,
+          "astronaut": 0.3894311388865238,
+          "coffee": 0.22412184549413985
+        },
+        "heldout_50step": {
+          "lamp": 0.16883489575371083,
+          "lollipop": 0.20703200701208202
+        }
+      },
+      "16": {
+        "q6_blocks": [
+          0,
+          1,
+          5,
+          7,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          22
+        ],
+        "ten_step": {
+          "armchair": 0.31352893749897104,
+          "avocado": 0.18722580846738562,
+          "chelsea": 0.5721822834950651,
+          "astronaut": 0.20955748087471396,
+          "coffee": 0.13831870804358512
+        },
+        "heldout_50step": {
+          "lamp": 0.09718693342726842,
+          "lollipop": 0.11235888753323131
+        }
+      },
+      "24": {
+        "q6_blocks": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23
+        ],
+        "ten_step": {},
+        "heldout_50step": {
+          "lamp": 0.05683958516829959,
+          "lollipop": 0.05521011285353801
+        }
+      }
+    }
+  },
+  "combined_q8_denoiser_q2_gaussian": {
+    "chelsea": {
+      "scope": "Actual complete Idol GGUF with covariance Q8_0 denoiser block matrices and covariance Q2_K Gaussian matrices; original image encoders; 50 steps, 262144 points. Local incompatible xFormers disabled. Compares to original runtime and original Gaussian output, not ground-truth geometry.",
+      "model_sha256": "1d013890302d88355c25d1f4b011f458bdb1826602bfe78566485738bc6f8d59",
+      "image_sha256": "adbb6c59da5251983dfca65bd3d055e3d2cb9d49f85af5d473852a9033e42f24",
+      "latent_sha256": "2687ee457bde1b16f937e97a2fa3982a047a021dc0d8d3211c825a886e96d554",
+      "point_cloud_sha256": "cdc853872a756789bddf33a140c0284b332e05662a0c35638518bf4466d1b271",
+      "relative_latent_l2": 0.09864050318367451,
+      "prototype_relative_latent_l2": 0.09864050318367451,
+      "prototype_score_matches": true,
+      "elapsed_seconds": 43.21808860001329,
+      "gpu_peak_allocated_bytes": 3556051968,
+      "gpu_peak_reserved_bytes": 4617928704,
+      "original_point_cloud_sha256": "d735a64099aa1635bc17b3b1ee7edf5344a657bf8d466b26ff73cc61c5d810b2",
+      "geometry_vs_original": {
+        "reference_count": 262144,
+        "candidate_count": 262144,
+        "reference_to_candidate": {
+          "mean_center_distance": 0.0012499164478837442,
+          "p95_center_distance": 0.002309756622888167,
+          "opacity_weighted_mean_center_distance": 0.0011949724950082333,
+          "nearest_color_mean_absolute_difference": 0.07634355293240962
+        },
+        "candidate_to_reference": {
+          "mean_center_distance": 0.0014352042636053461,
+          "p95_center_distance": 0.0029996861014389754,
+          "opacity_weighted_mean_center_distance": 0.001345755479746838,
+          "nearest_color_mean_absolute_difference": 0.0754091181670719
+        },
+        "center_voxel_iou": {
+          "16": 0.9044117647058824,
+          "32": 0.8906882591093117,
+          "64": 0.8481933974525604
+        },
+        "orthographic_center_occupancy_iou": {
+          "16": {
+            "xy": 0.9347826086956522,
+            "xz": 0.918918918918919,
+            "yz": 0.9657142857142857
+          },
+          "32": {
+            "xy": 0.9574468085106383,
+            "xz": 0.9215686274509803,
+            "yz": 0.9758064516129032
+          },
+          "64": {
+            "xy": 0.9624217118997912,
+            "xz": 0.9251700680272109,
+            "yz": 0.9798369798369798
+          }
+        }
+      }
+    },
+    "astronaut": {
+      "scope": "Actual complete Idol GGUF with covariance Q8_0 denoiser block matrices and covariance Q2_K Gaussian matrices; original image encoders; 50 steps, 262144 points. Local incompatible xFormers disabled. Compares to original runtime and original Gaussian output, not ground-truth geometry.",
+      "model_sha256": "1d013890302d88355c25d1f4b011f458bdb1826602bfe78566485738bc6f8d59",
+      "image_sha256": "b8c8afe36141c45dd06f55d257d6b951b4c77a1a2c31fe09e78452cdda2dfcd4",
+      "latent_sha256": "7a26e9e8ab4c7e0cddfd469274ce96910e87b6d7d5d3e5b7253f47daf989372a",
+      "point_cloud_sha256": "3c79f626995ba7dbfdd904ce8aef6bc54e7d3eef4ec8b096f502e2d693bfa9e7",
+      "relative_latent_l2": 0.06451022078491811,
+      "prototype_relative_latent_l2": 0.06451022078491811,
+      "prototype_score_matches": true,
+      "elapsed_seconds": 41.68845770000189,
+      "gpu_peak_allocated_bytes": 3556051968,
+      "gpu_peak_reserved_bytes": 4617928704,
+      "original_point_cloud_sha256": "8990c0cd65f9c746d5582f10e8591c70cff4d5aebc72cb75ee87fe9df9d65d27",
+      "geometry_vs_original": {
+        "reference_count": 262144,
+        "candidate_count": 262144,
+        "reference_to_candidate": {
+          "mean_center_distance": 0.0021274527855741545,
+          "p95_center_distance": 0.00444796452163697,
+          "opacity_weighted_mean_center_distance": 0.0018770938386992709,
+          "nearest_color_mean_absolute_difference": 0.07288219987208994
+        },
+        "candidate_to_reference": {
+          "mean_center_distance": 0.0021052079788797928,
+          "p95_center_distance": 0.004311505127443927,
+          "opacity_weighted_mean_center_distance": 0.0019224109260211632,
+          "nearest_color_mean_absolute_difference": 0.06940748300168904
+        },
+        "center_voxel_iou": {
+          "16": 0.8601226993865031,
+          "32": 0.8184741303712365,
+          "64": 0.7508621878879845
+        },
+        "orthographic_center_occupancy_iou": {
+          "16": {
+            "xy": 0.9533333333333334,
+            "xz": 0.98,
+            "yz": 0.9848484848484849
+          },
+          "32": {
+            "xy": 0.9647749510763209,
+            "xz": 0.9813432835820896,
+            "yz": 0.9764453961456103
+          },
+          "64": {
+            "xy": 0.9731182795698925,
+            "xz": 0.985126425384234,
+            "yz": 0.9843296575739988
+          }
+        }
+      }
+    }
+  }
+}

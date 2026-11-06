@@ -1,0 +1,2 @@
+# The browser interface uses the same viewer release as the upstream Idol demo.
+gradio==5.49.1

@@ -1,0 +1,82 @@
+{
+  "scope": "Development comparison of weighted covariance two-bit and mixed two-/four-bit Gaussian decoders against the original decoder, using two original 50-step latents and 262144 points. The denoiser, octree and image encoders use original runtime precision. These are not ground-truth reconstruction measurements.",
+  "pairing_assumption": "The recorded scripts use the same latent, octree, seed 42, anchor count and output slot order for each pair. Anchor bytes were not independently recorded in these runs; the index pairing depends on the same sampling implementation producing identical ordered anchors.",
+  "units": {
+    "center_distance": "model-coordinate units",
+    "opacity_and_color_difference": "unitless; color values are derived from zero-degree spherical-harmonic coefficients and are not clipped"
+  },
+  "cases": {
+    "chelsea": {
+      "q2": {
+        "model_sha256": "1cb943e6f608dbb150b881e157e7d6526bd2d71073db50d8e75607b7954d1740",
+        "latent_sha256": "cda3f2375b4a21e9c63f7123bce90a1d52f40f8e8de188e7c1c808637e16f6b2",
+        "reference_point_cloud_sha256": "d735a64099aa1635bc17b3b1ee7edf5344a657bf8d466b26ff73cc61c5d810b2",
+        "candidate_point_cloud_sha256": "fb10038e39bf5963cb750e045633f595d9c9cf40ed6668881345af542d10cbc7",
+        "comparison_tool_sha256": "f4d7f07efb3da0dbbd846567d36e4ac48ff9db84afbacee16fb5cfa3305d3817",
+        "point_count": 262144,
+        "index_paired": {
+          "assumption": "point indices correspond; equal counts alone do not establish this",
+          "mean_center_distance": 0.0026460105997806243,
+          "p95_center_distance": 0.005408759873538068,
+          "max_center_distance": 0.020660508615428484,
+          "opacity_mean_absolute_difference": 0.08285502647587559,
+          "color_mean_absolute_difference": 0.03556593513522146
+        },
+        "center_voxel_iou_32_per_unit": 0.9342379958246346
+      },
+      "q2q4": {
+        "model_sha256": "ed8c6285a3e4aaf17f7b1bce68f2e1a58a981701cd7dc718d6bd63425eac4788",
+        "latent_sha256": "cda3f2375b4a21e9c63f7123bce90a1d52f40f8e8de188e7c1c808637e16f6b2",
+        "reference_point_cloud_sha256": "d735a64099aa1635bc17b3b1ee7edf5344a657bf8d466b26ff73cc61c5d810b2",
+        "candidate_point_cloud_sha256": "9b7d4f2e9677e204046bc162018f763a96d41c2c06855f2514aa8f45ad72cd3d",
+        "comparison_tool_sha256": "f4d7f07efb3da0dbbd846567d36e4ac48ff9db84afbacee16fb5cfa3305d3817",
+        "point_count": 262144,
+        "index_paired": {
+          "assumption": "point indices correspond; equal counts alone do not establish this",
+          "mean_center_distance": 0.0015315941952489497,
+          "p95_center_distance": 0.003449446295422205,
+          "max_center_distance": 0.021417377025270055,
+          "opacity_mean_absolute_difference": 0.06082461659396719,
+          "color_mean_absolute_difference": 0.023756641174776504
+        },
+        "center_voxel_iou_32_per_unit": 0.9813186813186813
+      }
+    },
+    "astronaut": {
+      "q2": {
+        "model_sha256": "1cb943e6f608dbb150b881e157e7d6526bd2d71073db50d8e75607b7954d1740",
+        "latent_sha256": "c14e5fe1423dee0be1d89ee60c815dc72f316a3d545310f5822db5604c8721c0",
+        "reference_point_cloud_sha256": "8990c0cd65f9c746d5582f10e8591c70cff4d5aebc72cb75ee87fe9df9d65d27",
+        "candidate_point_cloud_sha256": "d444c84e9de7dab9907091dfb8a30ece28d19c709eea3509cb2f28df90d92848",
+        "comparison_tool_sha256": "f4d7f07efb3da0dbbd846567d36e4ac48ff9db84afbacee16fb5cfa3305d3817",
+        "point_count": 262144,
+        "index_paired": {
+          "assumption": "point indices correspond; equal counts alone do not establish this",
+          "mean_center_distance": 0.0038890293577803813,
+          "p95_center_distance": 0.008741278407670413,
+          "max_center_distance": 0.11658385315611301,
+          "opacity_mean_absolute_difference": 0.13597458880871496,
+          "color_mean_absolute_difference": 0.04290401149826515
+        },
+        "center_voxel_iou_32_per_unit": 0.8447242206235012
+      },
+      "q2q4": {
+        "model_sha256": "ed8c6285a3e4aaf17f7b1bce68f2e1a58a981701cd7dc718d6bd63425eac4788",
+        "latent_sha256": "c14e5fe1423dee0be1d89ee60c815dc72f316a3d545310f5822db5604c8721c0",
+        "reference_point_cloud_sha256": "8990c0cd65f9c746d5582f10e8591c70cff4d5aebc72cb75ee87fe9df9d65d27",
+        "candidate_point_cloud_sha256": "926f5751a96f8489ca4d84ecc07edc15642dc8d041cb0b9676631f839a1c64a5",
+        "comparison_tool_sha256": "f4d7f07efb3da0dbbd846567d36e4ac48ff9db84afbacee16fb5cfa3305d3817",
+        "point_count": 262144,
+        "index_paired": {
+          "assumption": "point indices correspond; equal counts alone do not establish this",
+          "mean_center_distance": 0.0020503535583694756,
+          "p95_center_distance": 0.004813702892951203,
+          "max_center_distance": 0.07070148970365257,
+          "opacity_mean_absolute_difference": 0.055729383038130284,
+          "color_mean_absolute_difference": 0.02422418023521115
+        },
+        "center_voxel_iou_32_per_unit": 0.9045028709579933
+      }
+    }
+  }
+}

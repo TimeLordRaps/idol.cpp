@@ -1,0 +1,95 @@
+{
+  "scope": "One saved case, 1024 anchors, 8192 tokens, 8 threads, 3 interleaved processes per configuration, 1 warmup and median of 3 measured runs per decoder. Other workloads, including a guarded GPU quantization job, were active; this is not a controlled idle or full-generation benchmark. Quantized benchmark weights were prepared separately; their earlier cache provenance is not fully bound.",
+  "bindings_at_start": {
+    "redacted": "Case and local file hashes omitted from this documentation copy; see the local evidence packet."
+  },
+  "results": {
+    "float32": {
+      "median_gaussian_seconds": 3.938581,
+      "min_gaussian_seconds": 3.145762,
+      "max_gaussian_seconds": 4.052509,
+      "peak_megabytes": 1355.3,
+      "samples": [
+        {
+          "oct_s": 0.538629,
+          "gaussian_s": 3.145762,
+          "resident_megabytes": 1151.82,
+          "peak_megabytes": 1355.2,
+          "process_cpu_seconds": 86.41
+        },
+        {
+          "oct_s": 0.572743,
+          "gaussian_s": 3.938581,
+          "resident_megabytes": 1151.82,
+          "peak_megabytes": 1355.3,
+          "process_cpu_seconds": 127.06
+        },
+        {
+          "oct_s": 0.515457,
+          "gaussian_s": 4.052509,
+          "resident_megabytes": 1151.82,
+          "peak_megabytes": 1355.3,
+          "process_cpu_seconds": 122.17
+        }
+      ]
+    },
+    "4-bit float activations": {
+      "median_gaussian_seconds": 3.184468,
+      "min_gaussian_seconds": 2.595559,
+      "max_gaussian_seconds": 4.034144,
+      "peak_megabytes": 386.6,
+      "samples": [
+        {
+          "oct_s": 0.531382,
+          "gaussian_s": 3.184468,
+          "resident_megabytes": 183.09,
+          "peak_megabytes": 386.6,
+          "process_cpu_seconds": 78.98
+        },
+        {
+          "oct_s": 0.505759,
+          "gaussian_s": 4.034144,
+          "resident_megabytes": 183.09,
+          "peak_megabytes": 386.6,
+          "process_cpu_seconds": 118.5
+        },
+        {
+          "oct_s": 0.474075,
+          "gaussian_s": 2.595559,
+          "resident_megabytes": 183.09,
+          "peak_megabytes": 386.6,
+          "process_cpu_seconds": 91.88
+        }
+      ]
+    },
+    "4-bit integer activations": {
+      "median_gaussian_seconds": 3.664306,
+      "min_gaussian_seconds": 2.834797,
+      "max_gaussian_seconds": 3.899673,
+      "peak_megabytes": 387.0,
+      "samples": [
+        {
+          "oct_s": 0.542471,
+          "gaussian_s": 2.834797,
+          "resident_megabytes": 183.09,
+          "peak_megabytes": 386.9,
+          "process_cpu_seconds": 68.48
+        },
+        {
+          "oct_s": 0.488196,
+          "gaussian_s": 3.664306,
+          "resident_megabytes": 183.09,
+          "peak_megabytes": 386.9,
+          "process_cpu_seconds": 103.73
+        },
+        {
+          "oct_s": 0.561354,
+          "gaussian_s": 3.899673,
+          "resident_megabytes": 183.09,
+          "peak_megabytes": 387.0,
+          "process_cpu_seconds": 114.45
+        }
+      ]
+    }
+  }
+}

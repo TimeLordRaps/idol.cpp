@@ -1,0 +1,35 @@
+{
+  "scope": "Six saved fixed-anchor cases on the separately prepared 4-bit benchmark export; machine was running other work. Timing is not a controlled speed comparison. Cache/source provenance is not fully bound.",
+  "packed_weights_sha256": "2eb314a5aeeaa68575d38f8b89b9ac95798d67de1995a33be6fef978c1df62a2",
+  "threads": 8,
+  "float_activations": {
+    "cases_count": 6,
+    "oct_rel": 0.1951637,
+    "gs_rel": 0.075516995,
+    "oct_rel_max": 0.2346325,
+    "gs_rel_max": 0.1222069,
+    "oct_s": 1.057,
+    "gs_s": 5.3215,
+    "resident_mb": 183.09,
+    "peak_mb": 434.6,
+    "pos": 0.0017990235,
+    "col": 0.089890545,
+    "opa": 0.02053779,
+    "lsc": 0.1632151
+  },
+  "integer_activations_requested": {
+    "cases_count": 6,
+    "oct_rel": 0.19618115,
+    "gs_rel": 0.07714897500000001,
+    "oct_rel_max": 0.2347384,
+    "gs_rel_max": 0.1211729,
+    "oct_s": 0.8645,
+    "gs_s": 5.617,
+    "resident_mb": 183.09,
+    "peak_mb": 434.4,
+    "pos": 0.0018288405000000002,
+    "col": 0.09240976000000001,
+    "opa": 0.02071959,
+    "lsc": 0.1663374
+  }
+}

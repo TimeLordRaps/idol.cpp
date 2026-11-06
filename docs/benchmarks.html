@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Benchmarks · idol.cpp</title>
+  <meta name="description" content="Timings and parity figures for idol.cpp, with the conditions they were measured under and how to reproduce them.">
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <a class="name" href="index.html">idol.cpp</a>
+    <nav>
+      <a href="getting-started.html">Getting started</a>
+      <a href="architecture.html">Architecture</a>
+      <a href="format.html">Format</a>
+      <a href="mesh.html">Mesh</a>
+      <a href="benchmarks.html" aria-current="page">Benchmarks</a>
+      <a href="status.html">Status</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1>Benchmarks</h1>
+  <p class="lead">For the complete image pipeline, see the <a href="benchmark-gso32.md">32-object eight-bit fidelity study</a>. The results below are exploratory decoder-only measurements and do not measure the complete pipeline.</p>
+
+  <h2 id="real-idol-decoders-exploratory-results">Real Idol decoders: exploratory results</h2>
+  <div class="note"><p>These are local measurements, not a quality certification. Six saved latents supplied fixed
+  anchors and references. Calibration and sensitivity caches were not fully bound to their inputs, so earlier-run
+  provenance is incomplete. These tests do not measure image encoding, denoising, end-to-end generation, or visual
+  quality. They do not establish globally optimal quantization.</p></div>
+  <p>Relative output difference is the Euclidean length of the output difference divided by the Euclidean length of
+  the reference output. Percentages below are the median and largest difference across the six cases, not percentages
+  of visual quality. The packed-bit figure includes quantization metadata and padding for the quantized weights;
+  resident weight memory also includes the other runtime weights.</p>
+  <h3>Octree-focused allocation</h3>
+  <p>The following compares the eight-child probabilities at 2,048 saved anchor locations per case, using octree
+  level 8. These are sampled anchor positions, not necessarily the parent-cell centers visited during tree construction.
+  For each location, total variation is half the sum of the absolute probability differences. The table reports the
+  median of each case's mean across six cases; lower is closer to the saved reference. The priority values weight the
+  octree sensitivity proxy during allocation and are not measured quality scores.</p>
+  <table>
+    <thead><tr><th>Budget</th><th>Octree priority</th><th>Resident weights</th><th>Child-probability difference</th><th>Gaussian output difference</th></tr></thead>
+    <tbody>
+      <tr><td>4.5 packed bits</td><td>1 (baseline)</td><td>165.12 MB</td><td>1.895%</td><td>5.905%</td></tr>
+      <tr><td>4.5 packed bits</td><td>4</td><td>164.99 MB</td><td>1.391%</td><td>6.240%</td></tr>
+      <tr><td>4.5 packed bits</td><td>16</td><td>164.47 MB</td><td>0.796%</td><td>7.548%</td></tr>
+      <tr><td>5.0 packed bits</td><td>1 (baseline)</td><td>182.68 MB</td><td>1.393%</td><td>3.726%</td></tr>
+      <tr><td>5.0 packed bits</td><td>4</td><td>182.94 MB</td><td>0.796%</td><td>4.931%</td></tr>
+      <tr><td>5.0 packed bits</td><td>16</td><td>182.75 MB</td><td>0.560%</td><td>5.604%</td></tr>
+      <tr><td>Octree kept float32</td><td>—</td><td>353.90 MB</td><td>0.000399%</td><td>3.421%</td></tr>
+    </tbody>
+  </table>
+  <p>For the last row, all 62 octree tensors matched the current float export byte for byte; 98 Gaussian matrices
+  were quantized. On one saved latent and one seed, sampled cell counts also matched the float decoder at all six
+  tested scales. This does not establish behavior for every input, a different implementation, or visual quality.</p>
+  <figure class="measurement-figure"><img src="assets/idol-octree-probability-tradeoff.png" alt="Child-probability and Gaussian output differences for octree-prioritized plans"><figcaption>Fixed-anchor probability differences and their Gaussian tradeoff.</figcaption></figure>
+  <p>The separate sampling test generated 8,192 anchors per model for each of the six saved latents. At cell level 3,
+  median empirical count difference was 1.04% for the baseline and 0.52% for priority 16; the float model compared with
+  a different seed gave 0.38%. At finer levels, differences were close to the different-seed comparison. Sampling
+  paths can consume random numbers differently, so these are finite sampled-count comparisons, not exact distribution
+  distances or visual-quality scores.</p>
+  <figure class="measurement-figure"><img src="assets/idol-octree-sampled-scales.png" alt="Sampled octree cell-count differences across spatial scales"><figcaption>Same-seed candidate comparisons and a different-seed float reference; vertical scale is logarithmic.</figcaption></figure>
+  <p>The sanitized <a href="data/octree-exploratory-summary.json">octree aggregate data</a> contains the plotted
+  summaries. Calibration-cache provenance is incomplete; the probability-focused allocation objective is implemented
+  but its real-model experiment has not yet been validated.</p>
+
+  <h3>Construction comparisons</h3>
+  <p>For five saved latents, each decoder generated 16,384 Gaussians at level 8. We compared Gaussian centers and
+  six 128-by-128 orthographic preview views in a common coordinate frame. The preview renderer projects Gaussian
+  covariance and composites opacity, but is an approximation with fixed framing, not the upstream renderer or a
+  ground-truth image comparison. Foreground pixel difference is mean absolute color difference on pixels where either
+  preview has opacity of at least 1/255. The table reports the median across the five cases of each case's mean across
+  its six views. A different full-precision seed illustrates sampling variation, rather than a quality target.</p>
+  <table>
+    <thead><tr><th>Candidate</th><th>Foreground pixel difference</th><th>Center voxel overlap</th></tr></thead>
+    <tbody>
+      <tr><td>Float reference, different seed</td><td>2.796%</td><td>72.37%</td></tr>
+      <tr><td>Mixed 4.5-bit baseline</td><td>2.637%</td><td>71.95%</td></tr>
+      <tr><td>Mixed 4.5-bit, octree priority 16</td><td>2.520%</td><td>72.25%</td></tr>
+      <tr><td>Float octree, four-bit Gaussian</td><td>0.385%</td><td>95.42%</td></tr>
+      <tr><td>Float octree, eight-bit Gaussian, nearest-code rounding</td><td>0.107%</td><td>98.74%</td></tr>
+    </tbody>
+  </table>
+  <p>Center voxel overlap is intersection over union of occupied center cells, with 32 cells per unit of the model's
+  coordinates; Gaussian footprints are not considered. Sampling noise affects both the voxel and image comparisons.
+  The source inputs are limited, and performance at 16,384 Gaussians does not establish behavior at larger output sizes.
+  See the <a href="data/construction-five-case-summary.json">sanitized aggregate data</a> and the comparison tools in
+  the repository for definitions.</p>
+  <p>A subsequent six-case comparison used a newly calibrated eight-bit Gaussian candidate with 32-weight groups and
+  an uncalibrated eight-bit candidate with 64-weight groups. Both keep the octree in 32-bit floating point. The
+  calibration used 16 byte-disjoint latent files; their provenance and representativeness are not established by the
+  hash check.</p>
+  <table>
+    <thead><tr><th>Candidate</th><th>Median foreground difference</th><th>Worst view</th><th>Median center voxel overlap</th></tr></thead>
+    <tbody>
+      <tr><td>Float reference, different seed</td><td>3.053%</td><td>5.503%</td><td>70.06%</td></tr>
+      <tr><td>Float octree, calibrated eight-bit Gaussian</td><td>0.0314%</td><td>0.0596%</td><td>99.79%</td></tr>
+      <tr><td>Float octree, uncalibrated eight-bit Gaussian</td><td>0.1094%</td><td>0.2217%</td><td>98.70%</td></tr>
+    </tbody>
+  </table>
+  <p>As above, the first column of differences is a median of six case means over six approximate views each; worst
+  view is the largest foreground difference across all 36 views. These are diagnostic previews of the same sampled
+  latents, not a user study or a comparison against ground-truth objects. The <a
+  href="data/construction-six-case-summary.json">aggregate data</a> also records center distances and silhouette overlap.</p>
+
+  <h3>Mixed-plan output differences</h3>
+  <table>
+    <thead><tr><th>Budget, bits per quantized weight</th><th>Actual packed bits</th><th>Resident weights</th><th>Octree median / worst</th><th>Gaussian median / worst</th></tr></thead>
+    <tbody>
+      <tr><td>3.5</td><td>3.481</td><td>128.59 MB</td><td>10.00% / 12.84%</td><td>10.24% / 12.66%</td></tr>
+      <tr><td>4.0</td><td>3.988</td><td>146.77 MB</td><td>7.37% / 9.46%</td><td>7.81% / 10.53%</td></tr>
+      <tr><td>4.5</td><td>4.499</td><td>165.12 MB</td><td>3.18% / 3.73%</td><td>5.91% / 8.25%</td></tr>
+      <tr><td>5.0</td><td>4.989</td><td>182.68 MB</td><td>2.33% / 2.71%</td><td>3.73% / 4.59%</td></tr>
+      <tr><td>6.0</td><td>5.988</td><td>218.52 MB</td><td>1.15% / 1.35%</td><td>1.52% / 3.87%</td></tr>
+    </tbody>
+  </table>
+  <p>Here MB means decimal megabytes, or one million bytes. Budgets of 2.5 and 3.0 packed bits per quantized weight
+  were below the smallest available plan. These plans were chosen using an approximate sensitivity heuristic, then
+  scored in the decoder runtime. The figures compare only the listed candidates.</p>
+  <figure class="measurement-figure"><img src="assets/idol-decoder-tradeoffs.png" alt="Exploratory resident-weight memory and decoder-output difference for uniform and mixed plans"><figcaption>Decoder output differences at fixed anchors; not a visual quality comparison.</figcaption></figure>
+  <figure class="measurement-figure"><img src="assets/idol-loaded-timings.png" alt="Loaded-machine decoder timing medians and observed ranges"><figcaption>One case, 1,024 anchors, 8,192 latent tokens, eight threads, three interleaved process samples per setting. Each sample is the median of three runs after one warm-up. Other work was active; ranges overlap.</figcaption></figure>
+  <p>In that loaded run the median Gaussian-decoder times were 3.94 seconds for 32-bit floating-point weights,
+  3.18 seconds for separately quantized 4-bit weights with floating-point activations, and 3.66 seconds with integer
+  activations. The observed ranges overlap, so this sample does not establish a reliable speed winner. Peak process
+  memory was approximately 1,355, 387, and 387 decimal megabytes respectively. The four-bit timing weights were
+  prepared separately from the accuracy tiers.</p>
+  <p>Input and output summaries are available as <a href="data/idol-mixed-results.json">mixed-plan results</a>,
+  <a href="data/idol-busy-benchmark.json">loaded timing samples</a>,
+  <a href="data/idol-4bit-kernel-comparison.json">four-bit arithmetic comparison</a>, and
+  <a href="data/idol-evaluated-front.json">finite candidate comparison</a>. The plotting inputs for the earlier
+  uniform-tier runs are <a href="data/real-rounding-results.json">nearest-code results</a>,
+  <a href="data/real-feedback-results.json">feedback-assisted results</a>, and
+  <a href="data/real-earlier-timing.json">earlier timing samples</a>.</p>
+
+</main><footer><div class="wrap">idol.cpp · <a href="notice.html">Third-party notices</a></div></footer></body></html>

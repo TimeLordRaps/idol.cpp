@@ -1,0 +1,75 @@
+"""Download the tested Iris models and write a local image-generator configuration."""
+import argparse
+import hashlib
+import json
+import os
+from pathlib import Path
+
+IRIS = ('webmp3/Sakura-Iris-3B-GGUF', 'Sakura-Iris-3B-Q4_K_M-3.14GiB.gguf',
+        '14ec1a1c5f6d442167c9622700809744dcce8094',
+        'a65ca4a773ca9433166d1a3b20ba8f4e66a3193e7198264f23ffd2528a7678a3')
+QWEN = ('Qwen/Qwen3-VL-4B-Instruct-GGUF', 'Qwen3VL-4B-Instruct-Q4_K_M.gguf',
+        '1cd86afb9a95c410a6038ab3b40d8b578c892266',
+        '66358cb18bb6b3b1b6675aa412c7a88ef01d228f481184d13668e5201c730a0a')
+
+
+def default_config_path():
+    root = (Path(os.environ['LOCALAPPDATA']) if os.environ.get('LOCALAPPDATA') else
+            Path(os.environ.get('XDG_CONFIG_HOME', str(Path.home() / '.config'))))
+    return root / 'idol.cpp' / 'image-generator.json'
+
+
+def checked_file(path, expected):
+    path = Path(path).expanduser().resolve(strict=True)
+    if not path.is_file():
+        raise ValueError(f'Not a regular file: {path}')
+    digest = hashlib.sha256()
+    with path.open('rb') as stream:
+        for block in iter(lambda: stream.read(4 * 1024 * 1024), b''):
+            digest.update(block)
+    if digest.hexdigest() != expected:
+        raise ValueError(f'Model digest does not match the tested file: {path}')
+    return path
+
+
+def prepare(runner, config, *, image_model=None, text_encoder=None):
+    runner = Path(runner).expanduser().resolve(strict=True)
+    if not runner.is_file() or (os.name != 'nt' and not os.access(runner, os.X_OK)):
+        raise ValueError(f'The stable-diffusion.cpp runner is not executable: {runner}')
+    config = Path(config).expanduser().absolute()
+    if config.exists():
+        raise FileExistsError(f'Configuration already exists; preserving it: {config}')
+
+    def resolve(spec, supplied):
+        if supplied is None:
+            from huggingface_hub import hf_hub_download
+            supplied = hf_hub_download(repo_id=spec[0], filename=spec[1], revision=spec[2])
+        return checked_file(supplied, spec[3])
+
+    image = resolve(IRIS, image_model)
+    encoder = resolve(QWEN, text_encoder)
+    settings = {'version': 1, 'engine': 'stable-diffusion.cpp', 'executable': str(runner),
+                'diffusion_model': str(image), 'text_encoder': str(encoder),
+                'license_notice': 'Iris-3B and Qwen3-VL-4B: Apache-2.0',
+                'steps': 30, 'cfg': 3.0, 'sampling_method': 'dpm++2m',
+                'width': 1024, 'height': 1024}
+    config.parent.mkdir(parents=True, exist_ok=True)
+    with config.open('x', encoding='utf-8') as stream:
+        json.dump(settings, stream, indent=2)
+        stream.write('\n')
+    return config
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--runner', required=True, help='Path to a compatible stable-diffusion.cpp sd-cli executable')
+    parser.add_argument('--config', default=default_config_path(), help='New configuration path; existing files are preserved')
+    parser.add_argument('--image-model', help='Use an existing tested Iris file instead of downloading it')
+    parser.add_argument('--text-encoder', help='Use an existing tested Qwen file instead of downloading it')
+    args = parser.parse_args()
+    print('Image generator configuration:', prepare(args.runner, args.config,
+          image_model=args.image_model, text_encoder=args.text_encoder))
+
+
+if __name__ == '__main__':
+    main()

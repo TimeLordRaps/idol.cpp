@@ -1,0 +1,6 @@
+.git
+build
+out
+docs
+*.obj
+__pycache__

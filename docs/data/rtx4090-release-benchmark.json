@@ -1,0 +1,231 @@
+{
+  "scope": "Individual local image-to-3D HTTP requests, not ground-truth quality or a latency distribution. GPU counters cover PyTorch allocated bytes, not total device usage.",
+  "hardware": "NVIDIA GeForce RTX 4090, 24564 MiB, Windows; PyTorch 2.10.0+cu128 and triton-windows 3.5.0.post21",
+  "settings": "50 steps, seed 42, 262144 Gaussian points, fused kernels. Cold starts include model loading. Warm requests follow a one-step warmup. Staged rows use staged models and disable batch guidance and cuDNN attention; all other rows use resident models, batch guidance and cuDNN attention.",
+  "model_sha256": "1f6875979bac8c8aecacf0c698662b7c63ff54ae1b6d7c06755297a05607e983",
+  "external_dino_q4_sha256": "cf80ee6e3c2d4044b3214c0ccde5e416cb999b799f35b699f4edaa4059d83d71",
+  "matched_staged_axolotl_q4_dino_vs_original_dino_relative_latent_l2": 0.3417002617568336,
+  "matched_comparison": "Both use the same Idol Q8 model and staged settings; norm(Q4 DINO latent - original DINO latent) / norm(original DINO latent). One image and seed; no ground truth.",
+  "samples": [
+    {
+      "id": "original-cold-lamp",
+      "image": "lamp",
+      "image_sha256": "184bb44d9abd5590b6b804877e6c32278387d40339150d96eca8a55c782f36d0",
+      "raw_report_sha256": "cc336259233ef9c1a521114a2d44541fd067611351b03f187442396a30476349",
+      "seconds": 36.99469569999974,
+      "point_cloud_sha256": "6e45a7a0594bfb96bbdfe96eed62d5b4069e929d03e08ba450b68e1aa89255b1",
+      "peak_pytorch_allocated_bytes": 4760522240,
+      "peak_host_working_set_bytes": 6426030080,
+      "relative_latent_l2_vs_original_idol": 0.007856167150612449,
+      "runtime_source_sha256_at_import": {
+        "idol_server.py": "6df5510d04fc3923a62383922e0953306923aee7f62215388fc4049018d52111",
+        "idol_session.py": "3ac203165f46cfaee879d9232b1c8a610dabec4c66f5f443054502e4b46d0a9f",
+        "idol_generate.py": "6d27a27a5e0d0cf03c58be5246c9a6f0a1823b92302fa8c5e3e38afe54ce95d7",
+        "idol_packed.py": "5f16197339272294f801a1d3ec8fb3894d45a2e29b4b66b14ce9adb95bb88b82",
+        "idol_triton.py": "1e9c78d48da62bfcd8dbfbe4ab389e20e30d56edbe24d6de4d2fbca302d3744a"
+      },
+      "batch_guidance": true,
+      "cudnn_attention": true
+    },
+    {
+      "id": "original-cold-axolotl",
+      "image": "axolotl",
+      "image_sha256": "907d771e241396b47d364f3dd9382dc30d1ed4bb569618f148dac40d67c07fea",
+      "raw_report_sha256": "896023eb4eaa4f01955fe06b6aecddeb0e8070b96a176f152378799d46d4e185",
+      "seconds": 36.010643900000105,
+      "point_cloud_sha256": "b4566a56d159fa8783c4dbc61efcba4a3f707ef696bbf548960aa2ba9f5088dd",
+      "peak_pytorch_allocated_bytes": 4760522240,
+      "peak_host_working_set_bytes": 6423760896,
+      "relative_latent_l2_vs_original_idol": 0.017491533116887763,
+      "runtime_source_sha256_at_import": {
+        "idol_server.py": "6df5510d04fc3923a62383922e0953306923aee7f62215388fc4049018d52111",
+        "idol_session.py": "3ac203165f46cfaee879d9232b1c8a610dabec4c66f5f443054502e4b46d0a9f",
+        "idol_generate.py": "6d27a27a5e0d0cf03c58be5246c9a6f0a1823b92302fa8c5e3e38afe54ce95d7",
+        "idol_packed.py": "5f16197339272294f801a1d3ec8fb3894d45a2e29b4b66b14ce9adb95bb88b82",
+        "idol_triton.py": "1e9c78d48da62bfcd8dbfbe4ab389e20e30d56edbe24d6de4d2fbca302d3744a"
+      },
+      "batch_guidance": true,
+      "cudnn_attention": true
+    },
+    {
+      "id": "q8-cold-lamp",
+      "image": "lamp",
+      "image_sha256": "184bb44d9abd5590b6b804877e6c32278387d40339150d96eca8a55c782f36d0",
+      "raw_report_sha256": "d2373485a231fff6c432258abcf96d2682692a66355d0b3d4026a4bdb4549d2c",
+      "seconds": 34.621054800000366,
+      "point_cloud_sha256": "c4ee66435f5c91a3caf94b5c8d8988895249dc33ed67f68cb72ca9da45b3b10a",
+      "peak_pytorch_allocated_bytes": 4392456192,
+      "peak_host_working_set_bytes": 6725910528,
+      "relative_latent_l2_vs_original_idol": 0.0326889731501919,
+      "runtime_source_sha256_at_import": {
+        "idol_server.py": "6df5510d04fc3923a62383922e0953306923aee7f62215388fc4049018d52111",
+        "idol_session.py": "3ac203165f46cfaee879d9232b1c8a610dabec4c66f5f443054502e4b46d0a9f",
+        "idol_generate.py": "6d27a27a5e0d0cf03c58be5246c9a6f0a1823b92302fa8c5e3e38afe54ce95d7",
+        "idol_packed.py": "5f16197339272294f801a1d3ec8fb3894d45a2e29b4b66b14ce9adb95bb88b82",
+        "idol_triton.py": "1e9c78d48da62bfcd8dbfbe4ab389e20e30d56edbe24d6de4d2fbca302d3744a"
+      },
+      "batch_guidance": true,
+      "cudnn_attention": true
+    },
+    {
+      "id": "q8-cold-axolotl",
+      "image": "axolotl",
+      "image_sha256": "907d771e241396b47d364f3dd9382dc30d1ed4bb569618f148dac40d67c07fea",
+      "raw_report_sha256": "c3677f26d9accb9074c5f799170c7c2b0c10399816a728af1dbd3c7331ea2078",
+      "seconds": 34.57237989999976,
+      "point_cloud_sha256": "5dcfa22699a2fa6a6d2826287ba46e755dfc7c03f79d5541720a4c00b6d2f4b1",
+      "peak_pytorch_allocated_bytes": 4392456192,
+      "peak_host_working_set_bytes": 6724706304,
+      "relative_latent_l2_vs_original_idol": 0.0620813837694531,
+      "runtime_source_sha256_at_import": {
+        "idol_server.py": "6df5510d04fc3923a62383922e0953306923aee7f62215388fc4049018d52111",
+        "idol_session.py": "3ac203165f46cfaee879d9232b1c8a610dabec4c66f5f443054502e4b46d0a9f",
+        "idol_generate.py": "6d27a27a5e0d0cf03c58be5246c9a6f0a1823b92302fa8c5e3e38afe54ce95d7",
+        "idol_packed.py": "5f16197339272294f801a1d3ec8fb3894d45a2e29b4b66b14ce9adb95bb88b82",
+        "idol_triton.py": "1e9c78d48da62bfcd8dbfbe4ab389e20e30d56edbe24d6de4d2fbca302d3744a"
+      },
+      "batch_guidance": true,
+      "cudnn_attention": true
+    },
+    {
+      "id": "original-warm-lamp",
+      "image": "lamp",
+      "image_sha256": "184bb44d9abd5590b6b804877e6c32278387d40339150d96eca8a55c782f36d0",
+      "raw_report_sha256": "9849296ac82edf1bdcbeaf1f2c79dce1e29c8f081d1216ee0e5dd3abf71c2010",
+      "seconds": 25.119119700000056,
+      "point_cloud_sha256": "6e45a7a0594bfb96bbdfe96eed62d5b4069e929d03e08ba450b68e1aa89255b1",
+      "peak_pytorch_allocated_bytes": 5364295680,
+      "peak_host_working_set_bytes": 6067867648,
+      "relative_latent_l2_vs_original_idol": 0.007856167150612449,
+      "runtime_source_sha256_at_import": {
+        "idol_server.py": "77fa3706cddbd5119838b5a9e23748f90ec9eca9688860d830786a3f196b335f",
+        "idol_session.py": "3ac203165f46cfaee879d9232b1c8a610dabec4c66f5f443054502e4b46d0a9f",
+        "idol_generate.py": "6d27a27a5e0d0cf03c58be5246c9a6f0a1823b92302fa8c5e3e38afe54ce95d7",
+        "idol_packed.py": "5f16197339272294f801a1d3ec8fb3894d45a2e29b4b66b14ce9adb95bb88b82",
+        "idol_triton.py": "f8bc147efa9518f02ae215871a6aacb69f06cec4cbc72c7f23c7f2b4e8deb5ce"
+      },
+      "batch_guidance": true,
+      "cudnn_attention": true
+    },
+    {
+      "id": "original-warm-axolotl",
+      "image": "axolotl",
+      "image_sha256": "907d771e241396b47d364f3dd9382dc30d1ed4bb569618f148dac40d67c07fea",
+      "raw_report_sha256": "35542d155fce257ff035d5ce4e9acea499437df51ec7b31908536bab316b2875",
+      "seconds": 25.118847599999754,
+      "point_cloud_sha256": "b4566a56d159fa8783c4dbc61efcba4a3f707ef696bbf548960aa2ba9f5088dd",
+      "peak_pytorch_allocated_bytes": 5364295680,
+      "peak_host_working_set_bytes": 6064332800,
+      "relative_latent_l2_vs_original_idol": 0.017491533116887763,
+      "runtime_source_sha256_at_import": {
+        "idol_server.py": "6df5510d04fc3923a62383922e0953306923aee7f62215388fc4049018d52111",
+        "idol_session.py": "3ac203165f46cfaee879d9232b1c8a610dabec4c66f5f443054502e4b46d0a9f",
+        "idol_generate.py": "6d27a27a5e0d0cf03c58be5246c9a6f0a1823b92302fa8c5e3e38afe54ce95d7",
+        "idol_packed.py": "5f16197339272294f801a1d3ec8fb3894d45a2e29b4b66b14ce9adb95bb88b82",
+        "idol_triton.py": "1e9c78d48da62bfcd8dbfbe4ab389e20e30d56edbe24d6de4d2fbca302d3744a"
+      },
+      "batch_guidance": true,
+      "cudnn_attention": true
+    },
+    {
+      "id": "q8-warm-lamp",
+      "image": "lamp",
+      "image_sha256": "184bb44d9abd5590b6b804877e6c32278387d40339150d96eca8a55c782f36d0",
+      "raw_report_sha256": "c30dc234e22a0c64f755bf730c223f30e2488fa78861e20e83490fdc1a395ded",
+      "seconds": 28.04915200000005,
+      "point_cloud_sha256": "c4ee66435f5c91a3caf94b5c8d8988895249dc33ed67f68cb72ca9da45b3b10a",
+      "peak_pytorch_allocated_bytes": 4726539264,
+      "peak_host_working_set_bytes": 6728028160,
+      "relative_latent_l2_vs_original_idol": 0.0326889731501919,
+      "runtime_source_sha256_at_import": {
+        "idol_server.py": "6df5510d04fc3923a62383922e0953306923aee7f62215388fc4049018d52111",
+        "idol_session.py": "3ac203165f46cfaee879d9232b1c8a610dabec4c66f5f443054502e4b46d0a9f",
+        "idol_generate.py": "6d27a27a5e0d0cf03c58be5246c9a6f0a1823b92302fa8c5e3e38afe54ce95d7",
+        "idol_packed.py": "5f16197339272294f801a1d3ec8fb3894d45a2e29b4b66b14ce9adb95bb88b82",
+        "idol_triton.py": "1e9c78d48da62bfcd8dbfbe4ab389e20e30d56edbe24d6de4d2fbca302d3744a"
+      },
+      "batch_guidance": true,
+      "cudnn_attention": true
+    },
+    {
+      "id": "q8-warm-axolotl",
+      "image": "axolotl",
+      "image_sha256": "907d771e241396b47d364f3dd9382dc30d1ed4bb569618f148dac40d67c07fea",
+      "raw_report_sha256": "1fc85d78e6b40350f8afc10d6096b78de5e1fe3c41154cf8dc153c5da117cf1f",
+      "seconds": 27.3777227999999,
+      "point_cloud_sha256": "5dcfa22699a2fa6a6d2826287ba46e755dfc7c03f79d5541720a4c00b6d2f4b1",
+      "peak_pytorch_allocated_bytes": 4726539264,
+      "peak_host_working_set_bytes": 6724780032,
+      "relative_latent_l2_vs_original_idol": 0.0620813837694531,
+      "runtime_source_sha256_at_import": {
+        "idol_server.py": "6df5510d04fc3923a62383922e0953306923aee7f62215388fc4049018d52111",
+        "idol_session.py": "3ac203165f46cfaee879d9232b1c8a610dabec4c66f5f443054502e4b46d0a9f",
+        "idol_generate.py": "6d27a27a5e0d0cf03c58be5246c9a6f0a1823b92302fa8c5e3e38afe54ce95d7",
+        "idol_packed.py": "5f16197339272294f801a1d3ec8fb3894d45a2e29b4b66b14ce9adb95bb88b82",
+        "idol_triton.py": "1e9c78d48da62bfcd8dbfbe4ab389e20e30d56edbe24d6de4d2fbca302d3744a"
+      },
+      "batch_guidance": true,
+      "cudnn_attention": true
+    },
+    {
+      "id": "q8-dino-q4-resident-axolotl",
+      "image": "axolotl",
+      "image_sha256": "907d771e241396b47d364f3dd9382dc30d1ed4bb569618f148dac40d67c07fea",
+      "raw_report_sha256": "ac99074135c7a42971b6e1e7cadbe29e7de638a49c2a344d5643798e58cd6322",
+      "seconds": 30.20438479999939,
+      "point_cloud_sha256": "3c56ccc211c98630fcfa28beda733f0c0c6a0d316d46060b0c853ac5d36f4a38",
+      "peak_pytorch_allocated_bytes": 3513844736,
+      "peak_host_working_set_bytes": 3631570944,
+      "relative_latent_l2_vs_original_idol": 0.343563603882726,
+      "runtime_source_sha256_at_import": {
+        "idol_server.py": "d3b92018029f2aafa9b7edf1770e56af76f13fba39a993691e5a80464a761c18",
+        "idol_session.py": "3ac203165f46cfaee879d9232b1c8a610dabec4c66f5f443054502e4b46d0a9f",
+        "idol_generate.py": "6d27a27a5e0d0cf03c58be5246c9a6f0a1823b92302fa8c5e3e38afe54ce95d7",
+        "idol_packed.py": "5f16197339272294f801a1d3ec8fb3894d45a2e29b4b66b14ce9adb95bb88b82",
+        "idol_triton.py": "1e9c78d48da62bfcd8dbfbe4ab389e20e30d56edbe24d6de4d2fbca302d3744a"
+      },
+      "batch_guidance": true,
+      "cudnn_attention": true
+    },
+    {
+      "id": "q8-dino-q4-staged-axolotl",
+      "image": "axolotl",
+      "image_sha256": "907d771e241396b47d364f3dd9382dc30d1ed4bb569618f148dac40d67c07fea",
+      "raw_report_sha256": "d8048008cdf459873a80bb6cd1eb1fb81f946c87b72751e555a746793ac4c00c",
+      "seconds": 30.919155799999317,
+      "point_cloud_sha256": "a1383c8a1ae3d31ac0b6c97ecff60e0516c82273325d1495757e629d31e3f064",
+      "peak_pytorch_allocated_bytes": 2313296384,
+      "peak_host_working_set_bytes": 5415870464,
+      "relative_latent_l2_vs_original_idol": 0.3437969169034904,
+      "runtime_source_sha256_at_import": {
+        "idol_server.py": "d3b92018029f2aafa9b7edf1770e56af76f13fba39a993691e5a80464a761c18",
+        "idol_session.py": "3ac203165f46cfaee879d9232b1c8a610dabec4c66f5f443054502e4b46d0a9f",
+        "idol_generate.py": "6d27a27a5e0d0cf03c58be5246c9a6f0a1823b92302fa8c5e3e38afe54ce95d7",
+        "idol_packed.py": "5f16197339272294f801a1d3ec8fb3894d45a2e29b4b66b14ce9adb95bb88b82",
+        "idol_triton.py": "1e9c78d48da62bfcd8dbfbe4ab389e20e30d56edbe24d6de4d2fbca302d3744a"
+      },
+      "batch_guidance": false,
+      "cudnn_attention": false
+    },
+    {
+      "id": "q8-dino-original-staged-axolotl",
+      "image": "axolotl",
+      "image_sha256": "907d771e241396b47d364f3dd9382dc30d1ed4bb569618f148dac40d67c07fea",
+      "raw_report_sha256": "6ab27c82f445d68b23db655e68565cca0a85898da9270b57ba49147b8d72e27c",
+      "seconds": 33.28393119999964,
+      "point_cloud_sha256": "d8cdbed0dc18fff631086f9190f2afda57da9622a903aa132c01ca59b0ab9657",
+      "peak_pytorch_allocated_bytes": 3513210368,
+      "peak_host_working_set_bytes": 6721720320,
+      "relative_latent_l2_vs_original_idol": 0.06369735307172786,
+      "runtime_source_sha256_at_import": {
+        "idol_server.py": "d3b92018029f2aafa9b7edf1770e56af76f13fba39a993691e5a80464a761c18",
+        "idol_session.py": "3ac203165f46cfaee879d9232b1c8a610dabec4c66f5f443054502e4b46d0a9f",
+        "idol_generate.py": "6d27a27a5e0d0cf03c58be5246c9a6f0a1823b92302fa8c5e3e38afe54ce95d7",
+        "idol_packed.py": "5f16197339272294f801a1d3ec8fb3894d45a2e29b4b66b14ce9adb95bb88b82",
+        "idol_triton.py": "1e9c78d48da62bfcd8dbfbe4ab389e20e30d56edbe24d6de4d2fbca302d3744a"
+      },
+      "batch_guidance": false,
+      "cudnn_attention": false
+    }
+  ]
+}

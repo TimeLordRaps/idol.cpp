@@ -1,0 +1,497 @@
+{
+  "scope": "Post-hoc single-worst-case exploratory controls for runtime, preprocessing and decoding differences.\n\nThis supplements the frozen cohort; it is not included in its headline averages.\nThis object and seed were selected after inspecting the results; findings do not generalize.\n",
+  "model_sha256": "1f6875979bac8c8aecacf0c698662b7c63ff54ae1b6d7c06755297a05607e983",
+  "protocol_sha256": "e7999d448303ed355489bc48e9283c9ecd1c5f67121e504c721d3e07a25665ed",
+  "main_run_identity_sha256": "70f15a40bf66435c6f8af7f48aaa64f24dec7282592a406ca133f39f02c31eea",
+  "seed": 2026,
+  "cases": [
+    {
+      "object": "Lego_Friends_Mia",
+      "stratum": "irregular_and_multipart",
+      "fused_replay_matches_main_ply": true,
+      "fused_ply_sha256": "2e7b5381ca372fb57fd40cd11a58488593f5bd32271f536ec1fc6c255d4506e1",
+      "default_ply_sha256": "9ad193f8bba1315d11654579cbc4f35d8f56f6ba5c7da803f7f9ea7e5a818a3c",
+      "relative_latent_runtime_path_difference": 0.0,
+      "mesh_runtime_path_difference": {
+        "surface_samples_per_mesh": 20000,
+        "sample_seed": 23,
+        "reference_area": 1.005519387580186,
+        "sampled_point_to_triangle": {
+          "method": "Area-weighted sampled points to the closest target-mesh triangles; no alignment. F1 is the harmonic mean of precision and recall within the recorded distance threshold. p95 is the 95th percentile; the maximum is over sampled source points, not the continuous surface.",
+          "symmetric_mean_distance": 0.0009204932556130032,
+          "symmetric_mean_over_reference_diagonal": 0.0007760501249159228,
+          "reference_to_candidate_mean": 0.00042173124275209713,
+          "candidate_to_reference_mean": 0.0014192552684739092,
+          "symmetric_p95_distance": 0.0017889764640600509,
+          "maximum_sampled_distance": 0.05319504432006067,
+          "f_scores_by_reference_diagonal_fraction": {
+            "0.001": {
+              "distance_threshold": 0.0011861260324038082,
+              "precision": 0.9198,
+              "recall": 0.9523,
+              "f1": 0.9357678970140484
+            },
+            "0.005": {
+              "distance_threshold": 0.005930630162019041,
+              "precision": 0.96425,
+              "recall": 0.9997,
+              "f1": 0.9816550574098118
+            },
+            "0.01": {
+              "distance_threshold": 0.011861260324038081,
+              "precision": 0.96505,
+              "recall": 1.0,
+              "f1": 0.9822141930230782
+            }
+          }
+        },
+        "distance_units": "input model-coordinate units; no alignment or rescaling",
+        "reference_bounding_box_diagonal": 1.186126032403808,
+        "symmetric_mean_sample_distance": 0.004070699319496954,
+        "symmetric_mean_distance_over_reference_diagonal": 0.003431928149529993,
+        "symmetric_p95_sample_distance": 0.008216097773284095,
+        "sampled_hausdorff_distance": 0.054313693288833516,
+        "surface_f_scores_by_reference_diagonal_fraction": {
+          "0.005": {
+            "distance_threshold": 0.005930630162019041,
+            "precision": 0.8588,
+            "recall": 0.88465,
+            "f1": 0.8715333620121024,
+            "reference_resampling_recall": 0.89055
+          },
+          "0.01": {
+            "distance_threshold": 0.011861260324038081,
+            "precision": 0.9646,
+            "recall": 0.9998,
+            "f1": 0.9818846263490125,
+            "reference_resampling_recall": 0.9999
+          }
+        },
+        "candidate_area": 1.0429638322142354,
+        "reference_to_candidate": {
+          "mean_surface_distance": 0.003637619221623507,
+          "p95_surface_distance": 0.006972779072288625
+        },
+        "candidate_to_reference": {
+          "mean_surface_distance": 0.0045037794173704015,
+          "p95_surface_distance": 0.008216097773284095
+        },
+        "reference_vertices": 37642,
+        "same_reference_mesh_different_sample_seed": {
+          "mean_surface_distance": 0.0035392349905212527,
+          "p95_surface_distance": 0.0068861529488244595
+        },
+        "candidate_vertices": 39124,
+        "reference_faces": 75328,
+        "candidate_faces": 78284,
+        "reference_watertight": true,
+        "candidate_watertight": true
+      },
+      "appearance_runtime_path_difference": {
+        "xy-front": {
+          "rgb_mean_absolute_difference": 0.0009228338890755767,
+          "rgb_mean_squared_difference": 3.247865578207703e-05,
+          "foreground_rgb_mean_absolute_difference": 0.010727435571273201,
+          "white_background_rgb_mean_absolute_difference": 0.0008551878041485064,
+          "rgb_peak_signal_to_noise_ratio_db": 44.88401953522828,
+          "alpha_mean_absolute_difference": 0.0003434874307652852,
+          "alpha_threshold_0_5_iou": 0.9964049195837276
+        },
+        "xy-back": {
+          "rgb_mean_absolute_difference": 0.0009024444503387095,
+          "rgb_mean_squared_difference": 3.0938384752858894e-05,
+          "foreground_rgb_mean_absolute_difference": 0.010489585902345005,
+          "white_background_rgb_mean_absolute_difference": 0.0008281023264764065,
+          "rgb_peak_signal_to_noise_ratio_db": 45.09502363914994,
+          "alpha_mean_absolute_difference": 0.0003434874307652855,
+          "alpha_threshold_0_5_iou": 0.9964049195837276
+        },
+        "xz-front": {
+          "rgb_mean_absolute_difference": 0.0010229641458000891,
+          "rgb_mean_squared_difference": 3.466578463382161e-05,
+          "foreground_rgb_mean_absolute_difference": 0.013440156264875342,
+          "white_background_rgb_mean_absolute_difference": 0.000990388656140354,
+          "rgb_peak_signal_to_noise_ratio_db": 44.60098965426768,
+          "alpha_mean_absolute_difference": 0.00022192475153784134,
+          "alpha_threshold_0_5_iou": 0.9970382906706157
+        },
+        "xz-back": {
+          "rgb_mean_absolute_difference": 0.0008530397122800248,
+          "rgb_mean_squared_difference": 2.622325840698533e-05,
+          "foreground_rgb_mean_absolute_difference": 0.011202634367917366,
+          "white_background_rgb_mean_absolute_difference": 0.0008087956481876698,
+          "rgb_peak_signal_to_noise_ratio_db": 45.813133454357214,
+          "alpha_mean_absolute_difference": 0.00022192475153784153,
+          "alpha_threshold_0_5_iou": 0.9970382906706157
+        },
+        "yz-front": {
+          "rgb_mean_absolute_difference": 0.0005653103082030947,
+          "rgb_mean_squared_difference": 2.013517430011201e-05,
+          "foreground_rgb_mean_absolute_difference": 0.011395137092898699,
+          "white_background_rgb_mean_absolute_difference": 0.0005233701198085124,
+          "rgb_peak_signal_to_noise_ratio_db": 46.96044606570619,
+          "alpha_mean_absolute_difference": 0.00017185611174498286,
+          "alpha_threshold_0_5_iou": 0.997093023255814
+        },
+        "yz-back": {
+          "rgb_mean_absolute_difference": 0.0004552399600187009,
+          "rgb_mean_squared_difference": 1.2372403471336935e-05,
+          "foreground_rgb_mean_absolute_difference": 0.009171470910880745,
+          "white_background_rgb_mean_absolute_difference": 0.0004303206414491346,
+          "rgb_peak_signal_to_noise_ratio_db": 49.075459258400436,
+          "alpha_mean_absolute_difference": 0.00017185611174498275,
+          "alpha_threshold_0_5_iou": 0.997093023255814
+        }
+      },
+      "mesh_versus_original": {
+        "fused": {
+          "surface_samples_per_mesh": 20000,
+          "sample_seed": 23,
+          "reference_area": 0.9373908579544927,
+          "sampled_point_to_triangle": {
+            "method": "Area-weighted sampled points to the closest target-mesh triangles; no alignment. F1 is the harmonic mean of precision and recall within the recorded distance threshold. p95 is the 95th percentile; the maximum is over sampled source points, not the continuous surface.",
+            "symmetric_mean_distance": 0.020262850457157373,
+            "symmetric_mean_over_reference_diagonal": 0.017150866559335037,
+            "reference_to_candidate_mean": 0.019821976141857146,
+            "candidate_to_reference_mean": 0.0207037247724576,
+            "symmetric_p95_distance": 0.06627138639559906,
+            "maximum_sampled_distance": 0.11840795061549834,
+            "f_scores_by_reference_diagonal_fraction": {
+              "0.001": {
+                "distance_threshold": 0.0011814476188160017,
+                "precision": 0.04965,
+                "recall": 0.05545,
+                "f1": 0.05238996194100857
+              },
+              "0.005": {
+                "distance_threshold": 0.005907238094080009,
+                "precision": 0.23645,
+                "recall": 0.26035,
+                "f1": 0.24782511070853463
+              },
+              "0.01": {
+                "distance_threshold": 0.011814476188160018,
+                "precision": 0.4402,
+                "recall": 0.4784,
+                "f1": 0.4585057261049423
+              }
+            }
+          },
+          "distance_units": "input model-coordinate units; no alignment or rescaling",
+          "reference_bounding_box_diagonal": 1.1814476188160017,
+          "symmetric_mean_sample_distance": 0.02122024439938844,
+          "symmetric_mean_distance_over_reference_diagonal": 0.017961223215849805,
+          "symmetric_p95_sample_distance": 0.06670451400199601,
+          "sampled_hausdorff_distance": 0.11876848642929218,
+          "surface_f_scores_by_reference_diagonal_fraction": {
+            "0.005": {
+              "distance_threshold": 0.005907238094080009,
+              "precision": 0.1718,
+              "recall": 0.18595,
+              "f1": 0.1785951642208246,
+              "reference_resampling_recall": 0.90555
+            },
+            "0.01": {
+              "distance_threshold": 0.011814476188160018,
+              "precision": 0.4201,
+              "recall": 0.45385,
+              "f1": 0.43632332513301675,
+              "reference_resampling_recall": 0.9999
+            }
+          },
+          "candidate_area": 1.005519387580186,
+          "reference_to_candidate": {
+            "mean_surface_distance": 0.020824513336675544,
+            "p95_surface_distance": 0.06670451400199601
+          },
+          "candidate_to_reference": {
+            "mean_surface_distance": 0.02161597546210134,
+            "p95_surface_distance": 0.06474079613135657
+          },
+          "reference_vertices": 34986,
+          "same_reference_mesh_different_sample_seed": {
+            "mean_surface_distance": 0.003407695003885785,
+            "p95_surface_distance": 0.006651366948639382
+          },
+          "candidate_vertices": 37642,
+          "reference_faces": 70040,
+          "candidate_faces": 75328,
+          "reference_watertight": true,
+          "candidate_watertight": true
+        },
+        "default": {
+          "surface_samples_per_mesh": 20000,
+          "sample_seed": 23,
+          "reference_area": 0.9373908579544927,
+          "sampled_point_to_triangle": {
+            "method": "Area-weighted sampled points to the closest target-mesh triangles; no alignment. F1 is the harmonic mean of precision and recall within the recorded distance threshold. p95 is the 95th percentile; the maximum is over sampled source points, not the continuous surface.",
+            "symmetric_mean_distance": 0.02005422404145425,
+            "symmetric_mean_over_reference_diagonal": 0.016974281146337887,
+            "reference_to_candidate_mean": 0.01943724057300516,
+            "candidate_to_reference_mean": 0.02067120750990334,
+            "symmetric_p95_distance": 0.06603987854527538,
+            "maximum_sampled_distance": 0.11805989549465905,
+            "f_scores_by_reference_diagonal_fraction": {
+              "0.001": {
+                "distance_threshold": 0.0011814476188160017,
+                "precision": 0.0506,
+                "recall": 0.05545,
+                "f1": 0.05291409712399811
+              },
+              "0.005": {
+                "distance_threshold": 0.005907238094080009,
+                "precision": 0.2407,
+                "recall": 0.2688,
+                "f1": 0.2539751128557409
+              },
+              "0.01": {
+                "distance_threshold": 0.011814476188160018,
+                "precision": 0.4416,
+                "recall": 0.49385,
+                "f1": 0.46626577582981454
+              }
+            }
+          },
+          "distance_units": "input model-coordinate units; no alignment or rescaling",
+          "reference_bounding_box_diagonal": 1.1814476188160017,
+          "symmetric_mean_sample_distance": 0.021017044906251253,
+          "symmetric_mean_distance_over_reference_diagonal": 0.01778923125454658,
+          "symmetric_p95_sample_distance": 0.06643927436356624,
+          "sampled_hausdorff_distance": 0.11840609735436329,
+          "surface_f_scores_by_reference_diagonal_fraction": {
+            "0.005": {
+              "distance_threshold": 0.005907238094080009,
+              "precision": 0.17565,
+              "recall": 0.18915,
+              "f1": 0.18215020559210526,
+              "reference_resampling_recall": 0.90555
+            },
+            "0.01": {
+              "distance_threshold": 0.011814476188160018,
+              "precision": 0.4198,
+              "recall": 0.4667,
+              "f1": 0.4420093852227862,
+              "reference_resampling_recall": 0.9999
+            }
+          },
+          "candidate_area": 1.0429638322142354,
+          "reference_to_candidate": {
+            "mean_surface_distance": 0.020455398912063397,
+            "p95_surface_distance": 0.06643927436356624
+          },
+          "candidate_to_reference": {
+            "mean_surface_distance": 0.021578690900439106,
+            "p95_surface_distance": 0.06475363546632487
+          },
+          "reference_vertices": 34986,
+          "same_reference_mesh_different_sample_seed": {
+            "mean_surface_distance": 0.003407695003885785,
+            "p95_surface_distance": 0.006651366948639382
+          },
+          "candidate_vertices": 39124,
+          "reference_faces": 70040,
+          "candidate_faces": 78284,
+          "reference_watertight": true,
+          "candidate_watertight": true
+        },
+        "fixed_prepared": {
+          "surface_samples_per_mesh": 20000,
+          "sample_seed": 23,
+          "reference_area": 0.9373908579544927,
+          "sampled_point_to_triangle": {
+            "method": "Area-weighted sampled points to the closest target-mesh triangles; no alignment. F1 is the harmonic mean of precision and recall within the recorded distance threshold. p95 is the 95th percentile; the maximum is over sampled source points, not the continuous surface.",
+            "symmetric_mean_distance": 0.01648643906483989,
+            "symmetric_mean_over_reference_diagonal": 0.013954439284715747,
+            "reference_to_candidate_mean": 0.015427236763849292,
+            "candidate_to_reference_mean": 0.017545641365830488,
+            "symmetric_p95_distance": 0.052056806357602084,
+            "maximum_sampled_distance": 0.09206647735745335,
+            "f_scores_by_reference_diagonal_fraction": {
+              "0.001": {
+                "distance_threshold": 0.0011814476188160017,
+                "precision": 0.0526,
+                "recall": 0.06525,
+                "f1": 0.05824607551972846
+              },
+              "0.005": {
+                "distance_threshold": 0.005907238094080009,
+                "precision": 0.2651,
+                "recall": 0.31195,
+                "f1": 0.2866231522398406
+              },
+              "0.01": {
+                "distance_threshold": 0.011814476188160018,
+                "precision": 0.4804,
+                "recall": 0.5435,
+                "f1": 0.5100056646156851
+              }
+            }
+          },
+          "distance_units": "input model-coordinate units; no alignment or rescaling",
+          "reference_bounding_box_diagonal": 1.1814476188160017,
+          "symmetric_mean_sample_distance": 0.017530137610597026,
+          "symmetric_mean_distance_over_reference_diagonal": 0.01483784581847565,
+          "symmetric_p95_sample_distance": 0.0524493589453053,
+          "sampled_hausdorff_distance": 0.09234629221251758,
+          "surface_f_scores_by_reference_diagonal_fraction": {
+            "0.005": {
+              "distance_threshold": 0.005907238094080009,
+              "precision": 0.1935,
+              "recall": 0.2172,
+              "f1": 0.20466617969320672,
+              "reference_resampling_recall": 0.90555
+            },
+            "0.01": {
+              "distance_threshold": 0.011814476188160018,
+              "precision": 0.4543,
+              "recall": 0.5149,
+              "f1": 0.4827054684275691,
+              "reference_resampling_recall": 0.9999
+            }
+          },
+          "candidate_area": 1.0387965035586337,
+          "reference_to_candidate": {
+            "mean_surface_distance": 0.01655587812245096,
+            "p95_surface_distance": 0.048622696368445434
+          },
+          "candidate_to_reference": {
+            "mean_surface_distance": 0.018504397098743096,
+            "p95_surface_distance": 0.0524493589453053
+          },
+          "reference_vertices": 34986,
+          "same_reference_mesh_different_sample_seed": {
+            "mean_surface_distance": 0.003407695003885785,
+            "p95_surface_distance": 0.006651366948639382
+          },
+          "candidate_vertices": 38992,
+          "reference_faces": 70040,
+          "candidate_faces": 78036,
+          "reference_watertight": true,
+          "candidate_watertight": true
+        },
+        "fixed_latent": {
+          "surface_samples_per_mesh": 20000,
+          "sample_seed": 23,
+          "reference_area": 0.9373908579544927,
+          "sampled_point_to_triangle": {
+            "method": "Area-weighted sampled points to the closest target-mesh triangles; no alignment. F1 is the harmonic mean of precision and recall within the recorded distance threshold. p95 is the 95th percentile; the maximum is over sampled source points, not the continuous surface.",
+            "symmetric_mean_distance": 0.00044600952320873126,
+            "symmetric_mean_over_reference_diagonal": 0.00037751104332133125,
+            "reference_to_candidate_mean": 0.0004506019299496409,
+            "candidate_to_reference_mean": 0.00044141711646782154,
+            "symmetric_p95_distance": 0.0012554867827721033,
+            "maximum_sampled_distance": 0.010069441332638634,
+            "f_scores_by_reference_diagonal_fraction": {
+              "0.001": {
+                "distance_threshold": 0.0011814476188160017,
+                "precision": 0.94415,
+                "recall": 0.94335,
+                "f1": 0.9437498304635761
+              },
+              "0.005": {
+                "distance_threshold": 0.005907238094080009,
+                "precision": 0.9996,
+                "recall": 0.99805,
+                "f1": 0.9988243986684354
+              },
+              "0.01": {
+                "distance_threshold": 0.011814476188160018,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0
+              }
+            }
+          },
+          "distance_units": "input model-coordinate units; no alignment or rescaling",
+          "reference_bounding_box_diagonal": 1.1814476188160017,
+          "symmetric_mean_sample_distance": 0.003494225756338965,
+          "symmetric_mean_distance_over_reference_diagonal": 0.0029575799220288197,
+          "symmetric_p95_sample_distance": 0.006786833537973064,
+          "sampled_hausdorff_distance": 0.012880633421821455,
+          "surface_f_scores_by_reference_diagonal_fraction": {
+            "0.005": {
+              "distance_threshold": 0.005907238094080009,
+              "precision": 0.9023,
+              "recall": 0.89985,
+              "f1": 0.9010733346280831,
+              "reference_resampling_recall": 0.90555
+            },
+            "0.01": {
+              "distance_threshold": 0.011814476188160018,
+              "precision": 1.0,
+              "recall": 0.99985,
+              "f1": 0.9999249943745782,
+              "reference_resampling_recall": 0.9999
+            }
+          },
+          "candidate_area": 0.9334199420222564,
+          "reference_to_candidate": {
+            "mean_surface_distance": 0.0035072152500164448,
+            "p95_surface_distance": 0.006786833537973064
+          },
+          "candidate_to_reference": {
+            "mean_surface_distance": 0.0034812362626614854,
+            "p95_surface_distance": 0.006669569627832579
+          },
+          "reference_vertices": 34986,
+          "same_reference_mesh_different_sample_seed": {
+            "mean_surface_distance": 0.003407695003885785,
+            "p95_surface_distance": 0.006651366948639382
+          },
+          "candidate_vertices": 34916,
+          "reference_faces": 70040,
+          "candidate_faces": 69892,
+          "reference_watertight": true,
+          "candidate_watertight": true
+        }
+      },
+      "relative_latent_error_versus_original": {
+        "fused": 0.7824206698855346,
+        "default": 0.7824206698855346,
+        "fixed_prepared": 0.7193610701438624
+      },
+      "prepared_original_png_sha256": "1ed87a9ba527f26133053e142d3e5ffc953d2ffa21458ec59e259ef466d256c6",
+      "original_latent_archive_sha256": "ec26b232340359a3bba901b5a4076b4f7df08804e23333a42817d4bea52d7001",
+      "cloud_sha256": {
+        "fused": "2e7b5381ca372fb57fd40cd11a58488593f5bd32271f536ec1fc6c255d4506e1",
+        "default": "9ad193f8bba1315d11654579cbc4f35d8f56f6ba5c7da803f7f9ea7e5a818a3c",
+        "fixed_prepared": "23f32fb4fb83460a605e1af14c8f20e53095f21a7215a905785d52d41ecfee4a",
+        "fixed_latent": "5913e2683da0de186f1d7f31e2d53ba7d90ad9295afa54620644f8028843f0e4"
+      },
+      "camera": {
+        "fused": {
+          "yaw": 0.958255683263718,
+          "pitch": 0.44095478270526656,
+          "radius": 1.408465053944432,
+          "fov": 77.20137751283936
+        },
+        "default": {
+          "yaw": 0.958255683263718,
+          "pitch": 0.44095478270526656,
+          "radius": 1.408465053944432,
+          "fov": 77.20137751283936
+        },
+        "fixed_prepared": {
+          "yaw": 0.9177130781687153,
+          "pitch": 0.42909742776831905,
+          "radius": 1.4163904753462417,
+          "fov": 76.98603906440361
+        }
+      }
+    }
+  ],
+  "intervention_scope": "Added after the complete cohort analysis. One object and seed selected post hoc as the worst observed matched case. Each intervention changes one pipeline boundary on the released artifact. Results are conditional, nonadditive diagnostics and are excluded from the 96-case cohort.",
+  "interventions": {
+    "default": "Same quantized weights, expanded default kernels instead of fused kernels.",
+    "fixed_prepared": "Fused quantized pipeline, replacing preprocessing output with the stored original-model prepared pixels; seed reset occurs after preprocessing.",
+    "fixed_latent": "Fused quantized octree and Gaussian decoders on the stored original latent with the same sampling seed; no denoising. Anchor identity is not assumed."
+  },
+  "source_sha256": {
+    "benchmark_worst_case_control_nov06.py": "723ae2f86eecc004d094d61ec9f27310c05b8843739ac7e140c0514d65ffd9db",
+    "idol_session.py": "3ac203165f46cfaee879d9232b1c8a610dabec4c66f5f443054502e4b46d0a9f",
+    "idol_generate.py": "6d27a27a5e0d0cf03c58be5246c9a6f0a1823b92302fa8c5e3e38afe54ce95d7",
+    "idol_gguf.py": "7d7c2e472c3470f822b7c1fff50d4a63547728100c74fab21e402d9121d400ce",
+    "idol_packed.py": "5f16197339272294f801a1d3ec8fb3894d45a2e29b4b66b14ce9adb95bb88b82",
+    "idol_triton.py": "1e9c78d48da62bfcd8dbfbe4ab389e20e30d56edbe24d6de4d2fbca302d3744a"
+  }
+}

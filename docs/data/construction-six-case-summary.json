@@ -1,0 +1,30 @@
+{
+  "scope": "Finite sampled Gaussian centers and six approximate orthographic preview views per latent. The preview is not the upstream renderer or a ground-truth visual-quality evaluation.",
+  "case_count": 6,
+  "gaussians": 16384,
+  "level": 8,
+  "activation_kernel": "float",
+  "summary": {
+    "reference_other_seed": {
+      "median_case_mean_foreground_rgb_difference": 0.030530560563474387,
+      "worst_view_foreground_rgb_difference": 0.05503386999023714,
+      "median_case_mean_silhouette_overlap": 0.9893907866987367,
+      "median_mean_reference_center_distance": 0.007622608344708422,
+      "median_voxel_overlap_32": 0.7005593388018341
+    },
+    "fresh32": {
+      "median_case_mean_foreground_rgb_difference": 0.00031440751153227807,
+      "worst_view_foreground_rgb_difference": 0.0005956182230434028,
+      "median_case_mean_silhouette_overlap": 0.9999182901037129,
+      "median_mean_reference_center_distance": 6.410088985511804e-05,
+      "median_voxel_overlap_32": 0.9978695329279637
+    },
+    "nearest64": {
+      "median_case_mean_foreground_rgb_difference": 0.001093898813844127,
+      "worst_view_foreground_rgb_difference": 0.0022173571566316656,
+      "median_case_mean_silhouette_overlap": 0.9997662831385998,
+      "median_mean_reference_center_distance": 0.00025112668384959637,
+      "median_voxel_overlap_32": 0.9869629292892074
+    }
+  }
+}

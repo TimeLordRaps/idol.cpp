@@ -1,0 +1,117 @@
+{
+  "scope": "Exploratory finite-set comparison of median relative decoder output differences and resident weight memory; six saved fixed-anchor cases. Runs and some cached inputs are not fully provenance-bound. Nondominated means only among these listed measurements and does not establish global optimality or visual quality.",
+  "points": [
+    {
+      "label": "float32 baseline",
+      "resident_weight_megabytes": 1151.82,
+      "median_octree_relative_difference": 5.729715e-06,
+      "median_gaussian_relative_difference": 3.629271e-06,
+      "nondominated_among_listed": true
+    },
+    {
+      "label": "nearest-code 8-bit g64 rtn",
+      "resident_weight_megabytes": 308.67,
+      "median_octree_relative_difference": 0.014087829999999999,
+      "median_gaussian_relative_difference": 0.006613494,
+      "nondominated_among_listed": true
+    },
+    {
+      "label": "nearest-code 6-bit g64 rtn",
+      "resident_weight_megabytes": 236.91,
+      "median_octree_relative_difference": 0.054431364999999995,
+      "median_gaussian_relative_difference": 0.028293775,
+      "nondominated_among_listed": false
+    },
+    {
+      "label": "nearest-code 5-bit g64 rtn",
+      "resident_weight_megabytes": 201.03,
+      "median_octree_relative_difference": 0.11189815,
+      "median_gaussian_relative_difference": 0.042445245,
+      "nondominated_among_listed": false
+    },
+    {
+      "label": "nearest-code 4-bit g64 rtn",
+      "resident_weight_megabytes": 165.15,
+      "median_octree_relative_difference": 0.22503385,
+      "median_gaussian_relative_difference": 0.083680225,
+      "nondominated_among_listed": false
+    },
+    {
+      "label": "nearest-code 4-bit g32 rtn",
+      "resident_weight_megabytes": 183.09,
+      "median_octree_relative_difference": 0.1922272,
+      "median_gaussian_relative_difference": 0.07324725,
+      "nondominated_among_listed": false
+    },
+    {
+      "label": "nearest-code 3-bit g32 rtn",
+      "resident_weight_megabytes": 147.21,
+      "median_octree_relative_difference": 0.40536194999999997,
+      "median_gaussian_relative_difference": 0.15070795,
+      "nondominated_among_listed": false
+    },
+    {
+      "label": "nearest-code 2-bit g32 rtn",
+      "resident_weight_megabytes": 111.33,
+      "median_octree_relative_difference": 0.81649305,
+      "median_gaussian_relative_difference": 0.2556507,
+      "nondominated_among_listed": false
+    },
+    {
+      "label": "feedback-assisted 4-bit g32 gptq",
+      "resident_weight_megabytes": 183.09,
+      "median_octree_relative_difference": 0.10098299999999999,
+      "median_gaussian_relative_difference": 0.034208550000000004,
+      "nondominated_among_listed": true
+    },
+    {
+      "label": "feedback-assisted 3-bit g32 gptq",
+      "resident_weight_megabytes": 147.21,
+      "median_octree_relative_difference": 0.27480119999999997,
+      "median_gaussian_relative_difference": 0.07262453499999999,
+      "nondominated_among_listed": true
+    },
+    {
+      "label": "feedback-assisted 2-bit g32 gptq",
+      "resident_weight_megabytes": 111.33,
+      "median_octree_relative_difference": 0.7609583,
+      "median_gaussian_relative_difference": 0.11552794999999999,
+      "nondominated_among_listed": true
+    },
+    {
+      "label": "mixed target 3.5 actual 3.480977",
+      "resident_weight_megabytes": 128.59,
+      "median_octree_relative_difference": 0.09998762,
+      "median_gaussian_relative_difference": 0.10237929500000001,
+      "nondominated_among_listed": true
+    },
+    {
+      "label": "mixed target 4.0 actual 3.987870",
+      "resident_weight_megabytes": 146.77,
+      "median_octree_relative_difference": 0.073682445,
+      "median_gaussian_relative_difference": 0.07807206,
+      "nondominated_among_listed": true
+    },
+    {
+      "label": "mixed target 4.5 actual 4.499329",
+      "resident_weight_megabytes": 165.12,
+      "median_octree_relative_difference": 0.03182354,
+      "median_gaussian_relative_difference": 0.059051405,
+      "nondominated_among_listed": true
+    },
+    {
+      "label": "mixed target 5.0 actual 4.988755",
+      "resident_weight_megabytes": 182.68,
+      "median_octree_relative_difference": 0.023315545,
+      "median_gaussian_relative_difference": 0.037263085,
+      "nondominated_among_listed": true
+    },
+    {
+      "label": "mixed target 6.0 actual 5.987699",
+      "resident_weight_megabytes": 218.52,
+      "median_octree_relative_difference": 0.011505635,
+      "median_gaussian_relative_difference": 0.015226665,
+      "nondominated_among_listed": true
+    }
+  ]
+}

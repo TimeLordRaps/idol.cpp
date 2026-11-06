@@ -1,0 +1,95 @@
+{
+  "scope": "Development comparisons of separately licensed DINOv3 image-encoder files with the original encoder. The original FLUX.2 autoencoder and same Idol denoiser are used; all latents use 50 steps and seed 42. Layer choices were developed using Chelsea and astronaut; all inputs have now influenced development decisions. Relative latent differences and sampled-center overlaps compare with original-model outputs, not ground-truth 3D.",
+  "metric": "Euclidean norm of candidate minus original latent divided by the original latent norm; unitless. Center overlap is intersection over union of occupied Gaussian-center cells at 32 cells per model-coordinate unit.",
+  "source_dinov3_sha256": "3e1d4d18b9bfa9f28fad8e9de6a783f1313532d3460efa4cd0b12521d81d1a4d",
+  "idol_model_sha256": "bef68803d8e56a462262dfa4a8c4931d8d66a71e819b050f40121e385d7ad22f",
+  "mixed_q8": {
+    "encoder_sha256": "c311bb41345c82fa918c7e2b16f96d392b697ae6a5ac3a19266859a51c4aec02",
+    "encoder_bytes": 1488080064,
+    "preserved_layers": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31
+    ],
+    "tensor_counts": {
+      "original_bfloat16": 168,
+      "quantized_q8": 56,
+      "other_identical": 391
+    },
+    "cases": {
+      "chelsea": {
+        "image_sha256": "adbb6c59da5251983dfca65bd3d055e3d2cb9d49f85af5d473852a9033e42f24",
+        "latent_sha256": "c6ec35403143e3768261be579708df6ec47c44828a2419c621cc5380f5e5eaf7",
+        "relative_latent_difference": 0.057886514832839506,
+        "actual_file_latent_equals_in_memory": true,
+        "image_to_latent_seconds": 28.086521799996262,
+        "pytorch_peak_allocated_bytes": 3367799808
+      },
+      "astronaut": {
+        "image_sha256": "b8c8afe36141c45dd06f55d257d6b951b4c77a1a2c31fe09e78452cdda2dfcd4",
+        "latent_sha256": "cda4902aa7d21a7b4662d9c88e8e7d14148a697e9f452819f769475a9b6c278f",
+        "relative_latent_difference": 0.07128170714540959,
+        "actual_file_latent_equals_in_memory": true,
+        "image_to_latent_seconds": 27.436297399995965,
+        "pytorch_peak_allocated_bytes": 3324836352
+      },
+      "coffee": {
+        "image_sha256": "bc7c679e93a04b35aef5c5d644f0293d6aac8df7ccbba06f1d5bdddc0285050b",
+        "latent_sha256": "eceab1ee1762233fb2eb29f8cde98c3ee3d8b0181e0884aa7c54ecedc616ffa9",
+        "relative_latent_difference": 0.028645667715607184,
+        "actual_file_latent_equals_in_memory": true,
+        "image_to_latent_seconds": 27.522747299997718,
+        "pytorch_peak_allocated_bytes": 3324836352
+      }
+    }
+  },
+  "third_party_q4": {
+    "repository": "zisisnotzis/dinov3-gguf",
+    "encoder_sha256": "cf80ee6e3c2d4044b3214c0ccde5e416cb999b799f35b699f4edaa4059d83d71",
+    "encoder_bytes": 476860704,
+    "source_revision": "unknown",
+    "cases": {
+      "chelsea": {
+        "image_sha256": "adbb6c59da5251983dfca65bd3d055e3d2cb9d49f85af5d473852a9033e42f24",
+        "latent_sha256": "4b17128ff6c0dae0050740e2b8c20020cbd1d334297a342eb05bcc8250d3cd69",
+        "relative_latent_difference": 0.9808430304372914,
+        "center_voxel_iou_32_per_unit": 0.21526980482204364,
+        "reference_point_cloud_sha256": "911875243f154761275760f444487221f610c9538eb8b3403fcd2c98093a10c5",
+        "candidate_point_cloud_sha256": "67490dc70d0e76a098898e9e56fcd79b9e93d35b70af73c7e6cdb5ba12b5aa65",
+        "image_to_latent_seconds": 27.652306599993608,
+        "pytorch_peak_allocated_bytes": 2357726208
+      },
+      "astronaut": {
+        "image_sha256": "b8c8afe36141c45dd06f55d257d6b951b4c77a1a2c31fe09e78452cdda2dfcd4",
+        "latent_sha256": "beb0f8ee71d4ca7e6b0e9202f36e677ca865db261dc9f3356113ec694b14a72a",
+        "relative_latent_difference": 0.27531896734427147,
+        "center_voxel_iou_32_per_unit": 0.7710979395992097,
+        "reference_point_cloud_sha256": "afadbc3d524ca32a67b76c6030f8de95db8a2ebe8e0de41b61275a76525b0a2a",
+        "candidate_point_cloud_sha256": "ab62a6b9aa93e6c6208c886c5d13d45326e4d6c007a092803d1a7b55350c3bc0",
+        "image_to_latent_seconds": 27.081718700006604,
+        "pytorch_peak_allocated_bytes": 2309282304
+      }
+    }
+  }
+}

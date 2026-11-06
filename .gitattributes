@@ -1,0 +1,7 @@
+# Preserve Unix entry points when the checkout is used from Docker on Windows.
+/idol-server text eol=lf
+*.sh text eol=lf
+/Dockerfile text eol=lf
+# Benchmark receipts bind these source bytes across Windows and Linux checkouts.
+/tools/*.py text eol=lf
+/benchmarks/gso32/protocol.json -text

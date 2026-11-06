@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Real Idol decoders · idol.cpp</title>
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<header class="site"><div class="wrap"><a class="name" href="index.html">idol.cpp</a>
+  <nav><a href="index.html">Home</a><a href="getting-started.html">Getting started</a>
+  <a href="benchmarks.html">Benchmarks</a><a href="status.html">Status</a></nav>
+</div></header>
+<main class="wrap">
+  <h1>Real Idol decoders</h1>
+  <p class="lead">Use a latent produced by the Idol pipeline to run its octree and Gaussian decoders on the central
+  processing unit (CPU), then write the resulting Gaussian splats to a file.</p>
+  <div class="note"><p>This page describes the native decoder interface. The complete image-to-output path additionally uses the upstream image encoders and denoiser; see <a href="getting-started.html">getting started</a>.</p></div>
+
+  <h2>Export and run</h2>
+  <p>Build the project as described in <a href="getting-started.html">getting started</a>. The export script also
+  requires Python, NumPy, PyTorch, safetensors, plyfile, the downloaded Idol decoder files, and a checkout of the
+  <a href="https://github.com/speridlabs/idol-sdk">Idol software development kit (SDK)</a>.</p>
+  <pre><code>python tools/export_idol.py --weights WEIGHTS_DIR --sdk IDOL_SDK_DIR --out idol-export
+idol_decode idol-export --check --threads 8
+idol_decode idol-export --latent latent.f32 --out splats.ply --threads 8
+idol_mesh splats.ply mesh.obj</code></pre>
+  <p>The weights directory must contain <code>config.json</code>, <code>decoder.safetensors</code>, and
+  <code>decoder_gs.safetensors</code>. The input latent is a raw file of 32-bit floating-point values, ordered by token
+  and then conditioning channel. The tested model uses 16 channels per token. <code>--check</code> compares the
+  exported reference case, while <code>--latent</code> decodes an existing latent. These are different operations.</p>
+  <p>The default output is 262,144 Gaussians at octree depth 8. Sampling uses the runtime's own random generator, so
+  matching a seed does not imply matching draws from PyTorch. The point cloud file uses binary little-endian Polygon
+  File Format (PLY), with the exported axes rotated from z-up to y-up.</p>
+
+  <h2>Library interface</h2>
+  <p><code>idol::Decoders</code> loads an export directory. Its <code>octree_logits</code> and
+  <code>gaussian_features</code> methods operate on supplied points and latents; <code>sample_anchors</code> samples
+  points and <code>decode</code> combines sampling, the Gaussian decoder, and activation. The public declarations and
+  dimensions are in <code>include/idol/decoders.hpp</code>. This interface begins with a latent, not an image.</p>
+
+  <h2>Checking and measuring</h2>
+  <p>The decoder test compares small randomly initialized SDK decoder instances against the runtime and inspects a
+  generated point cloud. Passing that test does not establish trained-model quality. <code>tools/quant_idol.py</code>
+  scores decoder outputs on supplied held-out latents, and <code>tools/bench_idol.py</code> times decoder operations.
+  These measurements exclude latent generation. The benchmark's profile shares aggregate both decoders and warm-ups;
+  they are not a breakdown of Gaussian decoder wall time.</p>
+  <p>The evaluation scripts cache cases, calibration statistics, and sensitivity results under their work directory.
+  Those caches are not bound to all input files or settings. Use a new work directory when changing models, latents,
+  calibration settings, or evaluation code; do not assume an existing cache matches a new run. Quantization refuses
+  to overwrite an existing tier export. The mixed-plan search accepts <code>--keep</code> to retain scored exports;
+  without it, its newly created temporary exports are removed after scoring.</p>
+  <p>A 32-object, 96-case matched-seed image-to-mesh and approximate-view evaluation is reported in the
+  <a href="benchmark-gso32.md">eight-bit fidelity study</a>. Broader quantization sweeps and accuracy against
+  ground-truth geometry remain unestablished. Measurements should identify the weights, inputs, arithmetic path,
+  machine, and procedure.</p>
+
+  <h2>Higher-accuracy quantization and construction checks</h2>
+  <p>One approach leaves every octree tensor in 32-bit floating point and quantizes the Gaussian matrices. The
+  <code>tools/calibrate_gaussian.py</code> script collects fresh Gaussian calibration matrices from a byte-disjoint
+  holdout and calibration split, records input hashes, and checks available memory on Windows and Linux before each
+  calibration case. <code>tools/build_quant_candidate.py</code> can then build an eight-bit candidate with those
+  matrices, or use nearest-code rounding without calibration. Both tools require their destination to be new.</p>
+  <pre><code>python tools/calibrate_gaussian.py --weights WEIGHTS_DIR --sdk SDK_DIR --latents LATENTS_DIR --out-dir CALIBRATION_DIR
+python tools/build_quant_candidate.py --export FLOAT_EXPORT --hessians CALIBRATION_DIR/hessians.pt --out QUANT_EXPORT --report BUILD_REPORT.json --bits 8 --group 64 --method gptq</code></pre>
+  <p><code>tools/gaussian_sensitivity.py</code> optionally measures the effect of quantizing one Gaussian matrix at a
+  time on calibration latents. Its report can be supplied to <code>build_quant_candidate.py</code> with
+  <code>--sensitivity-report</code> and <code>--keep-top-sensitive</code> to leave selected matrices at full precision.
+  The measurements are a heuristic: matrix effects can interact and the resulting model still needs held-out and
+  construction evaluation.</p>
+  <p>The calibration output can be large. Its recorded input bytes do not establish the latents' origin, variety, or
+  licensing. <code>tools/audit_octree_preservation.py</code> checks that the octree tensor bytes were retained, while
+  <code>tools/score_quant_candidate.py</code> scores saved output cases. For downstream evidence,
+  <code>tools/eval_construction.py</code> generates point clouds against a reference and a second reference seed;
+  <code>tools/compare_splats.py</code> compares centers; <code>tools/render_splats_preview.py</code> creates approximate
+  orthographic Gaussian previews; and <code>tools/compare_meshes.py</code> samples extracted mesh surfaces. Those Python
+  comparison tools need NumPy, SciPy, plyfile, Pillow and, for meshes, trimesh. The previews are not the upstream
+  renderer, and none of these comparisons supplies a ground-truth reconstruction.</p>
+  <p>See the <a href="benchmarks.html#real-idol-decoders-exploratory-results">exploratory benchmarks</a> for the
+  measured candidate tradeoffs and the limitations of the available cases.</p>
+
+  <h2>Octree sampling comparison</h2>
+  <p><code>idol_octree_compare REFERENCE_EXPORT CANDIDATE_EXPORT latent.f32 --anchors 8192 --level 8 --seed 0</code>
+  samples both octrees on the same latent and, by default, the same seed. It bins the sampled anchors into leaf cells
+  at the requested depth and reports half the sum of the absolute differences between their normalized cell counts.
+  This empirical total variation is between zero and one: zero means identical sampled cell counts, and one means
+  disjoint sampled cells. It is a comparison of finite sampled outcomes, not a distance between the exact probability
+  distributions and not a visual-quality measure. Different paths may consume random numbers differently. The optional
+  <code>--candidate-seed</code> lets you compare two seeds. Repeated <code>--candidate EXPORT</code> options reuse
+  one reference sample for several candidates. <code>--compare-levels 3,4,5,6,7,8</code> bins the same sampled anchors
+  at several spatial scales, and <code>--noise-seed 1</code> also compares the reference against itself with another
+  seed; the latter is reported as candidate <code>-1</code>. These finite-sample comparisons must be interpreted alongside
+  sampling variation.</p>
+  <p>The mixed-plan search accepts <code>--octree-weight</code> to place more emphasis on octree sensitivity in its
+  allocation heuristic. It leaves the measured scores unchanged and can trade Gaussian accuracy for octree accuracy;
+  evaluate both outputs and sampled cells rather than assuming an improvement.</p>
+  <p>For a fixed reference case, <code>idol_decode --check</code> also reports the mean and worst total variation
+  between the reference and candidate eight-child probability vectors. This uses a stable softmax on each row of
+  logits and is unchanged if a constant is added to all eight logits in a row. It measures probabilities at the
+  supplied locations and level; saved anchor locations need not be parent-cell centers visited during sampling.
+  It does not measure the entire sampled tree.</p>
+</main>
+<footer><div class="wrap">idol.cpp · Apache License 2.0. <a href="notice.html">Third-party notices</a>.</div></footer>
+</body>
+</html>

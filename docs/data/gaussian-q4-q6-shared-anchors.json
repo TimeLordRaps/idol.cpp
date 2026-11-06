@@ -1,0 +1,274 @@
+{
+  "scope": "Development comparison of four- and six-bit Gaussian decoder matrices on two photographs. Each original and candidate decoder used the same original 50-step latent and the identical ordered octree anchors within the same run; outputs contain 262144 points. These are comparisons to the original decoder, not ground-truth reconstruction quality. Denoiser and other components retain original runtime precision. Gaussian weights were expanded for the measured decoder runs.",
+  "units": {
+    "center_distance": "model-coordinate units",
+    "opacity_and_color_difference": "unitless; colors derive from zero-degree spherical-harmonic coefficients and are not clipped",
+    "center_voxel_resolution": "cells per model-coordinate unit"
+  },
+  "source_gaussian_sha256": "3087eb8ee5763206a53e4078acf2a1bf382dab5147d407ec13a2cf39c04cc544",
+  "base_model_sha256": "80707a85bcd4242453bd7a1ed390f5a8410efe8ab8812ad8327ef31863a9b483",
+  "comparison_tool_sha256": "f4d7f07efb3da0dbbd846567d36e4ac48ff9db84afbacee16fb5cfa3305d3817",
+  "experimental_script_sha256": "9cb0293bc2f58057ec44ac59c8b1658568f1bdda6893985db46236c997406660",
+  "variants": {
+    "q4_unweighted": {
+      "model_sha256": "6145c15fe306247eb69d50194f3ed93fd2deb2191ead9d0ee5c846f126f72a94",
+      "model_bytes": 1561610752,
+      "encoded_sha256": "bc2a68ab5254f2a05b90c22f90023c3c7bb68a087845be4d1043a41d0228b8c1",
+      "tensor_count_checked": 1690,
+      "encoded_gaussian_tensor_count_checked": 98,
+      "cases": {
+        "chelsea": {
+          "latent_sha256": "cda3f2375b4a21e9c63f7123bce90a1d52f40f8e8de188e7c1c808637e16f6b2",
+          "ordered_anchor_sha256": "cec2e16a5f74925875d55c417fef19a6b0aec90dae57fbf786a71769398fd224",
+          "original_point_cloud_sha256": "d735a64099aa1635bc17b3b1ee7edf5344a657bf8d466b26ff73cc61c5d810b2",
+          "candidate_point_cloud_sha256": "e9005cb9134ad1009212f8d56ac7518396d87a0033148e7113a0acf570db6b1a",
+          "original_matches_prior_reference_bytes": true,
+          "center_voxel_iou_32_per_unit": 0.9825136612021858,
+          "index_paired": {
+            "assumption": "point indices correspond; equal counts alone do not establish this",
+            "mean_center_distance": 0.0008713436780984936,
+            "p95_center_distance": 0.001771455863979204,
+            "max_center_distance": 0.02834467226687647,
+            "opacity_mean_absolute_difference": 0.02418611211664004,
+            "color_mean_absolute_difference": 0.009854735099565226
+          },
+          "reference_to_candidate": {
+            "mean_center_distance": 0.0006418143000577916,
+            "p95_center_distance": 0.0011936095989984817,
+            "opacity_weighted_mean_center_distance": 0.0006389112970581028,
+            "nearest_color_mean_absolute_difference": 0.0359090356014738
+          },
+          "candidate_to_reference": {
+            "mean_center_distance": 0.0006453766132296847,
+            "p95_center_distance": 0.0012001025089388375,
+            "opacity_weighted_mean_center_distance": 0.0006419142203159522,
+            "nearest_color_mean_absolute_difference": 0.035842483498673604
+          }
+        },
+        "astronaut": {
+          "latent_sha256": "c14e5fe1423dee0be1d89ee60c815dc72f316a3d545310f5822db5604c8721c0",
+          "ordered_anchor_sha256": "1fec55e26279d76b072d55a4427b07ec305dc99413803a8b6c2e375382497b89",
+          "original_point_cloud_sha256": "8990c0cd65f9c746d5582f10e8591c70cff4d5aebc72cb75ee87fe9df9d65d27",
+          "candidate_point_cloud_sha256": "525076172882b900d46aae671c64a76c3ca294f0542e01027e608045f238d97b",
+          "original_matches_prior_reference_bytes": true,
+          "center_voxel_iou_32_per_unit": 0.9407474931631723,
+          "index_paired": {
+            "assumption": "point indices correspond; equal counts alone do not establish this",
+            "mean_center_distance": 0.0011169385570338423,
+            "p95_center_distance": 0.0024475245677744897,
+            "max_center_distance": 0.04633227744570584,
+            "opacity_mean_absolute_difference": 0.022625593508420482,
+            "color_mean_absolute_difference": 0.011319690044299384
+          },
+          "reference_to_candidate": {
+            "mean_center_distance": 0.0009181914380789154,
+            "p95_center_distance": 0.0018647889093502523,
+            "opacity_weighted_mean_center_distance": 0.0008611751322628657,
+            "nearest_color_mean_absolute_difference": 0.02259102637896322
+          },
+          "candidate_to_reference": {
+            "mean_center_distance": 0.0009157807998608149,
+            "p95_center_distance": 0.0018618690831319075,
+            "opacity_weighted_mean_center_distance": 0.0008605492735993115,
+            "nearest_color_mean_absolute_difference": 0.02248153621527003
+          }
+        }
+      }
+    },
+    "q4_weighted": {
+      "model_sha256": "91311ceeb9038174e3a7f263be886bf63d52bb05ca9d0ae5c3adfb53262912bd",
+      "model_bytes": 1561610752,
+      "encoded_sha256": "4154fb3a07b06be7952f9e5ee5fd01f36ed489e2c4c2d5705939325facd53eaf",
+      "tensor_count_checked": 1690,
+      "encoded_gaussian_tensor_count_checked": 98,
+      "cases": {
+        "chelsea": {
+          "latent_sha256": "cda3f2375b4a21e9c63f7123bce90a1d52f40f8e8de188e7c1c808637e16f6b2",
+          "ordered_anchor_sha256": "cec2e16a5f74925875d55c417fef19a6b0aec90dae57fbf786a71769398fd224",
+          "original_point_cloud_sha256": "d735a64099aa1635bc17b3b1ee7edf5344a657bf8d466b26ff73cc61c5d810b2",
+          "candidate_point_cloud_sha256": "39cca4a08118396025748190a97b7876019c8182fc7f4123349b65188d9549c0",
+          "original_matches_prior_reference_bytes": true,
+          "center_voxel_iou_32_per_unit": 0.9846322722283205,
+          "index_paired": {
+            "assumption": "point indices correspond; equal counts alone do not establish this",
+            "mean_center_distance": 0.0007584863465838023,
+            "p95_center_distance": 0.0016014969201828386,
+            "max_center_distance": 0.013955041219410323,
+            "opacity_mean_absolute_difference": 0.030044535097716627,
+            "color_mean_absolute_difference": 0.009519973869284283
+          },
+          "reference_to_candidate": {
+            "mean_center_distance": 0.0005842005412071162,
+            "p95_center_distance": 0.001108496861288689,
+            "opacity_weighted_mean_center_distance": 0.0005744013611411458,
+            "nearest_color_mean_absolute_difference": 0.031694782669024646
+          },
+          "candidate_to_reference": {
+            "mean_center_distance": 0.000584821527390282,
+            "p95_center_distance": 0.0011068490399964738,
+            "opacity_weighted_mean_center_distance": 0.0005763385116052845,
+            "nearest_color_mean_absolute_difference": 0.031437562940613194
+          }
+        },
+        "astronaut": {
+          "latent_sha256": "c14e5fe1423dee0be1d89ee60c815dc72f316a3d545310f5822db5604c8721c0",
+          "ordered_anchor_sha256": "1fec55e26279d76b072d55a4427b07ec305dc99413803a8b6c2e375382497b89",
+          "original_point_cloud_sha256": "8990c0cd65f9c746d5582f10e8591c70cff4d5aebc72cb75ee87fe9df9d65d27",
+          "candidate_point_cloud_sha256": "e276ed613e7f09cb29a29b71867f943c7164de4bc6d2e13c05320ea1b1a6b1a6",
+          "original_matches_prior_reference_bytes": true,
+          "center_voxel_iou_32_per_unit": 0.9497533908754624,
+          "index_paired": {
+            "assumption": "point indices correspond; equal counts alone do not establish this",
+            "mean_center_distance": 0.0010552613928800814,
+            "p95_center_distance": 0.0023853984600051277,
+            "max_center_distance": 0.03910268961690798,
+            "opacity_mean_absolute_difference": 0.02117394255812562,
+            "color_mean_absolute_difference": 0.010724156167094686
+          },
+          "reference_to_candidate": {
+            "mean_center_distance": 0.0008702249197456756,
+            "p95_center_distance": 0.0018155851907190013,
+            "opacity_weighted_mean_center_distance": 0.0008162811260081424,
+            "nearest_color_mean_absolute_difference": 0.021023757453222547
+          },
+          "candidate_to_reference": {
+            "mean_center_distance": 0.0008724717225291878,
+            "p95_center_distance": 0.0018180815828531427,
+            "opacity_weighted_mean_center_distance": 0.0008188575350346666,
+            "nearest_color_mean_absolute_difference": 0.020871169092602924
+          }
+        }
+      }
+    },
+    "q6_unweighted": {
+      "model_sha256": "e982443922d21c5655a546d6a98c1887a4608e0f1095d69611089fcaecf0f373",
+      "model_bytes": 1622563072,
+      "encoded_sha256": "3806769644e550264bd1aebc50492aa53b8e757a902a0c6f968b9e0e93cd942f",
+      "tensor_count_checked": 1690,
+      "encoded_gaussian_tensor_count_checked": 98,
+      "cases": {
+        "chelsea": {
+          "latent_sha256": "cda3f2375b4a21e9c63f7123bce90a1d52f40f8e8de188e7c1c808637e16f6b2",
+          "ordered_anchor_sha256": "cec2e16a5f74925875d55c417fef19a6b0aec90dae57fbf786a71769398fd224",
+          "original_point_cloud_sha256": "d735a64099aa1635bc17b3b1ee7edf5344a657bf8d466b26ff73cc61c5d810b2",
+          "candidate_point_cloud_sha256": "f346320272206ab76b163ccc4bc87a5b8050d9f53d304aaa71e4e841b62de2bc",
+          "original_matches_prior_reference_bytes": true,
+          "center_voxel_iou_32_per_unit": 0.9933847850055126,
+          "index_paired": {
+            "assumption": "point indices correspond; equal counts alone do not establish this",
+            "mean_center_distance": 0.00019764045432723272,
+            "p95_center_distance": 0.00038821380210609003,
+            "max_center_distance": 0.013478750099906475,
+            "opacity_mean_absolute_difference": 0.0062824078399513344,
+            "color_mean_absolute_difference": 0.0022695529747186866
+          },
+          "reference_to_candidate": {
+            "mean_center_distance": 0.0001906141896398457,
+            "p95_center_distance": 0.00038071258991391547,
+            "opacity_weighted_mean_center_distance": 0.0001869379913102312,
+            "nearest_color_mean_absolute_difference": 0.003979356162501343
+          },
+          "candidate_to_reference": {
+            "mean_center_distance": 0.00019053890767590064,
+            "p95_center_distance": 0.0003805603332161366,
+            "opacity_weighted_mean_center_distance": 0.0001867026662112909,
+            "nearest_color_mean_absolute_difference": 0.004020430516428694
+          }
+        },
+        "astronaut": {
+          "latent_sha256": "c14e5fe1423dee0be1d89ee60c815dc72f316a3d545310f5822db5604c8721c0",
+          "ordered_anchor_sha256": "1fec55e26279d76b072d55a4427b07ec305dc99413803a8b6c2e375382497b89",
+          "original_point_cloud_sha256": "8990c0cd65f9c746d5582f10e8591c70cff4d5aebc72cb75ee87fe9df9d65d27",
+          "candidate_point_cloud_sha256": "46df57489a547735e03cf13251d10a895b62344cc4226106470c7c5736d550d0",
+          "original_matches_prior_reference_bytes": true,
+          "center_voxel_iou_32_per_unit": 0.9828446662507798,
+          "index_paired": {
+            "assumption": "point indices correspond; equal counts alone do not establish this",
+            "mean_center_distance": 0.0002929747940142371,
+            "p95_center_distance": 0.0006203678163420074,
+            "max_center_distance": 0.021237782605598984,
+            "opacity_mean_absolute_difference": 0.006685247332507294,
+            "color_mean_absolute_difference": 0.0030598905125608054
+          },
+          "reference_to_candidate": {
+            "mean_center_distance": 0.0002767749491686783,
+            "p95_center_distance": 0.0006078007387067462,
+            "opacity_weighted_mean_center_distance": 0.0002579826683569768,
+            "nearest_color_mean_absolute_difference": 0.0038092912284857475
+          },
+          "candidate_to_reference": {
+            "mean_center_distance": 0.000276730475835916,
+            "p95_center_distance": 0.0006072034575813773,
+            "opacity_weighted_mean_center_distance": 0.0002581189892923673,
+            "nearest_color_mean_absolute_difference": 0.003826841577738913
+          }
+        }
+      }
+    },
+    "q6_weighted": {
+      "model_sha256": "c89399dabe243554042ee5a32c9187a621002f0477267a4426d8b7000597e5f6",
+      "model_bytes": 1622563072,
+      "encoded_sha256": "a9f0f7363311e0041ceb4bb1dfd40446702b9fc8e13aa8bf9a42e8c1747f4757",
+      "tensor_count_checked": 1690,
+      "encoded_gaussian_tensor_count_checked": 98,
+      "cases": {
+        "chelsea": {
+          "latent_sha256": "cda3f2375b4a21e9c63f7123bce90a1d52f40f8e8de188e7c1c808637e16f6b2",
+          "ordered_anchor_sha256": "cec2e16a5f74925875d55c417fef19a6b0aec90dae57fbf786a71769398fd224",
+          "original_point_cloud_sha256": "d735a64099aa1635bc17b3b1ee7edf5344a657bf8d466b26ff73cc61c5d810b2",
+          "candidate_point_cloud_sha256": "fe120c4169fc7d9a997ccba99df79c8d24edb9d0e18cddab6e18c65e3e3568c0",
+          "original_matches_prior_reference_bytes": true,
+          "center_voxel_iou_32_per_unit": 0.9944812362030905,
+          "index_paired": {
+            "assumption": "point indices correspond; equal counts alone do not establish this",
+            "mean_center_distance": 0.0001800959597836326,
+            "p95_center_distance": 0.00033742674260753096,
+            "max_center_distance": 0.006009929260299684,
+            "opacity_mean_absolute_difference": 0.006208282527973284,
+            "color_mean_absolute_difference": 0.0023143028291811103
+          },
+          "reference_to_candidate": {
+            "mean_center_distance": 0.0001751711011309883,
+            "p95_center_distance": 0.00033323000314930564,
+            "opacity_weighted_mean_center_distance": 0.00017386424910216384,
+            "nearest_color_mean_absolute_difference": 0.00357876105954177
+          },
+          "candidate_to_reference": {
+            "mean_center_distance": 0.00017521042974266962,
+            "p95_center_distance": 0.0003336997272541564,
+            "opacity_weighted_mean_center_distance": 0.0001737563015444397,
+            "nearest_color_mean_absolute_difference": 0.003591664890075959
+          }
+        },
+        "astronaut": {
+          "latent_sha256": "c14e5fe1423dee0be1d89ee60c815dc72f316a3d545310f5822db5604c8721c0",
+          "ordered_anchor_sha256": "1fec55e26279d76b072d55a4427b07ec305dc99413803a8b6c2e375382497b89",
+          "original_point_cloud_sha256": "8990c0cd65f9c746d5582f10e8591c70cff4d5aebc72cb75ee87fe9df9d65d27",
+          "candidate_point_cloud_sha256": "aa5a357f0648c4c94e7b85546bd1cb303c969059cf138ae7ab84b3ee02125fbd",
+          "original_matches_prior_reference_bytes": true,
+          "center_voxel_iou_32_per_unit": 0.98562949078413,
+          "index_paired": {
+            "assumption": "point indices correspond; equal counts alone do not establish this",
+            "mean_center_distance": 0.0002580556505690393,
+            "p95_center_distance": 0.0005560305360990404,
+            "max_center_distance": 0.02080579931093176,
+            "opacity_mean_absolute_difference": 0.005115108930547771,
+            "color_mean_absolute_difference": 0.002772786316663705
+          },
+          "reference_to_candidate": {
+            "mean_center_distance": 0.00024787731944770784,
+            "p95_center_distance": 0.000548671500347552,
+            "opacity_weighted_mean_center_distance": 0.000229567436834713,
+            "nearest_color_mean_absolute_difference": 0.003336121572063786
+          },
+          "candidate_to_reference": {
+            "mean_center_distance": 0.0002478363492306432,
+            "p95_center_distance": 0.000547609435357579,
+            "opacity_weighted_mean_center_distance": 0.0002296210019514333,
+            "nearest_color_mean_absolute_difference": 0.0033710284592874495
+          }
+        }
+      }
+    }
+  }
+}

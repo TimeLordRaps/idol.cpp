@@ -1,0 +1,19 @@
+# Build output
+/build/
+/out/
+cmake-build-*/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Meshes and exports written by the tools
+*.obj
+/model/
+
+# Editor and IDE state
+.vs/
+.idea/
+.vscode/
+CMakeUserPresets.json

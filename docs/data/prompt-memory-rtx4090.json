@@ -1,0 +1,290 @@
+{
+  "scope": "Two separate browser-driven prompt-to-image-to-3D runs on a shared Windows workstation. Each starts the browser after the server is created; model loading occurs during the request. The image generator exits before Idol inference. The sampler runs in a separate child process and is included in the process-tree measurements.",
+  "prompt": "A small orange chair on a plain white background.",
+  "idol_settings": {
+    "steps": 50,
+    "seed": 42,
+    "gaussians": 262144,
+    "mode": "synthetic",
+    "fused_kernels": true,
+    "resident_gpu": true,
+    "batch_guidance": true,
+    "cudnn_attention": true
+  },
+  "memory_method": "NVIDIA Management Library device used bytes include all applications; the idle range is recorded but not subtracted. Windows process-tree working sets are simultaneous sums and may count shared pages more than once. Private committed bytes include paged allocations, not just physical RAM. Sampling intervals and maximum observed gaps are included; short peaks and processes can be missed.",
+  "limitations": "Two observations on a shared machine are not a latency distribution, an isolated application-only graphics allocation, or a minimum hardware requirement. Original gated encoders remained at bfloat16. Browser launch to status excludes initial server creation.",
+  "trials": [
+    {
+      "receipt_sha256": "63d4b772069388088e81d7619bf9dfdf6082d63fc4306d546286e079fa8106b8",
+      "component_identity": {
+        "idol": {
+          "file": "Idol-Q8-calibrated-denoiser-nov05.gguf",
+          "bytes": 967253440,
+          "sha256": "1f6875979bac8c8aecacf0c698662b7c63ff54ae1b6d7c06755297a05607e983"
+        },
+        "image_generator_executable": {
+          "file": "sd-cli.exe",
+          "bytes": 733696,
+          "sha256": "d7be3a39e33f7292acb1429b14b0b1aa686d8a29ecfd4b134a9f8f994c87c4cd"
+        },
+        "iris": {
+          "file": "Sakura-Iris-3B-Q4_K_M-3.14GiB.gguf",
+          "bytes": 3374947744,
+          "sha256": "a65ca4a773ca9433166d1a3b20ba8f4e66a3193e7198264f23ffd2528a7678a3"
+        },
+        "qwen": {
+          "file": "Qwen3VL-4B-Instruct-Q4_K_M.gguf",
+          "bytes": 2497281664,
+          "sha256": "66358cb18bb6b3b1b6675aa412c7a88ef01d228f481184d13668e5201c730a0a"
+        }
+      },
+      "sampling": {
+        "steps": 30,
+        "cfg": 3.0,
+        "sampling_method": "dpm++2m",
+        "width": 1024,
+        "height": 1024,
+        "max_vram_gib": 16
+      },
+      "timings_seconds": {
+        "image_generation_seconds": 26.781000000002678,
+        "click_to_status_seconds": 99.09373369999958,
+        "browser_launch_to_screenshot_seconds": 105.52823379999973,
+        "browser_total_seconds": 100.16168760000073
+      },
+      "output_sha256": "f6067d1ecea0d27fa4a88af40ea79eabc12ddfdb96a08c6622293cff60092bcf",
+      "source_sha256": {
+        "idol_server.py": "53d4ee0b557699dcf1aeed24df2ae932d3bb9a07586e033cbc53e457bfa413d3",
+        "idol_session.py": "3ac203165f46cfaee879d9232b1c8a610dabec4c66f5f443054502e4b46d0a9f",
+        "idol_generate.py": "6d27a27a5e0d0cf03c58be5246c9a6f0a1823b92302fa8c5e3e38afe54ce95d7",
+        "idol_image.py": "b61ea0120762717e90e442eb1d2d857965a8789a95c59d0290e26915752d0271",
+        "idol_packed.py": "5f16197339272294f801a1d3ec8fb3894d45a2e29b4b66b14ce9adb95bb88b82",
+        "idol_triton.py": "1e9c78d48da62bfcd8dbfbe4ab389e20e30d56edbe24d6de4d2fbca302d3744a"
+      },
+      "sampler_sha256": "d770f04f839caa96a06421d4c0d2ba2e48e758057d77c47a2ad15df034e8dc29",
+      "memory": {
+        "overall": {
+          "samples": 477,
+          "device_used_min_bytes": 5421367296,
+          "device_used_peak_bytes": 12845318144,
+          "process_tree_working_set_peak_bytes": 7431905280,
+          "process_tree_private_commit_peak_bytes": 11166617600,
+          "system_available_min_bytes": 27927175168
+        },
+        "phases": {
+          "idle": {
+            "samples": 14,
+            "device_used_min_bytes": 5574868992,
+            "device_used_peak_bytes": 5757263872,
+            "process_tree_working_set_peak_bytes": 674349056,
+            "process_tree_private_commit_peak_bytes": 1438986240,
+            "system_available_min_bytes": 34417516544
+          },
+          "server-preparation": {
+            "samples": 36,
+            "device_used_min_bytes": 5421367296,
+            "device_used_peak_bytes": 5710667776,
+            "process_tree_working_set_peak_bytes": 852353024,
+            "process_tree_private_commit_peak_bytes": 1603289088,
+            "system_available_min_bytes": 34282221568
+          },
+          "browser-startup": {
+            "samples": 4,
+            "device_used_min_bytes": 5468811264,
+            "device_used_peak_bytes": 5511876608,
+            "process_tree_working_set_peak_bytes": 1428496384,
+            "process_tree_private_commit_peak_bytes": 1977311232,
+            "system_available_min_bytes": 33917317120
+          },
+          "prompt-dispatch": {
+            "samples": 1,
+            "device_used_min_bytes": 5600731136,
+            "device_used_peak_bytes": 5600731136,
+            "process_tree_working_set_peak_bytes": 1484460032,
+            "process_tree_private_commit_peak_bytes": 2109517824,
+            "system_available_min_bytes": 33865707520
+          },
+          "iris-and-qwen-image-generation": {
+            "samples": 104,
+            "device_used_min_bytes": 5655814144,
+            "device_used_peak_bytes": 12845318144,
+            "process_tree_working_set_peak_bytes": 2736824320,
+            "process_tree_private_commit_peak_bytes": 10216407040,
+            "system_available_min_bytes": 32382644224
+          },
+          "idol-reconstruction": {
+            "samples": 276,
+            "device_used_min_bytes": 5573042176,
+            "device_used_peak_bytes": 12354240512,
+            "process_tree_working_set_peak_bytes": 7431905280,
+            "process_tree_private_commit_peak_bytes": 11076947968,
+            "system_available_min_bytes": 27927175168
+          },
+          "result-display": {
+            "samples": 30,
+            "device_used_min_bytes": 8936390656,
+            "device_used_peak_bytes": 12203077632,
+            "process_tree_working_set_peak_bytes": 4877021184,
+            "process_tree_private_commit_peak_bytes": 11166617600,
+            "system_available_min_bytes": 29912948736
+          },
+          "closed": {
+            "samples": 12,
+            "device_used_min_bytes": 8837775360,
+            "device_used_peak_bytes": 8997879808,
+            "process_tree_working_set_peak_bytes": 3119968256,
+            "process_tree_private_commit_peak_bytes": 7713832960,
+            "system_available_min_bytes": 31532335104
+          }
+        },
+        "observed_sample_gap_seconds": {
+          "median": 0.2649999999994179,
+          "maximum": 0.3129999999982829
+        },
+        "requested_interval_seconds": 0.25,
+        "device": {
+          "name": "NVIDIA GeForce RTX 4090",
+          "driver": "610.88"
+        }
+      },
+      "browser_screenshot": "captured",
+      "browser_page_errors": []
+    },
+    {
+      "receipt_sha256": "31eabe8966bce3cd1f5bacdd825a5b7c7d388a1dfb0e777f8aa89b0a741f0136",
+      "component_identity": {
+        "idol": {
+          "file": "Idol-Q8-calibrated-denoiser-nov05.gguf",
+          "bytes": 967253440,
+          "sha256": "1f6875979bac8c8aecacf0c698662b7c63ff54ae1b6d7c06755297a05607e983"
+        },
+        "image_generator_executable": {
+          "file": "sd-cli.exe",
+          "bytes": 733696,
+          "sha256": "d7be3a39e33f7292acb1429b14b0b1aa686d8a29ecfd4b134a9f8f994c87c4cd"
+        },
+        "iris": {
+          "file": "Sakura-Iris-3B-Q4_K_M-3.14GiB.gguf",
+          "bytes": 3374947744,
+          "sha256": "a65ca4a773ca9433166d1a3b20ba8f4e66a3193e7198264f23ffd2528a7678a3"
+        },
+        "qwen": {
+          "file": "Qwen3VL-4B-Instruct-Q4_K_M.gguf",
+          "bytes": 2497281664,
+          "sha256": "66358cb18bb6b3b1b6675aa412c7a88ef01d228f481184d13668e5201c730a0a"
+        }
+      },
+      "sampling": {
+        "steps": 30,
+        "cfg": 3.0,
+        "sampling_method": "dpm++2m",
+        "width": 1024,
+        "height": 1024,
+        "max_vram_gib": 16
+      },
+      "timings_seconds": {
+        "image_generation_seconds": 31.079000000001543,
+        "click_to_status_seconds": 71.73345100000006,
+        "browser_launch_to_screenshot_seconds": 78.24317259999953,
+        "browser_total_seconds": 72.74094089999926
+      },
+      "output_sha256": "f6067d1ecea0d27fa4a88af40ea79eabc12ddfdb96a08c6622293cff60092bcf",
+      "source_sha256": {
+        "idol_server.py": "53d4ee0b557699dcf1aeed24df2ae932d3bb9a07586e033cbc53e457bfa413d3",
+        "idol_session.py": "3ac203165f46cfaee879d9232b1c8a610dabec4c66f5f443054502e4b46d0a9f",
+        "idol_generate.py": "6d27a27a5e0d0cf03c58be5246c9a6f0a1823b92302fa8c5e3e38afe54ce95d7",
+        "idol_image.py": "b61ea0120762717e90e442eb1d2d857965a8789a95c59d0290e26915752d0271",
+        "idol_packed.py": "5f16197339272294f801a1d3ec8fb3894d45a2e29b4b66b14ce9adb95bb88b82",
+        "idol_triton.py": "1e9c78d48da62bfcd8dbfbe4ab389e20e30d56edbe24d6de4d2fbca302d3744a"
+      },
+      "sampler_sha256": "d770f04f839caa96a06421d4c0d2ba2e48e758057d77c47a2ad15df034e8dc29",
+      "memory": {
+        "overall": {
+          "samples": 500,
+          "device_used_min_bytes": 5560713216,
+          "device_used_peak_bytes": 13124243456,
+          "process_tree_working_set_peak_bytes": 6874738688,
+          "process_tree_private_commit_peak_bytes": 11956785152,
+          "system_available_min_bytes": 27833331712
+        },
+        "phases": {
+          "idle": {
+            "samples": 14,
+            "device_used_min_bytes": 5560713216,
+            "device_used_peak_bytes": 5561040896,
+            "process_tree_working_set_peak_bytes": 672722944,
+            "process_tree_private_commit_peak_bytes": 1436229632,
+            "system_available_min_bytes": 33903419392
+          },
+          "server-preparation": {
+            "samples": 42,
+            "device_used_min_bytes": 5561040896,
+            "device_used_peak_bytes": 6043402240,
+            "process_tree_working_set_peak_bytes": 851828736,
+            "process_tree_private_commit_peak_bytes": 1604485120,
+            "system_available_min_bytes": 33431564288
+          },
+          "browser-startup": {
+            "samples": 4,
+            "device_used_min_bytes": 5675888640,
+            "device_used_peak_bytes": 5724729344,
+            "process_tree_working_set_peak_bytes": 1436127232,
+            "process_tree_private_commit_peak_bytes": 1981992960,
+            "system_available_min_bytes": 32863727616
+          },
+          "prompt-dispatch": {
+            "samples": 4,
+            "device_used_min_bytes": 5760159744,
+            "device_used_peak_bytes": 5776396288,
+            "process_tree_working_set_peak_bytes": 1525641216,
+            "process_tree_private_commit_peak_bytes": 2134777856,
+            "system_available_min_bytes": 32419385344
+          },
+          "iris-and-qwen-image-generation": {
+            "samples": 120,
+            "device_used_min_bytes": 5735485440,
+            "device_used_peak_bytes": 13124243456,
+            "process_tree_working_set_peak_bytes": 2762940416,
+            "process_tree_private_commit_peak_bytes": 10243051520,
+            "system_available_min_bytes": 30623371264
+          },
+          "idol-reconstruction": {
+            "samples": 154,
+            "device_used_min_bytes": 5723885568,
+            "device_used_peak_bytes": 12398948352,
+            "process_tree_working_set_peak_bytes": 6874738688,
+            "process_tree_private_commit_peak_bytes": 11888787456,
+            "system_available_min_bytes": 27833331712
+          },
+          "result-display": {
+            "samples": 150,
+            "device_used_min_bytes": 8812781568,
+            "device_used_peak_bytes": 12436549632,
+            "process_tree_working_set_peak_bytes": 5633536000,
+            "process_tree_private_commit_peak_bytes": 11956785152,
+            "system_available_min_bytes": 29110308864
+          },
+          "closed": {
+            "samples": 12,
+            "device_used_min_bytes": 8797577216,
+            "device_used_peak_bytes": 8838340608,
+            "process_tree_working_set_peak_bytes": 3832717312,
+            "process_tree_private_commit_peak_bytes": 8471703552,
+            "system_available_min_bytes": 31094091776
+          }
+        },
+        "observed_sample_gap_seconds": {
+          "median": 0.2649999999994179,
+          "maximum": 0.3440000000009604
+        },
+        "requested_interval_seconds": 0.25,
+        "device": {
+          "name": "NVIDIA GeForce RTX 4090",
+          "driver": "610.88"
+        }
+      },
+      "browser_screenshot": "captured",
+      "browser_page_errors": []
+    }
+  ]
+}

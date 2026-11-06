@@ -1,0 +1,72 @@
+import hashlib
+import json
+import os
+from pathlib import Path
+import sys
+import tempfile
+import unittest
+from unittest.mock import patch
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'tools'))
+import setup_iris
+
+
+class IrisSetupTests(unittest.TestCase):
+    def test_existing_verified_files_and_preserved_configuration(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            runner, image, encoder = (root / name for name in ('sd-cli', 'iris.gguf', 'qwen.gguf'))
+            runner.write_bytes(b'runner')
+            if os.name != 'nt':
+                runner.chmod(0o755)
+            image.write_bytes(b'iris')
+            encoder.write_bytes(b'qwen')
+            iris = (*setup_iris.IRIS[:3], hashlib.sha256(b'iris').hexdigest())
+            qwen = (*setup_iris.QWEN[:3], hashlib.sha256(b'qwen').hexdigest())
+            config = root / 'config' / 'image-generator.json'
+            with patch.object(setup_iris, 'IRIS', iris), patch.object(setup_iris, 'QWEN', qwen):
+                setup_iris.prepare(runner, config, image_model=image, text_encoder=encoder)
+                settings = json.loads(config.read_text(encoding='utf-8'))
+                self.assertEqual(settings['diffusion_model'], str(image.resolve()))
+                self.assertEqual(settings['text_encoder'], str(encoder.resolve()))
+                self.assertNotIn('vae', settings)
+                before = config.read_bytes()
+                with self.assertRaises(FileExistsError):
+                    setup_iris.prepare(runner, config, image_model=image, text_encoder=encoder)
+                self.assertEqual(config.read_bytes(), before)
+
+    def test_mismatched_weights_do_not_create_configuration(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            runner, image = root / 'sd-cli', root / 'wrong.gguf'
+            runner.write_bytes(b'runner')
+            if os.name != 'nt':
+                runner.chmod(0o755)
+            image.write_bytes(b'wrong')
+            config = root / 'config.json'
+            with self.assertRaisesRegex(ValueError, 'digest'):
+                setup_iris.prepare(runner, config, image_model=image, text_encoder=image)
+            self.assertFalse(config.exists())
+
+    def test_downloads_pinned_revisions(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            runner, image, encoder = (root / name for name in ('sd-cli', 'iris.gguf', 'qwen.gguf'))
+            runner.write_bytes(b'runner')
+            if os.name != 'nt':
+                runner.chmod(0o755)
+            image.write_bytes(b'iris')
+            encoder.write_bytes(b'qwen')
+            iris = (*setup_iris.IRIS[:3], hashlib.sha256(b'iris').hexdigest())
+            qwen = (*setup_iris.QWEN[:3], hashlib.sha256(b'qwen').hexdigest())
+            with patch.object(setup_iris, 'IRIS', iris), patch.object(setup_iris, 'QWEN', qwen), \
+                 patch('huggingface_hub.hf_hub_download', side_effect=[str(image), str(encoder)]) as download:
+                setup_iris.prepare(runner, root / 'config.json')
+            self.assertEqual(download.call_args_list[0].kwargs,
+                             {'repo_id': iris[0], 'filename': iris[1], 'revision': iris[2]})
+            self.assertEqual(download.call_args_list[1].kwargs,
+                             {'repo_id': qwen[0], 'filename': qwen[1], 'revision': qwen[2]})
+
+
+if __name__ == '__main__':
+    unittest.main()

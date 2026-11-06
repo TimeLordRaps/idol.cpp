@@ -1,0 +1,958 @@
+{
+  "scope": "Development comparisons against the original model; not ground-truth 3D. Gaussian groups were selected using armchair and coffee latents. Chelsea and astronaut were examined during development and are not final independent validation. The actual combined file also uses a calibrated Q8 denoiser and original image encoders.",
+  "image_provenance": {
+    "chelsea": {
+      "sha256": "adbb6c59da5251983dfca65bd3d055e3d2cb9d49f85af5d473852a9033e42f24",
+      "attribution": "CC0 photo by Stefan van der Walt, distributed with scikit-image"
+    },
+    "astronaut": {
+      "sha256": "b8c8afe36141c45dd06f55d257d6b951b4c77a1a2c31fe09e78452cdda2dfcd4",
+      "attribution": "NASA photograph of Eileen Collins, described as public domain by scikit-image"
+    }
+  },
+  "selection": {
+    "status": "complete",
+    "scope": "Select Q4 Gaussian groups over a Q2 baseline using separate latent cases.\n\nSelection uses only training latents. Evaluation latents are reported but do\nnot influence group choices. Their origin and representativeness are external.\n",
+    "inputs_sha256": {
+      "config": "ddd89dcc6dcf4a5ac8d951b8c59afa1eceafe377615c5912c59f4e1f5ae35b32",
+      "octree": "9da4d7676bfcadb1c3fdfbff796e6257dadf82d26ec05be7717c79b2b13a1c4e",
+      "gaussian": "3087eb8ee5763206a53e4078acf2a1bf382dab5147d407ec13a2cf39c04cc544",
+      "q2_codes": "b5b325b38ea005d21acb091fe7a8cea65113065837cd6584298fb48d1f82b62f",
+      "q4_codes": "bc2a68ab5254f2a05b90c22f90023c3c7bb68a087845be4d1043a41d0228b8c1",
+      "tool": "7e42d9e2989128d308e03d25e7395ea402a1a237cf15071cfe23fc260cd441b2",
+      "exporter": "8c78bc7250cef1c82193453e1935123ba36e78161064963aa0cb6b6133a06574",
+      "sdk/idol/__init__.py": "8360662771574bc76241da02af5964d2795e0541c13666bbd77abdf11ef6a1a5",
+      "sdk/idol/camera.py": "53baeb98cdb8f6d5d173d796279f44621063e7ad64279cee42c6933ea8f2a95e",
+      "sdk/idol/conditioning.py": "97443730c61cc76366da43dcf71f05fa4092f7f9d1bbb5ed6a8f0cbdd05ca0be",
+      "sdk/idol/gaussian.py": "a604fbe1c04e47827f6a7e6c544dd44aa603e37d52a97bb4dcd5776358c49f56",
+      "sdk/idol/models/__init__.py": "8e0f01a978ed73f572847a5b027e1d6e71fd35e961cfa620a3f76ceecfe9a70d",
+      "sdk/idol/models/birefnet.py": "3caf6ad8c136768bc13e176e0f22ce397bbbbe94795125bb8e50d57384679282",
+      "sdk/idol/models/decoder.py": "40acabab1e597b5732a208bcc76b8e4d85e3398d22bd64913eb6e977f1e09006",
+      "sdk/idol/models/dit.py": "af972cb9fda7f3350691b77f53bc3fdfc99d561c7d59fcf1213181613470eb61",
+      "sdk/idol/models/layers.py": "b7ce95917fc88b056ae5e5e933c7747543a8e9e96e48cae14773041894b00cea",
+      "sdk/idol/pipeline.py": "b1b9c231fc4d37396bbc02e5c0aea86e9f40b997cd1aa8aa632d2e174166ab21",
+      "sdk/idol/preprocess.py": "6156fc8fa5c5c1b2278c11a75e87e465571670db1ef79c711f6688acb07340d4",
+      "sdk/idol/sample.py": "3e731b1956caf2dc30e4965a8326c07ec6378a77266187d1c411944d1f27d627",
+      "sdk/idol/sampler.py": "16ca2ba1fa7f90c134dd4e1d044b5fc75bd808c39c6c3ce850260d52d8bfc7bd",
+      "case_0": "715a6f1ae9821124f0c115cd18e561d5621126d9c91617fc0e76fa778a895e14",
+      "case_1": "25658df85ae1240475607769dfe14e43ca7c1993847b889af618ea93895e0410",
+      "case_2": "cda3f2375b4a21e9c63f7123bce90a1d52f40f8e8de188e7c1c808637e16f6b2",
+      "case_3": "c14e5fe1423dee0be1d89ee60c815dc72f316a3d545310f5822db5604c8721c0"
+    },
+    "hashes_unchanged_after_run": true,
+    "q2_moments_sha256": "21868433885ac5d79840a1cee5d2f85dec44e9f943912cab000889ac27c25ad5",
+    "q4_moments_sha256": "21868433885ac5d79840a1cee5d2f85dec44e9f943912cab000889ac27c25ad5",
+    "cases": [
+      {
+        "role": "training",
+        "name": "01.f32",
+        "file_sha256": "715a6f1ae9821124f0c115cd18e561d5621126d9c91617fc0e76fa778a895e14",
+        "latent_sha256": "715a6f1ae9821124f0c115cd18e561d5621126d9c91617fc0e76fa778a895e14"
+      },
+      {
+        "role": "training",
+        "name": "02.f32",
+        "file_sha256": "25658df85ae1240475607769dfe14e43ca7c1993847b889af618ea93895e0410",
+        "latent_sha256": "25658df85ae1240475607769dfe14e43ca7c1993847b889af618ea93895e0410"
+      },
+      {
+        "role": "evaluation",
+        "name": "chelsea-latent.npy",
+        "file_sha256": "cda3f2375b4a21e9c63f7123bce90a1d52f40f8e8de188e7c1c808637e16f6b2",
+        "latent_sha256": "d8abb278742517634fbc275eca1e7fd2b9164b01ed29a51fbb1f10dffa5be178"
+      },
+      {
+        "role": "evaluation",
+        "name": "astronaut-latent.npy",
+        "file_sha256": "c14e5fe1423dee0be1d89ee60c815dc72f316a3d545310f5822db5604c8721c0",
+        "latent_sha256": "deeee3d7c01b7d9ea4ac0a4bf9a510ca87afd1005a50e789d85c43d77e2c5bcb"
+      }
+    ],
+    "anchors": 1024,
+    "seed": 42,
+    "device": "cuda",
+    "threads": 4,
+    "torch_version": "2.10.0+cu128",
+    "matrix_count": 98,
+    "baseline": {
+      "training": [
+        0.14832283556461334,
+        0.18191097676753998
+      ],
+      "evaluation": [
+        0.1907697170972824,
+        0.16322432458400726
+      ]
+    },
+    "selected": [
+      {
+        "group": "blocks.1",
+        "training": [
+          0.14351391792297363,
+          0.15926675498485565
+        ],
+        "evaluation": [
+          0.18859298527240753,
+          0.15526245534420013
+        ],
+        "candidate_training_means": {
+          "blocks.0": 0.16027219593524933,
+          "blocks.1": 0.15139033645391464,
+          "blocks.10": 0.16564325988292694,
+          "blocks.11": 0.16243289411067963,
+          "blocks.12": 0.16680409014225006,
+          "blocks.13": 0.16488882154226303,
+          "blocks.14": 0.16494030505418777,
+          "blocks.15": 0.1651974841952324,
+          "blocks.2": 0.15197714418172836,
+          "blocks.3": 0.15367769449949265,
+          "blocks.4": 0.15760914236307144,
+          "blocks.5": 0.16165552288293839,
+          "blocks.6": 0.1611826941370964,
+          "blocks.7": 0.15949765592813492,
+          "blocks.8": 0.15957240015268326,
+          "blocks.9": 0.1628287509083748,
+          "input_layer.weight": 0.15237364172935486,
+          "out_proj.weight": 0.1615416407585144
+        }
+      },
+      {
+        "group": "blocks.3",
+        "training": [
+          0.12700487673282623,
+          0.14316488802433014
+        ],
+        "evaluation": [
+          0.17600524425506592,
+          0.14828841388225555
+        ],
+        "candidate_training_means": {
+          "blocks.0": 0.15007448196411133,
+          "blocks.10": 0.15197418630123138,
+          "blocks.11": 0.14861002564430237,
+          "blocks.12": 0.15261543542146683,
+          "blocks.13": 0.15096960961818695,
+          "blocks.14": 0.15130041539669037,
+          "blocks.15": 0.15144680440425873,
+          "blocks.2": 0.14494232088327408,
+          "blocks.3": 0.13508488237857819,
+          "blocks.4": 0.1416172906756401,
+          "blocks.5": 0.14779198914766312,
+          "blocks.6": 0.1466100886464119,
+          "blocks.7": 0.14546533674001694,
+          "blocks.8": 0.145196370780468,
+          "blocks.9": 0.14740227907896042,
+          "input_layer.weight": 0.1443062201142311,
+          "out_proj.weight": 0.1473299190402031
+        }
+      },
+      {
+        "group": "blocks.4",
+        "training": [
+          0.11816371977329254,
+          0.13322073221206665
+        ],
+        "evaluation": [
+          0.18001382052898407,
+          0.14477375149726868
+        ],
+        "candidate_training_means": {
+          "blocks.0": 0.13247386366128922,
+          "blocks.10": 0.13552802056074142,
+          "blocks.11": 0.13208415731787682,
+          "blocks.12": 0.13554394245147705,
+          "blocks.13": 0.1345113143324852,
+          "blocks.14": 0.13529616594314575,
+          "blocks.15": 0.1349198818206787,
+          "blocks.2": 0.1291234754025936,
+          "blocks.4": 0.1256922259926796,
+          "blocks.5": 0.12938427180051804,
+          "blocks.6": 0.12953142076730728,
+          "blocks.7": 0.1309107467532158,
+          "blocks.8": 0.12855864316225052,
+          "blocks.9": 0.13152312859892845,
+          "input_layer.weight": 0.12863189727067947,
+          "out_proj.weight": 0.1303405724465847
+        }
+      },
+      {
+        "group": "blocks.2",
+        "training": [
+          0.10055886954069138,
+          0.13917279243469238
+        ],
+        "evaluation": [
+          0.1626286804676056,
+          0.1198747530579567
+        ],
+        "candidate_training_means": {
+          "blocks.0": 0.1254534162580967,
+          "blocks.10": 0.12674587965011597,
+          "blocks.11": 0.12320170924067497,
+          "blocks.12": 0.12592212855815887,
+          "blocks.13": 0.12530527263879776,
+          "blocks.14": 0.12598001584410667,
+          "blocks.15": 0.1253734678030014,
+          "blocks.2": 0.11986583098769188,
+          "blocks.5": 0.12076517567038536,
+          "blocks.6": 0.12053946033120155,
+          "blocks.7": 0.12380082905292511,
+          "blocks.8": 0.12284763529896736,
+          "blocks.9": 0.12191879749298096,
+          "input_layer.weight": 0.1260213665664196,
+          "out_proj.weight": 0.12051241472363472
+        }
+      },
+      {
+        "group": "input_layer.weight",
+        "training": [
+          0.09252728521823883,
+          0.10354743897914886
+        ],
+        "evaluation": [
+          0.15865245461463928,
+          0.11344247311353683
+        ],
+        "candidate_training_means": {
+          "blocks.0": 0.11049289628863335,
+          "blocks.10": 0.12086677923798561,
+          "blocks.11": 0.11767887696623802,
+          "blocks.12": 0.12001840025186539,
+          "blocks.13": 0.11916517466306686,
+          "blocks.14": 0.12013301625847816,
+          "blocks.15": 0.11935818940401077,
+          "blocks.5": 0.11517270654439926,
+          "blocks.6": 0.11556820198893547,
+          "blocks.7": 0.11720291897654533,
+          "blocks.8": 0.11466621607542038,
+          "blocks.9": 0.11692112311720848,
+          "input_layer.weight": 0.09803736209869385,
+          "out_proj.weight": 0.11457211896777153
+        }
+      },
+      {
+        "group": "out_proj.weight",
+        "training": [
+          0.08645445853471756,
+          0.09612075239419937
+        ],
+        "evaluation": [
+          0.1519986093044281,
+          0.1062643751502037
+        ],
+        "candidate_training_means": {
+          "blocks.0": 0.09963494539260864,
+          "blocks.10": 0.09849164634943008,
+          "blocks.11": 0.09528345987200737,
+          "blocks.12": 0.09761230647563934,
+          "blocks.13": 0.0972554124891758,
+          "blocks.14": 0.09844646230340004,
+          "blocks.15": 0.0976344496011734,
+          "blocks.5": 0.09796582907438278,
+          "blocks.6": 0.09380082786083221,
+          "blocks.7": 0.09208812564611435,
+          "blocks.8": 0.0922413170337677,
+          "blocks.9": 0.09574044495820999,
+          "out_proj.weight": 0.09128760546445847
+        }
+      },
+      {
+        "group": "blocks.7",
+        "training": [
+          0.08041387051343918,
+          0.08901705592870712
+        ],
+        "evaluation": [
+          0.14014112949371338,
+          0.10040630400180817
+        ],
+        "candidate_training_means": {
+          "blocks.0": 0.09312222898006439,
+          "blocks.10": 0.09169646725058556,
+          "blocks.11": 0.08826438337564468,
+          "blocks.12": 0.09096746519207954,
+          "blocks.13": 0.09037181735038757,
+          "blocks.14": 0.09182676300406456,
+          "blocks.15": 0.09073714539408684,
+          "blocks.5": 0.09129820019006729,
+          "blocks.6": 0.08670724555850029,
+          "blocks.7": 0.08471546322107315,
+          "blocks.8": 0.08495889231562614,
+          "blocks.9": 0.08875304087996483
+        }
+      },
+      {
+        "group": "blocks.8",
+        "training": [
+          0.0771239772439003,
+          0.07895024120807648
+        ],
+        "evaluation": [
+          0.10810155421495438,
+          0.09058881551027298
+        ],
+        "candidate_training_means": {
+          "blocks.0": 0.08252773806452751,
+          "blocks.10": 0.08527496457099915,
+          "blocks.11": 0.08196854218840599,
+          "blocks.12": 0.08346477150917053,
+          "blocks.13": 0.08364119753241539,
+          "blocks.14": 0.08483351767063141,
+          "blocks.15": 0.08385739102959633,
+          "blocks.5": 0.08671809360384941,
+          "blocks.6": 0.08354663103818893,
+          "blocks.8": 0.07803710922598839,
+          "blocks.9": 0.07988607510924339
+        }
+      }
+    ]
+  },
+  "mixed_archive_metadata": {
+    "q2_codes_sha256": "b5b325b38ea005d21acb091fe7a8cea65113065837cd6584298fb48d1f82b62f",
+    "q2_moments_sha256": "21868433885ac5d79840a1cee5d2f85dec44e9f943912cab000889ac27c25ad5",
+    "q4_codes_sha256": "bc2a68ab5254f2a05b90c22f90023c3c7bb68a087845be4d1043a41d0228b8c1",
+    "q4_groups": [
+      "blocks.1",
+      "blocks.3",
+      "blocks.4",
+      "blocks.2",
+      "input_layer.weight",
+      "out_proj.weight",
+      "blocks.7",
+      "blocks.8"
+    ],
+    "q4_moments_sha256": "21868433885ac5d79840a1cee5d2f85dec44e9f943912cab000889ac27c25ad5",
+    "q4_names": [
+      "blocks.1.cross_attn.to_out.weight",
+      "blocks.1.cross_attn.to_q.weight",
+      "blocks.1.mlp.mlp.0.weight",
+      "blocks.1.mlp.mlp.2.weight",
+      "blocks.1.self_attn.to_out.weight",
+      "blocks.1.self_attn.to_qkv.weight",
+      "blocks.2.cross_attn.to_out.weight",
+      "blocks.2.cross_attn.to_q.weight",
+      "blocks.2.mlp.mlp.0.weight",
+      "blocks.2.mlp.mlp.2.weight",
+      "blocks.2.self_attn.to_out.weight",
+      "blocks.2.self_attn.to_qkv.weight",
+      "blocks.3.cross_attn.to_out.weight",
+      "blocks.3.cross_attn.to_q.weight",
+      "blocks.3.mlp.mlp.0.weight",
+      "blocks.3.mlp.mlp.2.weight",
+      "blocks.3.self_attn.to_out.weight",
+      "blocks.3.self_attn.to_qkv.weight",
+      "blocks.4.cross_attn.to_out.weight",
+      "blocks.4.cross_attn.to_q.weight",
+      "blocks.4.mlp.mlp.0.weight",
+      "blocks.4.mlp.mlp.2.weight",
+      "blocks.4.self_attn.to_out.weight",
+      "blocks.4.self_attn.to_qkv.weight",
+      "blocks.7.cross_attn.to_out.weight",
+      "blocks.7.cross_attn.to_q.weight",
+      "blocks.7.mlp.mlp.0.weight",
+      "blocks.7.mlp.mlp.2.weight",
+      "blocks.7.self_attn.to_out.weight",
+      "blocks.7.self_attn.to_qkv.weight",
+      "blocks.8.cross_attn.to_out.weight",
+      "blocks.8.cross_attn.to_q.weight",
+      "blocks.8.mlp.mlp.0.weight",
+      "blocks.8.mlp.mlp.2.weight",
+      "blocks.8.self_attn.to_out.weight",
+      "blocks.8.self_attn.to_qkv.weight",
+      "input_layer.weight",
+      "out_proj.weight"
+    ],
+    "quant_type": "Q2_K+Q4_K",
+    "selection_sha256": "08cf63a5538a1e94c4c0dfe46486898cee4bf35cbbb31799695f0c1419f5e3cd",
+    "source_sha256": "3087eb8ee5763206a53e4078acf2a1bf382dab5147d407ec13a2cf39c04cc544",
+    "tool_sha256": "4e732cc6ecf25a02224d11cedcae013a9eea1bd5e32179224e23f9aa00b5e37e",
+    "version": 1
+  },
+  "decoder_geometry": {
+    "scope": "Two development photographs; original 50-step latents and octree, same seed and 8192 anchors producing 262144 points. Four or eight Gaussian groups selected on separate training latents use Q4_K; other eligible matrices use Q2_K. Compare to original decoder, not ground-truth geometry. Expanded weights used during evaluation.",
+    "model_sha256": "158201098bce99a5212be4d36dec3389b486ec8984e8a14ba0286618258ca8d1",
+    "q2_sha256": "b5b325b38ea005d21acb091fe7a8cea65113065837cd6584298fb48d1f82b62f",
+    "q4_sha256": "bc2a68ab5254f2a05b90c22f90023c3c7bb68a087845be4d1043a41d0228b8c1",
+    "selection_sha256": "2665b064f17fd5fbfe5bab7da829a8a32e7a18df0318ff10b3c68333213710fe",
+    "variants": {
+      "4": {
+        "groups": [
+          "blocks.1",
+          "blocks.2",
+          "blocks.3",
+          "blocks.4"
+        ],
+        "q4_matrix_count": 24,
+        "cases": {
+          "chelsea": {
+            "latent_sha256": "cda3f2375b4a21e9c63f7123bce90a1d52f40f8e8de188e7c1c808637e16f6b2",
+            "candidate_sha256": "ff8888230b8a25d962407a68ea586a9a54f253bdce1d0021ad2ff5681657f76a",
+            "original_sha256": "d735a64099aa1635bc17b3b1ee7edf5344a657bf8d466b26ff73cc61c5d810b2",
+            "geometry": {
+              "reference_count": 262144,
+              "candidate_count": 262144,
+              "reference_to_candidate": {
+                "mean_center_distance": 0.0010090083962866533,
+                "p95_center_distance": 0.0017769714466350024,
+                "opacity_weighted_mean_center_distance": 0.001007515352176147,
+                "nearest_color_mean_absolute_difference": 0.06299833256677574
+              },
+              "candidate_to_reference": {
+                "mean_center_distance": 0.0011299442764322533,
+                "p95_center_distance": 0.002163406539635984,
+                "opacity_weighted_mean_center_distance": 0.0011049905803738698,
+                "nearest_color_mean_absolute_difference": 0.06246730460203409
+              },
+              "center_voxel_iou": {
+                "16": 0.9227941176470589,
+                "32": 0.918200408997955,
+                "64": 0.8807193864057128
+              },
+              "orthographic_center_occupancy_iou": {
+                "16": {
+                  "xy": 0.9782608695652174,
+                  "xz": 1.0,
+                  "yz": 0.9657142857142857
+                },
+                "32": {
+                  "xy": 0.9583333333333334,
+                  "xz": 0.9509803921568627,
+                  "yz": 0.9774557165861514
+                },
+                "64": {
+                  "xy": 0.9771784232365145,
+                  "xz": 0.9587628865979382,
+                  "yz": 0.9841541755888651
+                }
+              }
+            }
+          },
+          "astronaut": {
+            "latent_sha256": "c14e5fe1423dee0be1d89ee60c815dc72f316a3d545310f5822db5604c8721c0",
+            "candidate_sha256": "4c1087b54838a7e2458084568d1c396145b2d759fd6b2026548a108f2cf06a8b",
+            "original_sha256": "8990c0cd65f9c746d5582f10e8591c70cff4d5aebc72cb75ee87fe9df9d65d27",
+            "geometry": {
+              "reference_count": 262144,
+              "candidate_count": 262144,
+              "reference_to_candidate": {
+                "mean_center_distance": 0.0017125696719765605,
+                "p95_center_distance": 0.0035031172986457536,
+                "opacity_weighted_mean_center_distance": 0.0015734481099410756,
+                "nearest_color_mean_absolute_difference": 0.05897691540316039
+              },
+              "candidate_to_reference": {
+                "mean_center_distance": 0.0017377040381136655,
+                "p95_center_distance": 0.0035699662187571772,
+                "opacity_weighted_mean_center_distance": 0.0015950553988474242,
+                "nearest_color_mean_absolute_difference": 0.057690071634130424
+              },
+              "center_voxel_iou": {
+                "16": 0.9071782178217822,
+                "32": 0.8748145950756452,
+                "64": 0.8004876349703935
+              },
+              "orthographic_center_occupancy_iou": {
+                "16": {
+                  "xy": 0.9798657718120806,
+                  "xz": 0.9933333333333333,
+                  "yz": 0.9849624060150376
+                },
+                "32": {
+                  "xy": 0.9803149606299213,
+                  "xz": 0.9906367041198502,
+                  "yz": 0.9702127659574468
+                },
+                "64": {
+                  "xy": 0.985968699406368,
+                  "xz": 0.9900744416873449,
+                  "yz": 0.9826489300173511
+                }
+              }
+            }
+          }
+        }
+      },
+      "8": {
+        "groups": [
+          "blocks.1",
+          "blocks.2",
+          "blocks.3",
+          "blocks.4",
+          "blocks.7",
+          "blocks.8",
+          "input_layer.weight",
+          "out_proj.weight"
+        ],
+        "q4_matrix_count": 38,
+        "cases": {
+          "chelsea": {
+            "latent_sha256": "cda3f2375b4a21e9c63f7123bce90a1d52f40f8e8de188e7c1c808637e16f6b2",
+            "candidate_sha256": "ef8a68d77ce67d631f63f69d6f96d71bdfa7bbfe11b6f8973a8ecfb9f91bcd2d",
+            "original_sha256": "d735a64099aa1635bc17b3b1ee7edf5344a657bf8d466b26ff73cc61c5d810b2",
+            "geometry": {
+              "reference_count": 262144,
+              "candidate_count": 262144,
+              "reference_to_candidate": {
+                "mean_center_distance": 0.0008504886882205368,
+                "p95_center_distance": 0.0015276055036042295,
+                "opacity_weighted_mean_center_distance": 0.0008541643143962491,
+                "nearest_color_mean_absolute_difference": 0.055922360450112986
+              },
+              "candidate_to_reference": {
+                "mean_center_distance": 0.0008799724145506096,
+                "p95_center_distance": 0.0016199953867899516,
+                "opacity_weighted_mean_center_distance": 0.0008709289313659324,
+                "nearest_color_mean_absolute_difference": 0.0555690974383393
+              },
+              "center_voxel_iou": {
+                "16": 0.9541984732824428,
+                "32": 0.9543039319872476,
+                "64": 0.9359370609721832
+              },
+              "orthographic_center_occupancy_iou": {
+                "16": {
+                  "xy": 1.0,
+                  "xz": 1.0,
+                  "yz": 0.9883040935672515
+                },
+                "32": {
+                  "xy": 0.9787234042553191,
+                  "xz": 0.97,
+                  "yz": 0.9967159277504105
+                },
+                "64": {
+                  "xy": 0.9874213836477987,
+                  "xz": 0.9823943661971831,
+                  "yz": 0.9943698570809875
+                }
+              }
+            }
+          },
+          "astronaut": {
+            "latent_sha256": "c14e5fe1423dee0be1d89ee60c815dc72f316a3d545310f5822db5604c8721c0",
+            "candidate_sha256": "a4a67f7846382bb20a0d2b0b0f9737d7950cb7e7d6d7d848a20f7c3fe8794e2f",
+            "original_sha256": "8990c0cd65f9c746d5582f10e8591c70cff4d5aebc72cb75ee87fe9df9d65d27",
+            "geometry": {
+              "reference_count": 262144,
+              "candidate_count": 262144,
+              "reference_to_candidate": {
+                "mean_center_distance": 0.0014123947751942315,
+                "p95_center_distance": 0.002955440904272057,
+                "opacity_weighted_mean_center_distance": 0.0012953919627974513,
+                "nearest_color_mean_absolute_difference": 0.0455432844843591
+              },
+              "candidate_to_reference": {
+                "mean_center_distance": 0.0014097232742123962,
+                "p95_center_distance": 0.002939810604059358,
+                "opacity_weighted_mean_center_distance": 0.0012939954950922416,
+                "nearest_color_mean_absolute_difference": 0.045327036038951975
+              },
+              "center_voxel_iou": {
+                "16": 0.9369482976040353,
+                "32": 0.9044317154054868,
+                "64": 0.8366255437495543
+              },
+              "orthographic_center_occupancy_iou": {
+                "16": {
+                  "xy": 0.9731543624161074,
+                  "xz": 0.9866666666666667,
+                  "yz": 0.9924242424242424
+                },
+                "32": {
+                  "xy": 0.9821782178217822,
+                  "xz": 0.9906191369606003,
+                  "yz": 0.9743589743589743
+                },
+                "64": {
+                  "xy": 0.9902386117136659,
+                  "xz": 0.9935194416749751,
+                  "yz": 0.9866356769320163
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "complete_model": {
+    "chelsea": {
+      "scope": "Actual complete Idol GGUF with covariance Q8_0 denoiser block matrices and mixed covariance Q2_K and Q4_K Gaussian matrices; original image encoders; 50 steps, 262144 points. Local incompatible xFormers disabled. Compares to original runtime and original Gaussian output, not ground-truth geometry.",
+      "model_sha256": "2c089fe1035ef4060fe520bbc0054b5af2b7b4f241c364705e9c90423b8b3b94",
+      "image_sha256": "adbb6c59da5251983dfca65bd3d055e3d2cb9d49f85af5d473852a9033e42f24",
+      "latent_sha256": "2687ee457bde1b16f937e97a2fa3982a047a021dc0d8d3211c825a886e96d554",
+      "point_cloud_sha256": "2c5cfc49c5f038138d722d797436c6945f566460c57cd4944212503817b12aec",
+      "relative_latent_l2": 0.09864050318367451,
+      "prototype_relative_latent_l2": 0.09864050318367451,
+      "prototype_score_matches": true,
+      "elapsed_seconds": 52.09551389999979,
+      "gpu_peak_allocated_bytes": 3556051968,
+      "gpu_peak_reserved_bytes": 4617928704,
+      "original_point_cloud_sha256": "d735a64099aa1635bc17b3b1ee7edf5344a657bf8d466b26ff73cc61c5d810b2",
+      "geometry_vs_original": {
+        "reference_count": 262144,
+        "candidate_count": 262144,
+        "reference_to_candidate": {
+          "mean_center_distance": 0.0012115008323518544,
+          "p95_center_distance": 0.0022468449386981097,
+          "opacity_weighted_mean_center_distance": 0.001162475188774755,
+          "nearest_color_mean_absolute_difference": 0.06804984722964275
+        },
+        "candidate_to_reference": {
+          "mean_center_distance": 0.001253352771577735,
+          "p95_center_distance": 0.002467162209431818,
+          "opacity_weighted_mean_center_distance": 0.0011954906537993157,
+          "nearest_color_mean_absolute_difference": 0.0667250688231547
+        },
+        "center_voxel_iou": {
+          "16": 0.9107806691449815,
+          "32": 0.9151832460732985,
+          "64": 0.8812585499316006
+        },
+        "orthographic_center_occupancy_iou": {
+          "16": {
+            "xy": 0.9565217391304348,
+            "xz": 0.918918918918919,
+            "yz": 0.9712643678160919
+          },
+          "32": {
+            "xy": 0.9574468085106383,
+            "xz": 0.95,
+            "yz": 0.9820846905537459
+          },
+          "64": {
+            "xy": 0.9580712788259959,
+            "xz": 0.9480968858131488,
+            "yz": 0.9853068280034573
+          }
+        }
+      }
+    },
+    "astronaut": {
+      "scope": "Actual complete Idol GGUF with covariance Q8_0 denoiser block matrices and mixed covariance Q2_K and Q4_K Gaussian matrices; original image encoders; 50 steps, 262144 points. Local incompatible xFormers disabled. Compares to original runtime and original Gaussian output, not ground-truth geometry.",
+      "model_sha256": "2c089fe1035ef4060fe520bbc0054b5af2b7b4f241c364705e9c90423b8b3b94",
+      "image_sha256": "b8c8afe36141c45dd06f55d257d6b951b4c77a1a2c31fe09e78452cdda2dfcd4",
+      "latent_sha256": "7a26e9e8ab4c7e0cddfd469274ce96910e87b6d7d5d3e5b7253f47daf989372a",
+      "point_cloud_sha256": "810a1ac8ba81172f09c4defcc10a8281429a05d0d0d9170df6b9a90dcfb63566",
+      "relative_latent_l2": 0.06451022078491811,
+      "prototype_relative_latent_l2": 0.06451022078491811,
+      "prototype_score_matches": true,
+      "elapsed_seconds": 51.614962099993136,
+      "gpu_peak_allocated_bytes": 3556051968,
+      "gpu_peak_reserved_bytes": 4617928704,
+      "original_point_cloud_sha256": "8990c0cd65f9c746d5582f10e8591c70cff4d5aebc72cb75ee87fe9df9d65d27",
+      "geometry_vs_original": {
+        "reference_count": 262144,
+        "candidate_count": 262144,
+        "reference_to_candidate": {
+          "mean_center_distance": 0.001916541142183762,
+          "p95_center_distance": 0.004162819846103853,
+          "opacity_weighted_mean_center_distance": 0.0016755378898637326,
+          "nearest_color_mean_absolute_difference": 0.06286859667888194
+        },
+        "candidate_to_reference": {
+          "mean_center_distance": 0.0018968161371537271,
+          "p95_center_distance": 0.00407294945574875,
+          "opacity_weighted_mean_center_distance": 0.0016710932981906924,
+          "nearest_color_mean_absolute_difference": 0.06078561062584137
+        },
+        "center_voxel_iou": {
+          "16": 0.8774509803921569,
+          "32": 0.8407829389424482,
+          "64": 0.7647018505825908
+        },
+        "orthographic_center_occupancy_iou": {
+          "16": {
+            "xy": 0.9333333333333333,
+            "xz": 0.98,
+            "yz": 0.9624060150375939
+          },
+          "32": {
+            "xy": 0.9645669291338582,
+            "xz": 0.9850187265917603,
+            "yz": 0.9700854700854701
+          },
+          "64": {
+            "xy": 0.9735706580366774,
+            "xz": 0.9905284147557328,
+            "yz": 0.9831493317838466
+          }
+        }
+      }
+    }
+  },
+  "views": {
+    "chelsea": {
+      "two_bit": {
+        "scope": "Approximate orthographic Gaussian-splat previews and compare their pixels.\n\nThis diagnostic renderer is not the upstream Idol renderer. It projects each 3D covariance into a fixed camera,\ntruncates at three standard deviations, applies a half-pixel variance floor, and composites front to back against\nblack. Camera framing and rasterization choices affect the results; this is not ground-truth reconstruction quality.\n",
+        "input_sha256": {
+          "reference": "d735a64099aa1635bc17b3b1ee7edf5344a657bf8d466b26ff73cc61c5d810b2",
+          "candidate": "0845f0e2c801f3901ee07a277a61401921465913b7318d60fa3c7dde648a6d0b",
+          "tool": "0acb0999b112825802a521d4c998e001b9a3a2f046ea42efbe16aba3b9ecb0b5"
+        },
+        "size": 128,
+        "extent": 0.75,
+        "views": {
+          "xy-front": {
+            "rgb_mean_absolute_difference": 0.0012860052013089543,
+            "rgb_mean_squared_difference": 6.619739694827024e-05,
+            "foreground_rgb_mean_absolute_difference": 0.022338718574173334,
+            "white_background_rgb_mean_absolute_difference": 0.001490233920494866,
+            "rgb_peak_signal_to_noise_ratio_db": 41.79159087799408,
+            "alpha_mean_absolute_difference": 0.0005959373958174571,
+            "alpha_threshold_0_5_iou": 0.9896788990825688
+          },
+          "xy-back": {
+            "rgb_mean_absolute_difference": 0.0012644229579607744,
+            "rgb_mean_squared_difference": 6.803332263282458e-05,
+            "foreground_rgb_mean_absolute_difference": 0.021963741245437023,
+            "white_background_rgb_mean_absolute_difference": 0.001441225724332049,
+            "rgb_peak_signal_to_noise_ratio_db": 41.67278318310877,
+            "alpha_mean_absolute_difference": 0.0005959373958174564,
+            "alpha_threshold_0_5_iou": 0.9896788990825688
+          },
+          "xz-front": {
+            "rgb_mean_absolute_difference": 0.0009746963251635841,
+            "rgb_mean_squared_difference": 6.957204889476083e-05,
+            "foreground_rgb_mean_absolute_difference": 0.02510671379512371,
+            "white_background_rgb_mean_absolute_difference": 0.0009577993280458327,
+            "rgb_peak_signal_to_noise_ratio_db": 41.57565206494502,
+            "alpha_mean_absolute_difference": 0.00052714582301298,
+            "alpha_threshold_0_5_iou": 0.9891891891891892
+          },
+          "xz-back": {
+            "rgb_mean_absolute_difference": 0.0010136742525331335,
+            "rgb_mean_squared_difference": 7.60121178012023e-05,
+            "foreground_rgb_mean_absolute_difference": 0.026112404399360443,
+            "white_background_rgb_mean_absolute_difference": 0.0010077653254264355,
+            "rgb_peak_signal_to_noise_ratio_db": 41.19117167262826,
+            "alpha_mean_absolute_difference": 0.0005271458230129801,
+            "alpha_threshold_0_5_iou": 0.9891891891891892
+          },
+          "yz-front": {
+            "rgb_mean_absolute_difference": 0.00729658712595873,
+            "rgb_mean_squared_difference": 0.00036122269188977916,
+            "foreground_rgb_mean_absolute_difference": 0.027456801305888755,
+            "white_background_rgb_mean_absolute_difference": 0.00742251247765318,
+            "rgb_peak_signal_to_noise_ratio_db": 34.422249752661564,
+            "alpha_mean_absolute_difference": 0.0013433482087784041,
+            "alpha_threshold_0_5_iou": 0.9911546736791776
+          },
+          "yz-back": {
+            "rgb_mean_absolute_difference": 0.006212437525471626,
+            "rgb_mean_squared_difference": 0.00026988944590718703,
+            "foreground_rgb_mean_absolute_difference": 0.02337623415231482,
+            "white_background_rgb_mean_absolute_difference": 0.0064256425324519,
+            "rgb_peak_signal_to_noise_ratio_db": 35.688140983033946,
+            "alpha_mean_absolute_difference": 0.0013433482087784041,
+            "alpha_threshold_0_5_iou": 0.9911546736791776
+          }
+        },
+        "hashes_unchanged_after_run": true
+      },
+      "mixed": {
+        "scope": "Approximate orthographic Gaussian-splat previews and compare their pixels.\n\nThis diagnostic renderer is not the upstream Idol renderer. It projects each 3D covariance into a fixed camera,\ntruncates at three standard deviations, applies a half-pixel variance floor, and composites front to back against\nblack. Camera framing and rasterization choices affect the results; this is not ground-truth reconstruction quality.\n",
+        "input_sha256": {
+          "reference": "d735a64099aa1635bc17b3b1ee7edf5344a657bf8d466b26ff73cc61c5d810b2",
+          "candidate": "ef8a68d77ce67d631f63f69d6f96d71bdfa7bbfe11b6f8973a8ecfb9f91bcd2d",
+          "tool": "0acb0999b112825802a521d4c998e001b9a3a2f046ea42efbe16aba3b9ecb0b5"
+        },
+        "size": 128,
+        "extent": 0.75,
+        "views": {
+          "xy-front": {
+            "rgb_mean_absolute_difference": 0.0006375640865482422,
+            "rgb_mean_squared_difference": 1.7355973275803683e-05,
+            "foreground_rgb_mean_absolute_difference": 0.011228104898309454,
+            "white_background_rgb_mean_absolute_difference": 0.0008213990146088393,
+            "rgb_peak_signal_to_noise_ratio_db": 47.605510272556586,
+            "alpha_mean_absolute_difference": 0.0003966282965517386,
+            "alpha_threshold_0_5_iou": 0.9930795847750865
+          },
+          "xy-back": {
+            "rgb_mean_absolute_difference": 0.0006801332317024141,
+            "rgb_mean_squared_difference": 1.7699650023181668e-05,
+            "foreground_rgb_mean_absolute_difference": 0.011978055279424506,
+            "white_background_rgb_mean_absolute_difference": 0.0008379835361384335,
+            "rgb_peak_signal_to_noise_ratio_db": 47.520353208982876,
+            "alpha_mean_absolute_difference": 0.0003966282965517387,
+            "alpha_threshold_0_5_iou": 0.9930795847750865
+          },
+          "xz-front": {
+            "rgb_mean_absolute_difference": 0.0004942223449777533,
+            "rgb_mean_squared_difference": 1.4753582848365823e-05,
+            "foreground_rgb_mean_absolute_difference": 0.013118220195346312,
+            "white_background_rgb_mean_absolute_difference": 0.0005020747260315455,
+            "rgb_peak_signal_to_noise_ratio_db": 48.311025002062294,
+            "alpha_mean_absolute_difference": 0.00025506602759943096,
+            "alpha_threshold_0_5_iou": 0.9928057553956835
+          },
+          "xz-back": {
+            "rgb_mean_absolute_difference": 0.0005224777982014917,
+            "rgb_mean_squared_difference": 1.636769801765772e-05,
+            "foreground_rgb_mean_absolute_difference": 0.01386974030880138,
+            "white_background_rgb_mean_absolute_difference": 0.0005339321803388459,
+            "rgb_peak_signal_to_noise_ratio_db": 47.86012396246451,
+            "alpha_mean_absolute_difference": 0.00025506602759943107,
+            "alpha_threshold_0_5_iou": 0.9928057553956835
+          },
+          "yz-front": {
+            "rgb_mean_absolute_difference": 0.0037625199689679187,
+            "rgb_mean_squared_difference": 0.00012152559250032539,
+            "foreground_rgb_mean_absolute_difference": 0.014212488652623775,
+            "white_background_rgb_mean_absolute_difference": 0.003962877658183341,
+            "rgb_peak_signal_to_noise_ratio_db": 39.153322528372954,
+            "alpha_mean_absolute_difference": 0.0007348735412036911,
+            "alpha_threshold_0_5_iou": 0.9956813819577736
+          },
+          "yz-back": {
+            "rgb_mean_absolute_difference": 0.003507968737311025,
+            "rgb_mean_squared_difference": 9.113866618511945e-05,
+            "foreground_rgb_mean_absolute_difference": 0.013250641807327695,
+            "white_background_rgb_mean_absolute_difference": 0.0037338825363286443,
+            "rgb_peak_signal_to_noise_ratio_db": 40.4029733160919,
+            "alpha_mean_absolute_difference": 0.0007348735412036916,
+            "alpha_threshold_0_5_iou": 0.9956813819577736
+          }
+        },
+        "hashes_unchanged_after_run": true
+      }
+    },
+    "astronaut": {
+      "two_bit": {
+        "scope": "Approximate orthographic Gaussian-splat previews and compare their pixels.\n\nThis diagnostic renderer is not the upstream Idol renderer. It projects each 3D covariance into a fixed camera,\ntruncates at three standard deviations, applies a half-pixel variance floor, and composites front to back against\nblack. Camera framing and rasterization choices affect the results; this is not ground-truth reconstruction quality.\n",
+        "input_sha256": {
+          "reference": "8990c0cd65f9c746d5582f10e8591c70cff4d5aebc72cb75ee87fe9df9d65d27",
+          "candidate": "9c04bf6fb94a2fb92e0dd0eb4e18b301c7c86d0205e298d86fcf752f552a7d8f",
+          "tool": "0acb0999b112825802a521d4c998e001b9a3a2f046ea42efbe16aba3b9ecb0b5"
+        },
+        "size": 128,
+        "extent": 0.75,
+        "views": {
+          "xy-front": {
+            "rgb_mean_absolute_difference": 0.005142259437504246,
+            "rgb_mean_squared_difference": 0.00036694531386561327,
+            "foreground_rgb_mean_absolute_difference": 0.01473669537391834,
+            "white_background_rgb_mean_absolute_difference": 0.008923738403958685,
+            "rgb_peak_signal_to_noise_ratio_db": 34.35398654156751,
+            "alpha_mean_absolute_difference": 0.005019460733048038,
+            "alpha_threshold_0_5_iou": 0.9935766423357664
+          },
+          "xy-back": {
+            "rgb_mean_absolute_difference": 0.004922027476468002,
+            "rgb_mean_squared_difference": 0.0004007154984583605,
+            "foreground_rgb_mean_absolute_difference": 0.014105546127553763,
+            "white_background_rgb_mean_absolute_difference": 0.008824183621207687,
+            "rgb_peak_signal_to_noise_ratio_db": 33.97163860051011,
+            "alpha_mean_absolute_difference": 0.005019460733048038,
+            "alpha_threshold_0_5_iou": 0.9935766423357664
+          },
+          "xz-front": {
+            "rgb_mean_absolute_difference": 0.014887105385926802,
+            "rgb_mean_squared_difference": 0.0021594831708981886,
+            "foreground_rgb_mean_absolute_difference": 0.04754552156550667,
+            "white_background_rgb_mean_absolute_difference": 0.01640335848082482,
+            "rgb_peak_signal_to_noise_ratio_db": 26.656501761103613,
+            "alpha_mean_absolute_difference": 0.0020858986536990026,
+            "alpha_threshold_0_5_iou": 0.9943426724137931
+          },
+          "xz-back": {
+            "rgb_mean_absolute_difference": 0.005855415148754755,
+            "rgb_mean_squared_difference": 0.0003928969594022901,
+            "foreground_rgb_mean_absolute_difference": 0.018700450764729655,
+            "white_background_rgb_mean_absolute_difference": 0.00722110350437364,
+            "rgb_peak_signal_to_noise_ratio_db": 34.05721332144969,
+            "alpha_mean_absolute_difference": 0.0020858986536990026,
+            "alpha_threshold_0_5_iou": 0.9943426724137931
+          },
+          "yz-front": {
+            "rgb_mean_absolute_difference": 0.0054425042334057955,
+            "rgb_mean_squared_difference": 0.00043478667983647075,
+            "foreground_rgb_mean_absolute_difference": 0.01628664018106775,
+            "white_background_rgb_mean_absolute_difference": 0.009325050927175301,
+            "rgb_peak_signal_to_noise_ratio_db": 33.61723769466449,
+            "alpha_mean_absolute_difference": 0.0044846436075173975,
+            "alpha_threshold_0_5_iou": 0.9955835962145111
+          },
+          "yz-back": {
+            "rgb_mean_absolute_difference": 0.003900226250653132,
+            "rgb_mean_squared_difference": 0.00020850006290477785,
+            "foreground_rgb_mean_absolute_difference": 0.01167135571127021,
+            "white_background_rgb_mean_absolute_difference": 0.007818496842448655,
+            "rgb_peak_signal_to_noise_ratio_db": 36.808938096629156,
+            "alpha_mean_absolute_difference": 0.004484643607517398,
+            "alpha_threshold_0_5_iou": 0.9955835962145111
+          }
+        },
+        "hashes_unchanged_after_run": true
+      },
+      "mixed": {
+        "scope": "Approximate orthographic Gaussian-splat previews and compare their pixels.\n\nThis diagnostic renderer is not the upstream Idol renderer. It projects each 3D covariance into a fixed camera,\ntruncates at three standard deviations, applies a half-pixel variance floor, and composites front to back against\nblack. Camera framing and rasterization choices affect the results; this is not ground-truth reconstruction quality.\n",
+        "input_sha256": {
+          "reference": "8990c0cd65f9c746d5582f10e8591c70cff4d5aebc72cb75ee87fe9df9d65d27",
+          "candidate": "a4a67f7846382bb20a0d2b0b0f9737d7950cb7e7d6d7d848a20f7c3fe8794e2f",
+          "tool": "0acb0999b112825802a521d4c998e001b9a3a2f046ea42efbe16aba3b9ecb0b5"
+        },
+        "size": 128,
+        "extent": 0.75,
+        "views": {
+          "xy-front": {
+            "rgb_mean_absolute_difference": 0.0031428317399822673,
+            "rgb_mean_squared_difference": 0.00013020009314896483,
+            "foreground_rgb_mean_absolute_difference": 0.008662816992587554,
+            "white_background_rgb_mean_absolute_difference": 0.004510747478259996,
+            "rgb_peak_signal_to_noise_ratio_db": 38.85388705060707,
+            "alpha_mean_absolute_difference": 0.0019035434571265685,
+            "alpha_threshold_0_5_iou": 0.9967855055523086
+          },
+          "xy-back": {
+            "rgb_mean_absolute_difference": 0.002972875196685804,
+            "rgb_mean_squared_difference": 0.00012336242961720123,
+            "foreground_rgb_mean_absolute_difference": 0.008194349990294305,
+            "white_background_rgb_mean_absolute_difference": 0.004344185176253568,
+            "rgb_peak_signal_to_noise_ratio_db": 39.088170857996616,
+            "alpha_mean_absolute_difference": 0.0019035434571265677,
+            "alpha_threshold_0_5_iou": 0.9967855055523086
+          },
+          "xz-front": {
+            "rgb_mean_absolute_difference": 0.004533158175025319,
+            "rgb_mean_squared_difference": 0.00021926570844978165,
+            "foreground_rgb_mean_absolute_difference": 0.014157332162666656,
+            "white_background_rgb_mean_absolute_difference": 0.005281935617365664,
+            "rgb_peak_signal_to_noise_ratio_db": 36.59029283486746,
+            "alpha_mean_absolute_difference": 0.0009455584402302075,
+            "alpha_threshold_0_5_iou": 0.9975728155339806
+          },
+          "xz-back": {
+            "rgb_mean_absolute_difference": 0.003117177773748224,
+            "rgb_mean_squared_difference": 0.00010328264078500269,
+            "foreground_rgb_mean_absolute_difference": 0.009735025191392846,
+            "white_background_rgb_mean_absolute_difference": 0.0038269549863317715,
+            "rgb_peak_signal_to_noise_ratio_db": 39.85972666329432,
+            "alpha_mean_absolute_difference": 0.0009455584402302075,
+            "alpha_threshold_0_5_iou": 0.9975728155339806
+          },
+          "yz-front": {
+            "rgb_mean_absolute_difference": 0.0030390167366364114,
+            "rgb_mean_squared_difference": 0.00014353753129408027,
+            "foreground_rgb_mean_absolute_difference": 0.009077706601554865,
+            "white_background_rgb_mean_absolute_difference": 0.004887423024024666,
+            "rgb_peak_signal_to_noise_ratio_db": 38.43034527482122,
+            "alpha_mean_absolute_difference": 0.002178574602115983,
+            "alpha_threshold_0_5_iou": 0.9965277777777778
+          },
+          "yz-back": {
+            "rgb_mean_absolute_difference": 0.0023778570963383116,
+            "rgb_mean_squared_difference": 7.136025696399222e-05,
+            "foreground_rgb_mean_absolute_difference": 0.007102785991821324,
+            "white_background_rgb_mean_absolute_difference": 0.004236127217625802,
+            "rgb_peak_signal_to_noise_ratio_db": 41.46543594760816,
+            "alpha_mean_absolute_difference": 0.002178574602115983,
+            "alpha_threshold_0_5_iou": 0.9965277777777778
+          }
+        },
+        "hashes_unchanged_after_run": true
+      }
+    }
+  }
+}

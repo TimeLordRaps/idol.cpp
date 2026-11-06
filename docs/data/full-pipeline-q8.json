@@ -1,0 +1,360 @@
+{
+  "model_sha256": "5d7ccbe32e26d21e6d5af67ae5338c5a55a8f835d5d1a23143757de360a376c3",
+  "source_revision": "2731c2291fc65a797c5cb627a5e5526fc1490902",
+  "steps": 50,
+  "seed": 42,
+  "gaussians": 32768,
+  "cases": {
+    "armchair": {
+      "image_sha256": "8c30a0cbed2931aebb7ba5fe9082ccc87a01ab7c24ddf48faceb650921b5b29f",
+      "latent_sha256": "715a6f1ae9821124f0c115cd18e561d5621126d9c91617fc0e76fa778a895e14",
+      "camera": {
+        "yaw": 0.9732702087733137,
+        "pitch": 0.09927168209644667,
+        "radius": 3.007099312132872,
+        "fov": 36.973556855661975
+      },
+      "original_ply_sha256": "048b383e2940e5824a7e3efb21d625065a004ee1f41c53647d13ff8f35d45da8",
+      "candidate_ply_sha256": "e99c55922dd2ebead85158450a1d27e8b49717d578b0bf5988e47bbdaebc1d4c",
+      "center_comparison": {
+        "reference_count": 32768,
+        "candidate_count": 32768,
+        "reference_to_candidate": {
+          "mean_center_distance": 0.00016077993703259873,
+          "p95_center_distance": 0.00034629000988852356,
+          "opacity_weighted_mean_center_distance": 0.00015987988725106088,
+          "nearest_color_mean_absolute_difference": 0.0012789536672926434
+        },
+        "candidate_to_reference": {
+          "mean_center_distance": 0.00016019073389074374,
+          "p95_center_distance": 0.00034625281013087424,
+          "opacity_weighted_mean_center_distance": 0.00015907625781303803,
+          "nearest_color_mean_absolute_difference": 0.0012567527407107892
+        },
+        "center_voxel_iou": {
+          "16": 1.0,
+          "32": 0.993854748603352,
+          "64": 0.9827489481065919
+        },
+        "orthographic_center_occupancy_iou": {
+          "16": {
+            "xy": 1.0,
+            "xz": 1.0,
+            "yz": 1.0
+          },
+          "32": {
+            "xy": 1.0,
+            "xz": 1.0,
+            "yz": 1.0
+          },
+          "64": {
+            "xy": 1.0,
+            "xz": 1.0,
+            "yz": 0.9962825278810409
+          }
+        }
+      },
+      "preview": {
+        "scope": "Approximate orthographic Gaussian-splat previews and compare their pixels.\n\nThis diagnostic renderer is not the upstream Idol renderer. It projects each 3D covariance into a fixed camera,\ntruncates at three standard deviations, applies a half-pixel variance floor, and composites front to back against\nblack. Camera framing and rasterization choices affect the results; this is not ground-truth reconstruction quality.\n",
+        "input_sha256": {
+          "reference": "048b383e2940e5824a7e3efb21d625065a004ee1f41c53647d13ff8f35d45da8",
+          "candidate": "e99c55922dd2ebead85158450a1d27e8b49717d578b0bf5988e47bbdaebc1d4c",
+          "tool": "0acb0999b112825802a521d4c998e001b9a3a2f046ea42efbe16aba3b9ecb0b5"
+        },
+        "size": 128,
+        "extent": 0.75,
+        "views": {
+          "xy-front": {
+            "rgb_mean_absolute_difference": 7.807294247770125e-05,
+            "rgb_mean_squared_difference": 5.858598063427514e-07,
+            "foreground_rgb_mean_absolute_difference": 0.0011090218357208896,
+            "white_background_rgb_mean_absolute_difference": 8.201993974552616e-05,
+            "rgb_peak_signal_to_noise_ratio_db": 62.322062962958256,
+            "alpha_mean_absolute_difference": 2.9338666271218382e-05,
+            "alpha_threshold_0_5_iou": 1.0
+          },
+          "xy-back": {
+            "rgb_mean_absolute_difference": 6.744738390610364e-05,
+            "rgb_mean_squared_difference": 2.410585046002487e-07,
+            "foreground_rgb_mean_absolute_difference": 0.0009579053479454162,
+            "white_background_rgb_mean_absolute_difference": 6.93389173209625e-05,
+            "rgb_peak_signal_to_noise_ratio_db": 66.17877541900101,
+            "alpha_mean_absolute_difference": 2.9338666271218267e-05,
+            "alpha_threshold_0_5_iou": 1.0
+          },
+          "xz-front": {
+            "rgb_mean_absolute_difference": 0.0001278484775346052,
+            "rgb_mean_squared_difference": 4.690865282261156e-07,
+            "foreground_rgb_mean_absolute_difference": 0.0008334203966985488,
+            "white_background_rgb_mean_absolute_difference": 0.000126410871667326,
+            "rgb_peak_signal_to_noise_ratio_db": 63.28747039449074,
+            "alpha_mean_absolute_difference": 2.7539769019552602e-05,
+            "alpha_threshold_0_5_iou": 0.9995910020449897
+          },
+          "xz-back": {
+            "rgb_mean_absolute_difference": 0.00018362648125566457,
+            "rgb_mean_squared_difference": 1.803057301330053e-06,
+            "foreground_rgb_mean_absolute_difference": 0.001197076143429549,
+            "white_background_rgb_mean_absolute_difference": 0.00018129852547532364,
+            "rgb_peak_signal_to_noise_ratio_db": 57.43990471138935,
+            "alpha_mean_absolute_difference": 2.75397690195525e-05,
+            "alpha_threshold_0_5_iou": 0.9995910020449897
+          },
+          "yz-front": {
+            "rgb_mean_absolute_difference": 0.00018166273853191536,
+            "rgb_mean_squared_difference": 1.4542446662428734e-06,
+            "foreground_rgb_mean_absolute_difference": 0.0013556927890822543,
+            "white_background_rgb_mean_absolute_difference": 0.00018371791665220435,
+            "rgb_peak_signal_to_noise_ratio_db": 58.37362520395701,
+            "alpha_mean_absolute_difference": 3.963895869605008e-05,
+            "alpha_threshold_0_5_iou": 1.0
+          },
+          "yz-back": {
+            "rgb_mean_absolute_difference": 0.00019350877145264648,
+            "rgb_mean_squared_difference": 4.8636340478064455e-06,
+            "foreground_rgb_mean_absolute_difference": 0.0014441143884981404,
+            "white_background_rgb_mean_absolute_difference": 0.0001938246453294689,
+            "rgb_peak_signal_to_noise_ratio_db": 53.13039109927209,
+            "alpha_mean_absolute_difference": 3.963895869604996e-05,
+            "alpha_threshold_0_5_iou": 1.0
+          }
+        },
+        "hashes_unchanged_after_run": true
+      }
+    },
+    "avocado": {
+      "image_sha256": "b7dd1f8863bbca337bd71635ca8f5499cade479aa71faec5a136f13798a9d0ee",
+      "latent_sha256": "0164f01a7006508e6d40a7a76b412ea34637c90596d94d56e47f18fcea427e4b",
+      "camera": {
+        "yaw": 1.4827795642094452,
+        "pitch": 0.35955588878252986,
+        "radius": 1000.0,
+        "fov": 0.12427078994800571
+      },
+      "original_ply_sha256": "cfc3a76e811f6cdd174cfdf33ab6062f9efe78344d6d49d0d453ff45c9f49971",
+      "candidate_ply_sha256": "8a4ca9071531a489602c931fa883fb2b2cd11f80e14d8dfc5149a7d44bfac3a5",
+      "center_comparison": {
+        "reference_count": 32768,
+        "candidate_count": 32768,
+        "reference_to_candidate": {
+          "mean_center_distance": 0.00011852371320802773,
+          "p95_center_distance": 0.00023935216984370032,
+          "opacity_weighted_mean_center_distance": 0.00011790048816455182,
+          "nearest_color_mean_absolute_difference": 0.0008698452297260136
+        },
+        "candidate_to_reference": {
+          "mean_center_distance": 0.00011844036225113927,
+          "p95_center_distance": 0.00023931398115554695,
+          "opacity_weighted_mean_center_distance": 0.00011778615759839821,
+          "nearest_color_mean_absolute_difference": 0.0008897228884798877
+        },
+        "center_voxel_iou": {
+          "16": 1.0,
+          "32": 0.9945887445887446,
+          "64": 0.9901401141670991
+        },
+        "orthographic_center_occupancy_iou": {
+          "16": {
+            "xy": 1.0,
+            "xz": 1.0,
+            "yz": 1.0
+          },
+          "32": {
+            "xy": 1.0,
+            "xz": 1.0,
+            "yz": 0.9933333333333333
+          },
+          "64": {
+            "xy": 1.0,
+            "xz": 0.9989023051591658,
+            "yz": 0.998015873015873
+          }
+        }
+      },
+      "preview": {
+        "scope": "Approximate orthographic Gaussian-splat previews and compare their pixels.\n\nThis diagnostic renderer is not the upstream Idol renderer. It projects each 3D covariance into a fixed camera,\ntruncates at three standard deviations, applies a half-pixel variance floor, and composites front to back against\nblack. Camera framing and rasterization choices affect the results; this is not ground-truth reconstruction quality.\n",
+        "input_sha256": {
+          "reference": "cfc3a76e811f6cdd174cfdf33ab6062f9efe78344d6d49d0d453ff45c9f49971",
+          "candidate": "8a4ca9071531a489602c931fa883fb2b2cd11f80e14d8dfc5149a7d44bfac3a5",
+          "tool": "0acb0999b112825802a521d4c998e001b9a3a2f046ea42efbe16aba3b9ecb0b5"
+        },
+        "size": 128,
+        "extent": 0.75,
+        "views": {
+          "xy-front": {
+            "rgb_mean_absolute_difference": 1.873576028855404e-05,
+            "rgb_mean_squared_difference": 4.284608056110423e-08,
+            "foreground_rgb_mean_absolute_difference": 0.0007560723293317138,
+            "white_background_rgb_mean_absolute_difference": 2.735060967850653e-05,
+            "rgb_peak_signal_to_noise_ratio_db": 73.6808889996104,
+            "alpha_mean_absolute_difference": 1.2573946841507247e-05,
+            "alpha_threshold_0_5_iou": 1.0
+          },
+          "xy-back": {
+            "rgb_mean_absolute_difference": 2.6083722554925557e-05,
+            "rgb_mean_squared_difference": 3.0814671998074316e-07,
+            "foreground_rgb_mean_absolute_difference": 0.001052596993794371,
+            "white_background_rgb_mean_absolute_difference": 3.418360753959108e-05,
+            "rgb_peak_signal_to_noise_ratio_db": 65.11242450687955,
+            "alpha_mean_absolute_difference": 1.2573946841507383e-05,
+            "alpha_threshold_0_5_iou": 1.0
+          },
+          "xz-front": {
+            "rgb_mean_absolute_difference": 4.64468196202154e-05,
+            "rgb_mean_squared_difference": 9.530132573684022e-08,
+            "foreground_rgb_mean_absolute_difference": 0.00042206410429883583,
+            "white_background_rgb_mean_absolute_difference": 6.0004088713910496e-05,
+            "rgb_peak_signal_to_noise_ratio_db": 70.20901057848667,
+            "alpha_mean_absolute_difference": 3.0152716411548404e-05,
+            "alpha_threshold_0_5_iou": 0.9994262765347103
+          },
+          "xz-back": {
+            "rgb_mean_absolute_difference": 0.00017484590405754876,
+            "rgb_mean_squared_difference": 1.1079212080557895e-06,
+            "foreground_rgb_mean_absolute_difference": 0.0015888364834155636,
+            "white_background_rgb_mean_absolute_difference": 0.00018321507858209984,
+            "rgb_peak_signal_to_noise_ratio_db": 59.554911241954336,
+            "alpha_mean_absolute_difference": 3.0152716411548525e-05,
+            "alpha_threshold_0_5_iou": 0.9994262765347103
+          },
+          "yz-front": {
+            "rgb_mean_absolute_difference": 6.0116293539683864e-05,
+            "rgb_mean_squared_difference": 8.473481752037887e-07,
+            "foreground_rgb_mean_absolute_difference": 0.0009627998289023151,
+            "white_background_rgb_mean_absolute_difference": 7.289905591280972e-05,
+            "rgb_peak_signal_to_noise_ratio_db": 60.71938101476509,
+            "alpha_mean_absolute_difference": 2.0114845472818124e-05,
+            "alpha_threshold_0_5_iou": 1.0
+          },
+          "yz-back": {
+            "rgb_mean_absolute_difference": 6.018649982018489e-05,
+            "rgb_mean_squared_difference": 1.8316995001437689e-06,
+            "foreground_rgb_mean_absolute_difference": 0.0009639242274358939,
+            "white_background_rgb_mean_absolute_difference": 7.282737536900941e-05,
+            "rgb_peak_signal_to_noise_ratio_db": 57.371457730993015,
+            "alpha_mean_absolute_difference": 2.0114845472818083e-05,
+            "alpha_threshold_0_5_iou": 1.0
+          }
+        },
+        "hashes_unchanged_after_run": true
+      }
+    },
+    "axolotl": {
+      "image_sha256": "907d771e241396b47d364f3dd9382dc30d1ed4bb569618f148dac40d67c07fea",
+      "latent_sha256": "3299b5fe560c26b017c5956f29073698758f04d29cf6bc18feeccf811ac97352",
+      "camera": {
+        "yaw": 1.7530506648966093,
+        "pitch": 0.021876806073372487,
+        "radius": 4.114312003167418,
+        "fov": 25.266316073171847
+      },
+      "original_ply_sha256": "55a54fd297ac256a9f45ce126fb9c6d3901cb1425ec80699f6886621c44b04db",
+      "candidate_ply_sha256": "105b3bd808a05edd535c196836af099f4dcd79cc3cb9a5588f8d5cb1be7ce35f",
+      "center_comparison": {
+        "reference_count": 32768,
+        "candidate_count": 32768,
+        "reference_to_candidate": {
+          "mean_center_distance": 0.00012464906653655123,
+          "p95_center_distance": 0.0002591939417309659,
+          "opacity_weighted_mean_center_distance": 0.00012432785373449765,
+          "nearest_color_mean_absolute_difference": 0.0009062320664303862
+        },
+        "candidate_to_reference": {
+          "mean_center_distance": 0.00012448652928195373,
+          "p95_center_distance": 0.0002591939417309659,
+          "opacity_weighted_mean_center_distance": 0.00012415724575668403,
+          "nearest_color_mean_absolute_difference": 0.0009151056633431974
+        },
+        "center_voxel_iou": {
+          "16": 1.0,
+          "32": 0.9968627450980392,
+          "64": 0.9904003267973857
+        },
+        "orthographic_center_occupancy_iou": {
+          "16": {
+            "xy": 1.0,
+            "xz": 1.0,
+            "yz": 1.0
+          },
+          "32": {
+            "xy": 1.0,
+            "xz": 1.0,
+            "yz": 1.0
+          },
+          "64": {
+            "xy": 1.0,
+            "xz": 1.0,
+            "yz": 0.9989189189189189
+          }
+        }
+      },
+      "preview": {
+        "scope": "Approximate orthographic Gaussian-splat previews and compare their pixels.\n\nThis diagnostic renderer is not the upstream Idol renderer. It projects each 3D covariance into a fixed camera,\ntruncates at three standard deviations, applies a half-pixel variance floor, and composites front to back against\nblack. Camera framing and rasterization choices affect the results; this is not ground-truth reconstruction quality.\n",
+        "input_sha256": {
+          "reference": "55a54fd297ac256a9f45ce126fb9c6d3901cb1425ec80699f6886621c44b04db",
+          "candidate": "105b3bd808a05edd535c196836af099f4dcd79cc3cb9a5588f8d5cb1be7ce35f",
+          "tool": "0acb0999b112825802a521d4c998e001b9a3a2f046ea42efbe16aba3b9ecb0b5"
+        },
+        "size": 128,
+        "extent": 0.75,
+        "views": {
+          "xy-front": {
+            "rgb_mean_absolute_difference": 4.816670804934841e-05,
+            "rgb_mean_squared_difference": 1.7585704581767832e-07,
+            "foreground_rgb_mean_absolute_difference": 0.000793095815197386,
+            "white_background_rgb_mean_absolute_difference": 4.365360244850233e-05,
+            "rgb_peak_signal_to_noise_ratio_db": 67.54840226730389,
+            "alpha_mean_absolute_difference": 1.895673286374726e-05,
+            "alpha_threshold_0_5_iou": 1.0
+          },
+          "xy-back": {
+            "rgb_mean_absolute_difference": 3.582900596310239e-05,
+            "rgb_mean_squared_difference": 1.025785401092123e-07,
+            "foreground_rgb_mean_absolute_difference": 0.0005899391218398274,
+            "white_background_rgb_mean_absolute_difference": 3.280454266635293e-05,
+            "rgb_peak_signal_to_noise_ratio_db": 69.88943486075733,
+            "alpha_mean_absolute_difference": 1.8956732863747247e-05,
+            "alpha_threshold_0_5_iou": 1.0
+          },
+          "xz-front": {
+            "rgb_mean_absolute_difference": 8.244991224287946e-05,
+            "rgb_mean_squared_difference": 7.361927403164141e-07,
+            "foreground_rgb_mean_absolute_difference": 0.0008758914675961972,
+            "white_background_rgb_mean_absolute_difference": 7.530564341250066e-05,
+            "rgb_peak_signal_to_noise_ratio_db": 61.330084694974296,
+            "alpha_mean_absolute_difference": 3.0231782613843938e-05,
+            "alpha_threshold_0_5_iou": 0.998639455782313
+          },
+          "xz-back": {
+            "rgb_mean_absolute_difference": 6.0682895247447714e-05,
+            "rgb_mean_squared_difference": 1.983328936221037e-07,
+            "foreground_rgb_mean_absolute_difference": 0.0006446133877127545,
+            "white_background_rgb_mean_absolute_difference": 5.3209356668789275e-05,
+            "rgb_peak_signal_to_noise_ratio_db": 67.02605251836688,
+            "alpha_mean_absolute_difference": 3.0231782613843674e-05,
+            "alpha_threshold_0_5_iou": 0.998639455782313
+          },
+          "yz-front": {
+            "rgb_mean_absolute_difference": 0.00011093995828026074,
+            "rgb_mean_squared_difference": 6.544652397969043e-07,
+            "foreground_rgb_mean_absolute_difference": 0.0009735589371754265,
+            "white_background_rgb_mean_absolute_difference": 9.957633803695731e-05,
+            "rgb_peak_signal_to_noise_ratio_db": 61.84113414911978,
+            "alpha_mean_absolute_difference": 3.7877790387512435e-05,
+            "alpha_threshold_0_5_iou": 1.0
+          },
+          "yz-back": {
+            "rgb_mean_absolute_difference": 8.016525500702708e-05,
+            "rgb_mean_squared_difference": 2.807207013103954e-07,
+            "foreground_rgb_mean_absolute_difference": 0.0007034931960765669,
+            "white_background_rgb_mean_absolute_difference": 6.985956368816194e-05,
+            "rgb_peak_signal_to_noise_ratio_db": 65.51725559815254,
+            "alpha_mean_absolute_difference": 3.787779038751243e-05,
+            "alpha_threshold_0_5_iou": 1.0
+          }
+        },
+        "hashes_unchanged_after_run": true
+      }
+    }
+  }
+}

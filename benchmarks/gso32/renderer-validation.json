@@ -1,0 +1,8 @@
+{
+  "fixture_sha256": "5dcfa22699a2fa6a6d2826287ba46e755dfc7c03f79d5541720a4c00b6d2f4b1",
+  "maximum_absolute_difference": 0.0,
+  "views": 6,
+  "gaussians": 1024,
+  "size": 32,
+  "fastmath": false
+}

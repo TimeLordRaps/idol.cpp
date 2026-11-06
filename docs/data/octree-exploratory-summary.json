@@ -1,0 +1,228 @@
+{
+  "scope": "Exploratory; six fixed sampled-anchor cases, which are not necessarily parent-cell centers, and six same-seed sampled-tree comparisons. Calibration caches are not fully provenance-bound. Finite sampled-cell counts are not exact tree distributions or visual quality.",
+  "cases": 6,
+  "anchors_per_sample": 8192,
+  "rows": [
+    {
+      "allocation": "baseline",
+      "budget": 4.5,
+      "actual_packed_bits": 4.499329280474926,
+      "resident_weight_megabytes": 165.12,
+      "median_octree_logit_relative_difference": 0.03182354,
+      "median_gaussian_relative_difference": 0.059051405,
+      "child_probability": {
+        "median_case_mean_total_variation": 0.018951705,
+        "median_relative_logit_difference": 0.03182354,
+        "max_location_total_variation": 0.1611942
+      }
+    },
+    {
+      "allocation": "baseline",
+      "budget": 5.0,
+      "actual_packed_bits": 4.988754744983874,
+      "resident_weight_megabytes": 182.68,
+      "median_octree_logit_relative_difference": 0.023315545,
+      "median_gaussian_relative_difference": 0.037263085,
+      "child_probability": {
+        "median_case_mean_total_variation": 0.013927815,
+        "median_relative_logit_difference": 0.023315545,
+        "max_location_total_variation": 0.1430546
+      }
+    },
+    {
+      "allocation": "priority4",
+      "budget": 4.5,
+      "actual_packed_bits": 4.495675999657505,
+      "resident_weight_megabytes": 164.99,
+      "median_octree_logit_relative_difference": 0.023252085,
+      "median_gaussian_relative_difference": 0.062404390000000004,
+      "child_probability": {
+        "median_case_mean_total_variation": 0.013904759999999999,
+        "median_relative_logit_difference": 0.023252085,
+        "max_location_total_variation": 0.1420396
+      }
+    },
+    {
+      "allocation": "priority4",
+      "budget": 5.0,
+      "actual_packed_bits": 4.996061306618717,
+      "resident_weight_megabytes": 182.94,
+      "median_octree_logit_relative_difference": 0.01325241,
+      "median_gaussian_relative_difference": 0.049314424999999995,
+      "child_probability": {
+        "median_case_mean_total_variation": 0.007958019,
+        "median_relative_logit_difference": 0.01325241,
+        "max_location_total_variation": 0.07862954
+      }
+    },
+    {
+      "allocation": "priority16",
+      "budget": 4.5,
+      "actual_packed_bits": 4.481062876387819,
+      "resident_weight_megabytes": 164.47,
+      "median_octree_logit_relative_difference": 0.01325241,
+      "median_gaussian_relative_difference": 0.07548175,
+      "child_probability": {
+        "median_case_mean_total_variation": 0.007958019,
+        "median_relative_logit_difference": 0.01325241,
+        "max_location_total_variation": 0.07862954
+      }
+    },
+    {
+      "allocation": "priority16",
+      "budget": 5.0,
+      "actual_packed_bits": 4.990581385392585,
+      "resident_weight_megabytes": 182.75,
+      "median_octree_logit_relative_difference": 0.009282262999999999,
+      "median_gaussian_relative_difference": 0.05603859,
+      "child_probability": {
+        "median_case_mean_total_variation": 0.0056017245,
+        "median_relative_logit_difference": 0.009282262999999999,
+        "max_location_total_variation": 0.06459044
+      }
+    }
+  ],
+  "octree_float": {
+    "resident_weight_megabytes": 353.9,
+    "median_gaussian_relative_difference": 0.034208550000000004,
+    "child_probability": {
+      "median_case_mean_total_variation": 3.9900965e-06,
+      "median_relative_logit_difference": 5.729715e-06,
+      "max_location_total_variation": 4.497844e-05
+    }
+  },
+  "sampled_cell_summaries": {
+    "3": {
+      "baseline": {
+        "median_cell_total_variation": 0.010437011999999999,
+        "min": 0.009155273,
+        "max": 0.014038086
+      },
+      "priority4": {
+        "median_cell_total_variation": 0.0071411135,
+        "min": 0.006591797,
+        "max": 0.008789062
+      },
+      "priority16": {
+        "median_cell_total_variation": 0.005249023,
+        "min": 0.004516602,
+        "max": 0.006591797
+      },
+      "reference_other_seed": {
+        "median_cell_total_variation": 0.003845215,
+        "min": 0.002563477,
+        "max": 0.004516602
+      }
+    },
+    "4": {
+      "baseline": {
+        "median_cell_total_variation": 0.020690918000000003,
+        "min": 0.016967773,
+        "max": 0.023071289
+      },
+      "priority4": {
+        "median_cell_total_variation": 0.0165405275,
+        "min": 0.013061523,
+        "max": 0.01953125
+      },
+      "priority16": {
+        "median_cell_total_variation": 0.0145263675,
+        "min": 0.01171875,
+        "max": 0.018310547
+      },
+      "reference_other_seed": {
+        "median_cell_total_variation": 0.0166625975,
+        "min": 0.013793945,
+        "max": 0.018554688
+      }
+    },
+    "5": {
+      "baseline": {
+        "median_cell_total_variation": 0.0689086915,
+        "min": 0.045532227,
+        "max": 0.087402344
+      },
+      "priority4": {
+        "median_cell_total_variation": 0.0684814455,
+        "min": 0.041503906,
+        "max": 0.07824707
+      },
+      "priority16": {
+        "median_cell_total_variation": 0.056884765500000004,
+        "min": 0.047485352,
+        "max": 0.086425781
+      },
+      "reference_other_seed": {
+        "median_cell_total_variation": 0.06878662099999999,
+        "min": 0.046020508,
+        "max": 0.083129883
+      }
+    },
+    "6": {
+      "baseline": {
+        "median_cell_total_variation": 0.25201416,
+        "min": 0.174194336,
+        "max": 0.28515625
+      },
+      "priority4": {
+        "median_cell_total_variation": 0.243713379,
+        "min": 0.165527344,
+        "max": 0.286499023
+      },
+      "priority16": {
+        "median_cell_total_variation": 0.2340698245,
+        "min": 0.172729492,
+        "max": 0.288574219
+      },
+      "reference_other_seed": {
+        "median_cell_total_variation": 0.246887207,
+        "min": 0.17578125,
+        "max": 0.28503418
+      }
+    },
+    "7": {
+      "baseline": {
+        "median_cell_total_variation": 0.5274047855,
+        "min": 0.521362305,
+        "max": 0.564331055
+      },
+      "priority4": {
+        "median_cell_total_variation": 0.5283203125,
+        "min": 0.506713867,
+        "max": 0.572265625
+      },
+      "priority16": {
+        "median_cell_total_variation": 0.522705078,
+        "min": 0.520263672,
+        "max": 0.577758789
+      },
+      "reference_other_seed": {
+        "median_cell_total_variation": 0.531188965,
+        "min": 0.522705078,
+        "max": 0.57434082
+      }
+    },
+    "8": {
+      "baseline": {
+        "median_cell_total_variation": 0.7462158205,
+        "min": 0.737548828,
+        "max": 0.773925781
+      },
+      "priority4": {
+        "median_cell_total_variation": 0.7514038085,
+        "min": 0.73425293,
+        "max": 0.784301758
+      },
+      "priority16": {
+        "median_cell_total_variation": 0.748352051,
+        "min": 0.727416992,
+        "max": 0.786254883
+      },
+      "reference_other_seed": {
+        "median_cell_total_variation": 0.7467041015,
+        "min": 0.734619141,
+        "max": 0.782592773
+      }
+    }
+  }
+}

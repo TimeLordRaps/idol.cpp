@@ -1,0 +1,29 @@
+{
+  "model_sha256": "1f6875979bac8c8aecacf0c698662b7c63ff54ae1b6d7c06755297a05607e983",
+  "input_sha256": "907d771e241396b47d364f3dd9382dc30d1ed4bb569618f148dac40d67c07fea",
+  "point_cloud_sha256": "ed96f3101c311b3debe8ef3a1ec8dd51a189d441d3d140e0e5bfe563538607a9",
+  "point_cloud_bytes": 17826208,
+  "elapsed_seconds": 64.5448268400005,
+  "steps": 50,
+  "gaussians": 262144,
+  "torch": "2.10.0+cu128",
+  "cuda": "12.8",
+  "gpu": "NVIDIA GeForce RTX 4090",
+  "pytorch_peak_allocated_bytes": 3511637504,
+  "metadata_header_present": true,
+  "scope": "One offline image-to-3D request through a newly started Linux container HTTP server; not a fresh build of the repository Dockerfile or a latency distribution.",
+  "source_commit": "45fc1fef1e8e4118dea783e7028104549f964ade",
+  "runtime_source_sha256": {
+    "idol_server.py": "de0b24dad68e927d24bf9e9c99a8593c51227bc548d5f259c77aebf496639b39",
+    "idol_session.py": "73be45ffccb0ff9f2468d38f97aae19c2f238ee967379fedc9f7f175673d41a2",
+    "idol_generate.py": "f9609f90f5061ba101545a66a90fd7ebbf4ca5285c7b6de2c738fa8ee14054fc",
+    "idol_gguf.py": "9e839b6aef3565b93d79f82293bf59e64d5553c89ae2f1e1477c3709b6caa35e"
+  },
+  "sdk_commit": "4702a7f00850e34b6e83a2170cc123c3e9570744",
+  "base_image_id": "sha256:eb0bd066f0d2de9652bd37c9b83ee709b11ff033e1d33bb4d791a2550a0fa4a7",
+  "environment": "New Python 3.11 virtual environment with --system-site-packages on an existing GPU-enabled image. Runtime and server requirements installed into the virtual environment. The inherited base package yue2-infer reported incompatible numpy and safetensors versions; no claim of a conflict-free environment.",
+  "encoder_precision": "Original cached DINOv3 and FLUX.2 autoencoder; no separately supplied quantized encoders.",
+  "settings": "Default staged server, no fused kernels, no resident GPU flag, 50 steps, seed 42, 262144 Gaussian points. Model loading is included.",
+  "allocation_limitations": "PyTorch allocation excludes GPU context, unused reserved memory, other processes, and any image generator.",
+  "dockerfile_build": "Not completed: interrupted when Docker storage volume became low on free space."
+}

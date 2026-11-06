@@ -1,0 +1,36 @@
+{
+  "scope": "Actual reusable session on one photograph, two sequential 50-step staged graphics-device generations. Original external encoders; weighted mixed two-/four-bit Gaussian model. Imports precede timing. This is not a latency distribution, a clean-install test or ground-truth accuracy.",
+  "input_sha256": {
+    "model": "ed8c6285a3e4aaf17f7b1bce68f2e1a58a981701cd7dc718d6bd63425eac4788",
+    "image": "adbb6c59da5251983dfca65bd3d055e3d2cb9d49f85af5d473852a9033e42f24",
+    "session_tool": "33ede14e97a193cb0dcae65fa6d0c808b9791f80e6af1406f67f5b1d41b58542",
+    "inference_tool": "b513ea21cc6c5d353262a7c7fab56d87dbacaa72bad73f6629f8184e46b1ee66",
+    "expected_ply": "9b7d4f2e9677e204046bc162018f763a96d41c2c06855f2514aa8f45ad72cd3d"
+  },
+  "runs": [
+    {
+      "seconds": 28.376453899996704,
+      "point_cloud_sha256": "9b7d4f2e9677e204046bc162018f763a96d41c2c06855f2514aa8f45ad72cd3d",
+      "point_cloud_equals_reference": true,
+      "latent_equals_reference": true,
+      "preprocessed_pixels_equal_reference": true,
+      "camera_equals_reference": true
+    },
+    {
+      "seconds": 28.25781409999763,
+      "point_cloud_sha256": "9b7d4f2e9677e204046bc162018f763a96d41c2c06855f2514aa8f45ad72cd3d",
+      "point_cloud_equals_reference": true,
+      "latent_equals_reference": true,
+      "preprocessed_pixels_equal_reference": true,
+      "camera_equals_reference": true
+    }
+  ],
+  "initialization_seconds": 19.807860899993102,
+  "existing_output_rejected": true,
+  "peak_allocated_bytes": 3556051968,
+  "peak_reserved_bytes": 4617928704,
+  "closed_session_rejected": true,
+  "inputs_unchanged": true,
+  "environment": "Windows; NVIDIA GeForce RTX 4090; PyTorch 2.10.0+cu128; local incompatible xFormers disabled.",
+  "memory_limit": "PyTorch counters measure this process allocator, not total graphics memory or host memory."
+}

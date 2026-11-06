@@ -1,0 +1,21 @@
+{
+  "scope": "Supplemental cache observation during the benchmark; per-call encoder load identity was not independently instrumented.",
+  "observed_utc": "2026-11-06T04:50:38.407228+00:00",
+  "encoders": {
+    "facebook/dinov3-vith16plus-pretrain-lvd1689m": {
+      "revision": "c807c9eeea853df70aec4069e6f56b28ddc82acc",
+      "files": {
+        "config.json": "35770e98e425c9383534bcbfa7f3b7a3cb1d943f6d26a37d7d19fea0735eab57",
+        "model.safetensors": "3e1d4d18b9bfa9f28fad8e9de6a783f1313532d3460efa4cd0b12521d81d1a4d"
+      }
+    },
+    "black-forest-labs/FLUX.2-dev": {
+      "revision": "26afe3a78bb242c0a8bb181dcc8937bb16e5c66c",
+      "files": {
+        "vae/config.json": "7948580b2d53da578d49b9fed61b45d94a4c037ded5057ebd3adb4040bb5aef5",
+        "vae/diffusion_pytorch_model.safetensors": "d64f3a68e1cc4f9f4e29b6e0da38a0204fe9a49f2d4053f0ec1fa1ca02f9c4b5"
+      }
+    }
+  },
+  "workstation_guard_sha256": "e8281ab7bd02b47f800437012faa38c85ce4e0de2eca7f5d5b682d77e6604606"
+}

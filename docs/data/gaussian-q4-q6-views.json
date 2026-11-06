@@ -1,0 +1,278 @@
+{
+  "scope": "Approximate six-view orthographic renders of two development photographs, with identical original latents and ordered anchors. This diagnostic renderer is not the upstream renderer and does not measure ground-truth 3D accuracy. Foreground color difference is unitless on the renderer's zero-to-one color scale; camera framing and rasterization affect all results.",
+  "color_channels": "Red, green, and blue (RGB); unitless values on the renderer's zero-to-one color scale.",
+  "cases": {
+    "chelsea": {
+      "q4_weighted": {
+        "model_sha256": "91311ceeb9038174e3a7f263be886bf63d52bb05ca9d0ae5c3adfb53262912bd",
+        "reference_point_cloud_sha256": "d735a64099aa1635bc17b3b1ee7edf5344a657bf8d466b26ff73cc61c5d810b2",
+        "candidate_point_cloud_sha256": "39cca4a08118396025748190a97b7876019c8182fc7f4123349b65188d9549c0",
+        "renderer_sha256": "0acb0999b112825802a521d4c998e001b9a3a2f046ea42efbe16aba3b9ecb0b5",
+        "source_report_sha256": "1cc939b386083096bb97516964d1e49a4aa5f143ed8ac940a7e94bf3f7c55f81",
+        "size_pixels": 128,
+        "extent_model_coordinate_units": 0.75,
+        "mean_foreground_color_difference": 0.006034171900800217,
+        "max_foreground_color_difference": 0.007036240710288789,
+        "views": {
+          "xy-front": {
+            "rgb_mean_absolute_difference": 0.00025664823003823596,
+            "rgb_mean_squared_difference": 2.5631465583699706e-06,
+            "foreground_rgb_mean_absolute_difference": 0.0045386594163065,
+            "white_background_rgb_mean_absolute_difference": 0.000276496681421642,
+            "rgb_peak_signal_to_noise_ratio_db": 55.91226560545522,
+            "alpha_mean_absolute_difference": 0.00011097993928572373,
+            "alpha_threshold_0_5_iou": 0.9965317919075144
+          },
+          "xy-back": {
+            "rgb_mean_absolute_difference": 0.0002811064801086548,
+            "rgb_mean_squared_difference": 2.948998276652743e-06,
+            "foreground_rgb_mean_absolute_difference": 0.004971407740418587,
+            "white_background_rgb_mean_absolute_difference": 0.00029829850643569217,
+            "rgb_peak_signal_to_noise_ratio_db": 55.30325481242852,
+            "alpha_mean_absolute_difference": 0.00011097993928572348,
+            "alpha_threshold_0_5_iou": 0.9965317919075144
+          },
+          "xz-front": {
+            "rgb_mean_absolute_difference": 0.0002451005364510592,
+            "rgb_mean_squared_difference": 3.91202885458901e-06,
+            "foreground_rgb_mean_absolute_difference": 0.006575010670368293,
+            "white_background_rgb_mean_absolute_difference": 0.00024565203285490403,
+            "rgb_peak_signal_to_noise_ratio_db": 54.07597950576008,
+            "alpha_mean_absolute_difference": 0.00015353191825516206,
+            "alpha_threshold_0_5_iou": 0.9963768115942029
+          },
+          "xz-back": {
+            "rgb_mean_absolute_difference": 0.00023418679967938415,
+            "rgb_mean_squared_difference": 3.5467013810064706e-06,
+            "foreground_rgb_mean_absolute_difference": 0.006281877087302467,
+            "white_background_rgb_mean_absolute_difference": 0.00024198297809625816,
+            "rgb_peak_signal_to_noise_ratio_db": 54.50175375960134,
+            "alpha_mean_absolute_difference": 0.0001535319182551621,
+            "alpha_threshold_0_5_iou": 0.9963768115942029
+          },
+          "yz-front": {
+            "rgb_mean_absolute_difference": 0.001860833722991649,
+            "rgb_mean_squared_difference": 3.07305669493202e-05,
+            "foreground_rgb_mean_absolute_difference": 0.007036240710288789,
+            "white_background_rgb_mean_absolute_difference": 0.001907593478371769,
+            "rgb_peak_signal_to_noise_ratio_db": 45.12429427355403,
+            "alpha_mean_absolute_difference": 0.0003477934653171472,
+            "alpha_threshold_0_5_iou": 0.9983136593591906
+          },
+          "yz-back": {
+            "rgb_mean_absolute_difference": 0.0017988561295251514,
+            "rgb_mean_squared_difference": 2.3564090057241453e-05,
+            "foreground_rgb_mean_absolute_difference": 0.0068018357801166674,
+            "white_background_rgb_mean_absolute_difference": 0.0018392201694110875,
+            "rgb_peak_signal_to_noise_ratio_db": 46.277493261461835,
+            "alpha_mean_absolute_difference": 0.00034779346531714635,
+            "alpha_threshold_0_5_iou": 0.9983136593591906
+          }
+        }
+      },
+      "q6_weighted": {
+        "model_sha256": "c89399dabe243554042ee5a32c9187a621002f0477267a4426d8b7000597e5f6",
+        "reference_point_cloud_sha256": "d735a64099aa1635bc17b3b1ee7edf5344a657bf8d466b26ff73cc61c5d810b2",
+        "candidate_point_cloud_sha256": "fe120c4169fc7d9a997ccba99df79c8d24edb9d0e18cddab6e18c65e3e3568c0",
+        "renderer_sha256": "0acb0999b112825802a521d4c998e001b9a3a2f046ea42efbe16aba3b9ecb0b5",
+        "source_report_sha256": "36f77d3f91c24ec7da21c0351716061fa6763ab0cdf110b5da79020a3cd32fcc",
+        "size_pixels": 128,
+        "extent_model_coordinate_units": 0.75,
+        "mean_foreground_color_difference": 0.0015498517267495994,
+        "max_foreground_color_difference": 0.001800282376515334,
+        "views": {
+          "xy-front": {
+            "rgb_mean_absolute_difference": 6.450320479579106e-05,
+            "rgb_mean_squared_difference": 3.6230254871922604e-07,
+            "foreground_rgb_mean_absolute_difference": 0.001141081143109027,
+            "white_background_rgb_mean_absolute_difference": 6.821138055361019e-05,
+            "rgb_peak_signal_to_noise_ratio_db": 64.4092861078798,
+            "alpha_mean_absolute_difference": 3.42679550775055e-05,
+            "alpha_threshold_0_5_iou": 1.0
+          },
+          "xy-back": {
+            "rgb_mean_absolute_difference": 7.779174236572712e-05,
+            "rgb_mean_squared_difference": 4.470827227532983e-07,
+            "foreground_rgb_mean_absolute_difference": 0.0013764543740239243,
+            "white_background_rgb_mean_absolute_difference": 8.024711965093322e-05,
+            "rgb_peak_signal_to_noise_ratio_db": 63.49612112860409,
+            "alpha_mean_absolute_difference": 3.4267955077505366e-05,
+            "alpha_threshold_0_5_iou": 1.0
+          },
+          "xz-front": {
+            "rgb_mean_absolute_difference": 6.712845956829581e-05,
+            "rgb_mean_squared_difference": 5.19703231262369e-07,
+            "foreground_rgb_mean_absolute_difference": 0.001800282376515334,
+            "white_background_rgb_mean_absolute_difference": 6.849325038796231e-05,
+            "rgb_peak_signal_to_noise_ratio_db": 62.84244582936513,
+            "alpha_mean_absolute_difference": 5.3048261560084136e-05,
+            "alpha_threshold_0_5_iou": 1.0
+          },
+          "xz-back": {
+            "rgb_mean_absolute_difference": 6.262914085909834e-05,
+            "rgb_mean_squared_difference": 4.6909882964530504e-07,
+            "foreground_rgb_mean_absolute_difference": 0.001679434923077431,
+            "white_background_rgb_mean_absolute_difference": 6.435279014713768e-05,
+            "rgb_peak_signal_to_noise_ratio_db": 63.28735650572816,
+            "alpha_mean_absolute_difference": 5.304826156008415e-05,
+            "alpha_threshold_0_5_iou": 1.0
+          },
+          "yz-front": {
+            "rgb_mean_absolute_difference": 0.0004321420100475101,
+            "rgb_mean_squared_difference": 2.1281669382200333e-06,
+            "foreground_rgb_mean_absolute_difference": 0.0016346840611131317,
+            "white_background_rgb_mean_absolute_difference": 0.00045166678862301036,
+            "rgb_peak_signal_to_noise_ratio_db": 56.71994308000975,
+            "alpha_mean_absolute_difference": 0.00010897158868082327,
+            "alpha_threshold_0_5_iou": 0.9995184204189742
+          },
+          "yz-back": {
+            "rgb_mean_absolute_difference": 0.0004407284133044131,
+            "rgb_mean_squared_difference": 1.7273316301415014e-06,
+            "foreground_rgb_mean_absolute_difference": 0.0016671734826587483,
+            "white_background_rgb_mean_absolute_difference": 0.00047030834482661,
+            "rgb_peak_signal_to_noise_ratio_db": 57.62624274294777,
+            "alpha_mean_absolute_difference": 0.00010897158868082354,
+            "alpha_threshold_0_5_iou": 0.9995184204189742
+          }
+        }
+      }
+    },
+    "astronaut": {
+      "q4_weighted": {
+        "model_sha256": "91311ceeb9038174e3a7f263be886bf63d52bb05ca9d0ae5c3adfb53262912bd",
+        "reference_point_cloud_sha256": "8990c0cd65f9c746d5582f10e8591c70cff4d5aebc72cb75ee87fe9df9d65d27",
+        "candidate_point_cloud_sha256": "e276ed613e7f09cb29a29b71867f943c7164de4bc6d2e13c05320ea1b1a6b1a6",
+        "renderer_sha256": "0acb0999b112825802a521d4c998e001b9a3a2f046ea42efbe16aba3b9ecb0b5",
+        "source_report_sha256": "2c46fb55e6f9d516b5059bb8c8c0d20b85f5f9bab31c8287a0643aa7562a9634",
+        "size_pixels": 128,
+        "extent_model_coordinate_units": 0.75,
+        "mean_foreground_color_difference": 0.0040141006922830074,
+        "max_foreground_color_difference": 0.00615412067046383,
+        "views": {
+          "xy-front": {
+            "rgb_mean_absolute_difference": 0.0013526867627616788,
+            "rgb_mean_squared_difference": 3.12530494319944e-05,
+            "foreground_rgb_mean_absolute_difference": 0.003893528849552255,
+            "white_background_rgb_mean_absolute_difference": 0.002894418089420488,
+            "rgb_peak_signal_to_noise_ratio_db": 45.05107601139875,
+            "alpha_mean_absolute_difference": 0.001788090331899844,
+            "alpha_threshold_0_5_iou": 0.9985380116959064
+          },
+          "xy-back": {
+            "rgb_mean_absolute_difference": 0.0011507832374505007,
+            "rgb_mean_squared_difference": 2.625237325063962e-05,
+            "foreground_rgb_mean_absolute_difference": 0.0033123645206321497,
+            "white_background_rgb_mean_absolute_difference": 0.002682895098963701,
+            "rgb_peak_signal_to_noise_ratio_db": 45.8083142966497,
+            "alpha_mean_absolute_difference": 0.001788090331899844,
+            "alpha_threshold_0_5_iou": 0.9985380116959064
+          },
+          "xz-front": {
+            "rgb_mean_absolute_difference": 0.0019198742829182496,
+            "rgb_mean_squared_difference": 4.759746396208763e-05,
+            "foreground_rgb_mean_absolute_difference": 0.00615412067046383,
+            "white_background_rgb_mean_absolute_difference": 0.0022990152496644074,
+            "rgb_peak_signal_to_noise_ratio_db": 43.22416186283965,
+            "alpha_mean_absolute_difference": 0.00048684169582532066,
+            "alpha_threshold_0_5_iou": 0.9994601889338731
+          },
+          "xz-back": {
+            "rgb_mean_absolute_difference": 0.0012784427258394919,
+            "rgb_mean_squared_difference": 2.317872855177447e-05,
+            "foreground_rgb_mean_absolute_difference": 0.004097925277502291,
+            "white_background_rgb_mean_absolute_difference": 0.0016365449942906897,
+            "rgb_peak_signal_to_noise_ratio_db": 46.349103905507164,
+            "alpha_mean_absolute_difference": 0.0004868416958253196,
+            "alpha_threshold_0_5_iou": 0.9994601889338731
+          },
+          "yz-front": {
+            "rgb_mean_absolute_difference": 0.001291203331174952,
+            "rgb_mean_squared_difference": 2.728378039722936e-05,
+            "foreground_rgb_mean_absolute_difference": 0.003875260752587728,
+            "white_background_rgb_mean_absolute_difference": 0.0029784461953418404,
+            "rgb_peak_signal_to_noise_ratio_db": 45.640954546934225,
+            "alpha_mean_absolute_difference": 0.0018018140951190009,
+            "alpha_threshold_0_5_iou": 0.9987345776652958
+          },
+          "yz-back": {
+            "rgb_mean_absolute_difference": 0.0009167444956787009,
+            "rgb_mean_squared_difference": 1.2358291036724804e-05,
+            "foreground_rgb_mean_absolute_difference": 0.0027514040829597873,
+            "white_background_rgb_mean_absolute_difference": 0.0025866054945709836,
+            "rgb_peak_signal_to_noise_ratio_db": 49.08041581402125,
+            "alpha_mean_absolute_difference": 0.0018018140951190013,
+            "alpha_threshold_0_5_iou": 0.9987345776652958
+          }
+        }
+      },
+      "q6_weighted": {
+        "model_sha256": "c89399dabe243554042ee5a32c9187a621002f0477267a4426d8b7000597e5f6",
+        "reference_point_cloud_sha256": "8990c0cd65f9c746d5582f10e8591c70cff4d5aebc72cb75ee87fe9df9d65d27",
+        "candidate_point_cloud_sha256": "aa5a357f0648c4c94e7b85546bd1cb303c969059cf138ae7ab84b3ee02125fbd",
+        "renderer_sha256": "0acb0999b112825802a521d4c998e001b9a3a2f046ea42efbe16aba3b9ecb0b5",
+        "source_report_sha256": "8bbe10f6b991b04b1598eeead5cf00c66ac9b87ee279af4fb50b3d854abc9154",
+        "size_pixels": 128,
+        "extent_model_coordinate_units": 0.75,
+        "mean_foreground_color_difference": 0.0011101876370709282,
+        "max_foreground_color_difference": 0.0013537483336500502,
+        "views": {
+          "xy-front": {
+            "rgb_mean_absolute_difference": 0.0003425296288850508,
+            "rgb_mean_squared_difference": 2.4718003198269403e-06,
+            "foreground_rgb_mean_absolute_difference": 0.0009874985487756003,
+            "white_background_rgb_mean_absolute_difference": 0.0006348159068430326,
+            "rgb_peak_signal_to_noise_ratio_db": 56.069866159052175,
+            "alpha_mean_absolute_difference": 0.00035105470576517813,
+            "alpha_threshold_0_5_iou": 1.0
+          },
+          "xy-back": {
+            "rgb_mean_absolute_difference": 0.00034778711038735405,
+            "rgb_mean_squared_difference": 3.4493102299575863e-06,
+            "foreground_rgb_mean_absolute_difference": 0.0010026557899471078,
+            "white_background_rgb_mean_absolute_difference": 0.0006398548774759846,
+            "rgb_peak_signal_to_noise_ratio_db": 54.62267743556738,
+            "alpha_mean_absolute_difference": 0.00035105470576517775,
+            "alpha_threshold_0_5_iou": 1.0
+          },
+          "xz-front": {
+            "rgb_mean_absolute_difference": 0.0004215745283743173,
+            "rgb_mean_squared_difference": 2.9769638776766317e-06,
+            "foreground_rgb_mean_absolute_difference": 0.0013537483336500502,
+            "white_background_rgb_mean_absolute_difference": 0.0005397592815258257,
+            "rgb_peak_signal_to_noise_ratio_db": 55.26226435027742,
+            "alpha_mean_absolute_difference": 0.00013541483964906332,
+            "alpha_threshold_0_5_iou": 0.9994600431965442
+          },
+          "xz-back": {
+            "rgb_mean_absolute_difference": 0.0004128063661943972,
+            "rgb_mean_squared_difference": 3.910426345577968e-06,
+            "foreground_rgb_mean_absolute_difference": 0.0013255911658722583,
+            "white_background_rgb_mean_absolute_difference": 0.000526955066805778,
+            "rgb_peak_signal_to_noise_ratio_db": 54.07775889806754,
+            "alpha_mean_absolute_difference": 0.0001354148396490636,
+            "alpha_threshold_0_5_iou": 0.9994600431965442
+          },
+          "yz-front": {
+            "rgb_mean_absolute_difference": 0.0003491042464586684,
+            "rgb_mean_squared_difference": 2.648909245766858e-06,
+            "foreground_rgb_mean_absolute_difference": 0.0010476775691985088,
+            "white_background_rgb_mean_absolute_difference": 0.0005848041664972529,
+            "rgb_peak_signal_to_noise_ratio_db": 55.769329208035,
+            "alpha_mean_absolute_difference": 0.0002769245854135021,
+            "alpha_threshold_0_5_iou": 1.0
+          },
+          "yz-back": {
+            "rgb_mean_absolute_difference": 0.0003145509642540909,
+            "rgb_mean_squared_difference": 1.6001116091123225e-06,
+            "foreground_rgb_mean_absolute_difference": 0.0009439544149820434,
+            "white_background_rgb_mean_absolute_difference": 0.0005521707217438736,
+            "rgb_peak_signal_to_noise_ratio_db": 57.95849723887126,
+            "alpha_mean_absolute_difference": 0.00027692458541350197,
+            "alpha_threshold_0_5_iou": 1.0
+          }
+        }
+      }
+    }
+  }
+}

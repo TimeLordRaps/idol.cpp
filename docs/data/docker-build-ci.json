@@ -1,0 +1,32 @@
+{
+  "scope": "Observed successful fresh GitHub-hosted Dockerfile build and build-time tests; no GPU was available on that runner. This does not establish actual model inference inside the built image.",
+  "repository_commit": "ae1ba3db3cf93f9d5c994a00dff052d6673acfb0",
+  "run_url": "https://github.com/TimeLordRaps/idol.cpp/actions/runs/42156445818",
+  "job_url": "https://github.com/TimeLordRaps/idol.cpp/actions/runs/42156445818/job/127691625914",
+  "started_utc": "2026-11-06T03:25:20Z",
+  "completed_utc": "2026-11-06T03:28:35Z",
+  "conclusion": "success",
+  "command": "docker build -t idol-cpp .",
+  "image_digest_observed_in_log": "sha256:ee17ddb509fc21204616af01507d7b433422fb69651c6d625f9376cb8a909866",
+  "image_retention": "Runner-local image; no registry upload or retained downloadable image was established.",
+  "sha256": {
+    "Dockerfile": "27453079724a04718664780eb3a14fb40531fdd1ee8a7687f3a086303c7dcd83",
+    ".dockerignore": "1a98e5a429510c25582840aa3638d25994a1fa098e9ae0f5ddbec4cb31b9bd01",
+    "requirements-runtime.txt": "70a27a9bc159cd605b216d05eb6ce935f0e8b272102410683ddbce8bf8cb23a8",
+    "requirements-server.txt": "3003d2d16373b0b44aa378441c462df4e89cb9d03342077b67124583a039e127",
+    ".github/workflows/ci.yml": "c69cdd0683589d654fb4436e49c0202c06c417f3c575e0e98ad658f6fc6945d9"
+  },
+  "tests": {
+    "ctest_defined": 19,
+    "ctest_passed": 17,
+    "ctest_skipped": [
+      "fused_packed_gpu",
+      "calibrated_gguf"
+    ],
+    "server_tests_passed": 14,
+    "iris_setup_tests_passed": 3
+  },
+  "torch_installed": "2.10.0+cu128",
+  "sdk_revision": "4702a7f00850e34b6e83a2170cc123c3e9570744",
+  "remaining_unknown": "Real model inference inside this exact freshly built image; the separate successful GPU-container test used an existing base image."
+}
