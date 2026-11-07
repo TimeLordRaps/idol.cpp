@@ -64,7 +64,7 @@
   },
   "text_to_3d_through_the_server": {
     "command": "tools/idol_server.py with the published Idol-Q8_0.gguf, the tested Iris and Qwen files, --vram-budget-gib 4 and --memory-mode staged or lean; one POST /v1/text-to-3d with the prompt 'a red armchair', 50 Idol steps, the configured 30 image steps",
-    "choices_made": "Image generator: --max-vram 3, default loading (the server does not pass --mmap). The Idol session was released while the image was generated and rebuilt afterwards.",
+    "choices_made": "Image generator: --max-vram 3, weights loaded normally. These two runs were made before the server could memory-map the generator's weights; on this computer, which had far more memory free than the generator needs, the automatic choice made since (below) loads them normally too.",
     "runs": {
       "staged": {
         "idol_memory_mode": "staged",
@@ -86,12 +86,42 @@
       }
     },
     "same_point_cloud": "Both requests returned a 262,144-Gaussian point cloud of 17,826,208 bytes with the same SHA-256 (fd15b8ee656bbb46eaa1f6291d9ab763730686f77f39b739bb489ce10aee5dc8).",
-    "reading": "In both modes the host peak of the whole request was the image generator: its own private working set peaked at 6,846 MiB and the sum over the server and its children at 6,985 and 6,986 MiB. Idol's own peak is lower (staged 5,183 MiB, lean 3,286 MiB, idol-lowram.json), so lean mode lowered the host memory of Idol's stages but not of this request. Graphics memory summed over the process tree peaked at 3,328 MiB (staged) and 3,300 MiB (lean)."
+    "reading": "In both modes the host peak of the whole request was the image generator: its own private working set peaked at 6,846 MiB and the sum over the server and its children at 6,985 and 6,986 MiB. Idol's own peak is lower (staged 5,183 MiB, lean 3,286 MiB, idol-lowram.json), so lean mode lowered the host memory of Idol's stages but not of this request. Graphics memory summed over the process tree peaked at 3,328 MiB (staged) and 3,300 MiB (lean).",
+    "runs_with_mapping": {
+      "description": "The same request in lean mode with the generator's weights memory-mapped (configuration \"mmap\": true).",
+      "idol_memory_mode": "lean",
+      "http_status": 200,
+      "peak_summed_private_working_set_mib": 3777,
+      "peak_summed_total_working_set_mib": 8081,
+      "peak_single_process_private_mib": 3777,
+      "peak_single_process": "python.exe",
+      "peak_summed_dedicated_graphics_mib": 3288,
+      "same_point_cloud": "Byte-identical to the two requests above (SHA-256 fd15b8ee656bbb46eaa1f6291d9ab763730686f77f39b739bb489ce10aee5dc8).",
+      "reading": "The largest private working set was now the server process (Idol's lean stages), not the generator, so the host peak of a text prompt fell from 7.0 GB to 3.8 GB. The total working set, 8.1 GB, counts the mapped model files: about 4.3 GB of file pages that the system can drop and read again, which this computer never had to."
+    }
   },
   "limits": [
-    "One RTX 4090 and one 64 GiB Windows computer with the Vulkan runner. No computer with 4 to 6 GB of system memory was tested, and no memory limit was applied, so how --mmap behaves when the mapped pages must really be read back from a disk, including how much slower it is, was not measured.",
-    "The server's --mmap behaviour was not measured: the server does not pass the option, so the end-to-end rows use the default loading.",
-    "One prompt and one seed. The 8-step runs of the generator alone and the 30-step requests through the server were not compared with each other.",
+    "One RTX 4090 and one 64 GiB Windows computer with the Vulkan runner. No computer with 4 to 6 GB of system memory was tested, and no memory limit was applied, so how the mapped weights behave when the system must really read them back from a disk, including how much slower it is, was not measured. The memory-mapped figures are therefore the memory the generator holds privately, not a demonstration that a small computer runs it.",
+    "The automatic choice rests on private-memory figures at 2, 3, 4, 6 and 16 GiB budgets; a budget between them takes the figure of the lower one, and mapping was not measured above a 4 GiB budget. The free-memory probe is Windows' available memory or Linux's /proc/meminfo; it was not exercised against a real shortage.",
+    "One prompt and one seed. The 8-step runs of the generator alone, the 30-step runs of the product code and the requests through the server were not compared with each other.",
     "The private working set misses peaks shorter than the sampling interval; the total working set includes pages the system keeps in its file cache."
-  ]
+  ],
+  "automatic_choice": {
+    "code": "idol_memory.plan_image_host and LocalImageGenerator.use_mmap (tools/idol_image.py); configuration key \"mmap\": \"auto\" (the default), true or false; setup_iris.py --mmap auto|on|off",
+    "rule": "The generator gets --mmap when the free system memory is below the private memory it held at the graphics budget in use plus a 1,024 MiB headroom (the figures above: 6,737 to 6,898 MiB at 2 to 4 GiB, 3,547 MiB at 6 GiB, 1,093 MiB at 16 GiB). With the memory unknown it loads normally.",
+    "checked_with_the_real_runner": {
+      "settings": "LocalImageGenerator with the real configuration (30 steps, cfg 3, dpm++2m, 1024 x 1024, a 3 GiB budget), the free graphics memory fixed at 4,096 MiB and the free system memory faked as 3,000 MiB (short) or 1,000,000 MiB (roomy); prompt 'a red armchair', seed 42",
+      "short_memory": {
+        "mmap_passed": true,
+        "peak_private_working_set_mib": 1697,
+        "peak_total_working_set_mib": 7277
+      },
+      "roomy_memory": {
+        "mmap_passed": false,
+        "peak_private_working_set_mib": 6954,
+        "peak_total_working_set_mib": 7001
+      },
+      "images": "Byte-identical PNG files, 2,662,219 bytes each (SHA-256 b1a3d9a10371475c9ff8c28e7d1fd7ea9c35a301252321a997bd4b7d4b655019). Elapsed times (233 s and 362 s) are not reported as timings: the device was shared."
+    }
+  }
 }

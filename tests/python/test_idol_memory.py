@@ -136,6 +136,46 @@ class PlanningTests(unittest.TestCase):
     def test_the_measurements_are_ordered(self):
         self.assertLess(memory.IDOL_LEAN_HOST_MIB, memory.IDOL_STAGED_HOST_MIB)
 
+    def test_the_image_generator_host_figures_rise_as_the_budget_falls_and_mapping_lowers_them(self):
+        for peaks in (memory.IRIS_HOST_PEAKS_MIB, memory.IRIS_MMAP_HOST_PEAKS_MIB):
+            budgets = [budget for budget, _ in peaks]
+            self.assertEqual(budgets, sorted(set(budgets)), 'budgets are listed once, in order')
+        self.assertEqual(memory.iris_host_mib(16.0), 1093)
+        self.assertEqual(memory.iris_host_mib(3.0), 6846)
+        self.assertEqual(memory.iris_host_mib(5.0), memory.iris_host_mib(4.0), 'between two budgets: the lower one')
+        self.assertEqual(memory.iris_host_mib(1.0), memory.iris_host_mib(2.0), 'below the smallest: the smallest')
+        beyond_the_plateau = [memory.iris_host_mib(budget) for budget in (4, 5, 6, 7, 8, 12, 16, 32)]
+        self.assertEqual(beyond_the_plateau, sorted(beyond_the_plateau, reverse=True),
+                         'from 4 GiB up, a larger budget never needs more')
+        self.assertEqual(memory.iris_mmap_host_mib(3.0), 1198)
+        self.assertIsNone(memory.iris_mmap_host_mib(4.5), 'mapping was not measured above 4 GiB')
+        for budget, peak in memory.IRIS_MMAP_HOST_PEAKS_MIB:
+            self.assertLess(peak, memory.iris_host_mib(budget))
+
+    def test_the_image_generator_maps_its_weights_only_when_memory_is_short(self):
+        for budget in (2.0, 3.0, 4.0, 6.0, 16.0):
+            need = memory.iris_host_mib(budget) + memory.HOST_HEADROOM_MIB
+            self.assertFalse(memory.plan_image_host(budget, need).mmap, budget)
+            self.assertFalse(memory.plan_image_host(budget, 10**6).mmap, budget)
+            short = memory.plan_image_host(budget, need - 1)
+            self.assertTrue(short.mmap, budget)
+            self.assertIn('memory-mapping', short.reason)
+        unknown = memory.plan_image_host(3.0, None)
+        self.assertFalse(unknown.mmap)
+        self.assertIn('could not be measured', unknown.reason)
+
+    def test_mapping_is_chosen_for_every_amount_of_memory_below_the_threshold(self):
+        need = memory.iris_host_mib(3.0) + memory.HOST_HEADROOM_MIB
+        choices = [memory.plan_image_host(3.0, mib).mmap for mib in range(0, need + 512, 128)]
+        self.assertEqual(choices, sorted(choices, reverse=True), 'more memory never switches mapping on')
+        self.assertTrue(choices[0])
+        self.assertFalse(choices[-1])
+
+    def test_a_mapping_plan_says_when_even_mapping_may_not_fit_or_was_not_measured(self):
+        self.assertIn('may run out of memory', memory.plan_image_host(3.0, memory.iris_mmap_host_mib(3.0) - 1).reason)
+        self.assertNotIn('may run out of memory', memory.plan_image_host(3.0, memory.iris_mmap_host_mib(3.0)).reason)
+        self.assertIn('not measured', memory.plan_image_host(6.0, 100).reason)
+
     def test_free_disk_space_is_measured_where_the_files_go(self):
         calls = []
 

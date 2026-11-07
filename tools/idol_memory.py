@@ -8,7 +8,9 @@ free right now:
   by roughly a fifth, about a third of the memory).
 * The optional image generator takes a `--max-vram` budget. A budget at or above its full size keeps every
   weight resident (fastest); a smaller one streams weights and cuts the graph into segments, which is
-  three to four times slower but fits in a few GiB.
+  three to four times slower but fits in a few GiB. Weights it keeps off the device stay in host memory (about
+  6.8 GB at budgets of 4 GiB and below) unless it memory-maps them, which it is told to do when the free system
+  memory is short.
 
 The figures below are whole-process peaks measured on an RTX 4090 (see `docs/data/memory-tiers.json`). They
 are estimates: a different driver, resolution or model file moves them, so every choice keeps a headroom for
@@ -43,6 +45,13 @@ IDOL_LEAN_HOST_MIB = 3286  # lean: the waiting models sit in files
 LEAN_CACHE_MIB = 3704  # disk space those files take
 HOST_HEADROOM_MIB = 1024  # the operating system and other programs
 DISK_HEADROOM_MIB = 1024
+# Host memory of the image generator, in MiB: the peak private working set of the runner's process at each
+# `--max-vram` budget (budget in GiB, MiB), with its weights loaded normally and with `--mmap`
+# (docs/data/text-prompt-host-memory.json). Weights that do not fit in the graphics budget stay in private host
+# memory, so the figure rises as the budget falls; memory-mapped weights are file pages the system can drop and
+# read again, so they are not private. With mapping, budgets above 4 GiB were not measured.
+IRIS_HOST_PEAKS_MIB = ((2.0, 6737), (3.0, 6846), (4.0, 6898), (6.0, 3547), (16.0, 1093))
+IRIS_MMAP_HOST_PEAKS_MIB = ((2.0, 2397), (3.0, 1198), (4.0, 1425))
 
 
 @dataclass(frozen=True)
@@ -276,6 +285,54 @@ def iris_budget_gib(available):
     if usable >= IRIS_FULL_MIB:
         return IRIS_MAX_BUDGET_GIB
     return max((budget for budget, peak in IRIS_BUDGET_PEAKS_MIB if peak <= usable), default=IRIS_MIN_BUDGET_GIB)
+
+
+def _host_peak(peaks, budget_gib):
+    """The figure measured at the largest budget not above `budget_gib` (the first one below the smallest budget).
+
+    A budget between two measured ones takes the lower one's figure, which is the larger of the two, so the
+    estimate errs high."""
+    return max(((budget, peak) for budget, peak in peaks if budget <= budget_gib), default=peaks[0])[1]
+
+
+def iris_host_mib(budget_gib):
+    """Host memory the image generator needed at `budget_gib` with its weights loaded normally, in MiB."""
+    return _host_peak(IRIS_HOST_PEAKS_MIB, budget_gib)
+
+
+def iris_mmap_host_mib(budget_gib):
+    """The same with `--mmap`, or None for a budget above the largest one measured with it."""
+    if budget_gib > IRIS_MMAP_HOST_PEAKS_MIB[-1][0]:
+        return None
+    return _host_peak(IRIS_MMAP_HOST_PEAKS_MIB, budget_gib)
+
+
+@dataclass(frozen=True)
+class ImageHostPlan:
+    mmap: bool
+    reason: str
+
+
+def plan_image_host(budget_gib, available):
+    """Decide whether the image generator should memory-map its weights, from the free system memory.
+
+    Loading them normally is the default; mapping is chosen only when the computer lacks the memory the
+    generator held at this budget, because the mapped pages are read back from disk when the system needs the
+    memory elsewhere. `available` is the free system memory in MiB (None: unknown, so load normally)."""
+    if available is None:
+        return ImageHostPlan(False, 'free system memory could not be measured; loading the weights normally')
+    need = iris_host_mib(budget_gib)
+    if available >= need + HOST_HEADROOM_MIB:
+        return ImageHostPlan(False, f'{available} MiB of system memory is free, enough for the weights it holds at '
+                                    f'a {budget_gib:g} GiB budget (about {need} MiB)')
+    mapped = iris_mmap_host_mib(budget_gib)
+    reason = (f'{available} MiB of system memory is free but the generator held about {need} MiB at a '
+              f'{budget_gib:g} GiB budget; memory-mapping its weights')
+    if mapped is None:
+        reason += ' (its private memory with mapping was not measured at this budget)'
+    elif available < mapped:
+        reason += f' (about {mapped} MiB were needed when measured, so this may run out of memory)'
+    return ImageHostPlan(True, reason)
 
 
 def keep_idol_loaded(available):

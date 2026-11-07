@@ -144,7 +144,7 @@
     "A run on a real computer with little memory. The Windows figures are of the process on a 64 GiB computer, where the system does not take memory back from it; the container test above limits the process but not an operating system beside it.",
     "The operating system's own use, which is why the thresholds add a 1,024 MiB headroom.",
     "Linux or macOS; the metric is a Windows one.",
-    "Host memory of the separate image generator was measured afterwards (text-prompt-host-memory.json): it needs about 6.8 GB of private host memory at graphics budgets of 4 GiB and below, so a text prompt needs more host memory than Idol in lean mode does."
+    "Host memory of the separate image generator was measured afterwards (text-prompt-host-memory.json): it needs about 6.8 GB of private host memory at graphics budgets of 4 GiB and below, so a text prompt needs more host memory than Idol in lean mode does unless the generator's weights are memory-mapped, which the server now chooses when the system memory is short (3.8 GB private for a whole request in lean mode with mapping, same point cloud)."
   ],
   "capped_container": {
     "description": "The server's Runtime (tools/idol_server.py, default probes) building a session and generating twice inside a Linux container with a hard memory limit and no swap, to test the one thing the Windows figures cannot: whether the process survives a small memory limit.",

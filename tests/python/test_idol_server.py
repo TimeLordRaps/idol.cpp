@@ -682,6 +682,44 @@ class AutomaticMemoryTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     LocalImageGenerator(path)
 
+    def test_image_weights_are_memory_mapped_when_system_memory_is_short_unless_configured(self):
+        import idol_memory
+        config = {'version': 1, 'engine': 'stable-diffusion.cpp'}
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for name in ('sd-cli', 'iris.gguf', 'qwen.gguf'):
+                (root / name).write_bytes(b'x')
+            config.update(executable=str(root / 'sd-cli'), diffusion_model=str(root / 'iris.gguf'),
+                          text_encoder=str(root / 'qwen.gguf'), max_vram_gib=3)
+            path = root / 'config.json'
+
+            def mapped(extra, host_free):
+                path.write_text(json.dumps({**config, **extra}))
+                generator = LocalImageGenerator(path, memory_probe=lambda: 10**6, host_probe=lambda: host_free)
+                seen = []
+
+                def fake_run(args, **kwargs):
+                    seen.append(list(args))
+                    Path(args[args.index('--output') + 1]).write_bytes(image_bytes())
+                    return type('Result', (), {'returncode': 0, 'stdout': b''})()
+                with patch('idol_image.subprocess.run', side_effect=fake_run):
+                    generator.generate('a chair', 1)
+                self.assertEqual(generator.last_mmap, '--mmap' in seen[0])
+                self.assertEqual(seen[0].count('--mmap'), int(generator.last_mmap))
+                return generator.last_mmap
+
+            need = idol_memory.iris_host_mib(3) + idol_memory.HOST_HEADROOM_MIB
+            self.assertFalse(mapped({}, need))
+            self.assertTrue(mapped({}, need - 1))
+            self.assertTrue(mapped({'mmap': 'auto'}, need - 1))
+            self.assertFalse(mapped({}, None), 'unmeasurable memory keeps the normal loading')
+            self.assertTrue(mapped({'mmap': True}, 10**6), 'a configured choice is never overridden')
+            self.assertFalse(mapped({'mmap': False}, 0), 'a configured choice is never overridden')
+            for bad in ('yes', 1, 0, None, 'on'):
+                path.write_text(json.dumps({**config, 'mmap': bad}))
+                with self.assertRaises(ValueError):
+                    LocalImageGenerator(path)
+
 
 if __name__ == '__main__':
     unittest.main()

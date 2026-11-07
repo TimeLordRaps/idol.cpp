@@ -59,6 +59,14 @@ class IrisSetupTests(unittest.TestCase):
                 setup_iris.prepare(runner, root / 'auto.json', image_model=image, text_encoder=encoder,
                                    max_vram_gib='auto')
                 self.assertEqual(json.loads((root / 'auto.json').read_text(encoding='utf-8'))['max_vram_gib'], 'auto')
+                self.assertNotIn('mmap', json.loads((root / 'default.json').read_text(encoding='utf-8')))
+                for good in ('auto', True, False):
+                    setup_iris.prepare(runner, root / f'mmap-{good}.json', image_model=image, text_encoder=encoder, mmap=good)
+                    self.assertEqual(json.loads((root / f'mmap-{good}.json').read_text(encoding='utf-8'))['mmap'], good)
+                for bad in ('on', 1, 0, 'yes'):
+                    with self.assertRaisesRegex(ValueError, 'mmap'):
+                        setup_iris.prepare(runner, root / 'bad-mmap.json', image_model=image, text_encoder=encoder, mmap=bad)
+                    self.assertFalse((root / 'bad-mmap.json').exists())
 
     def test_mismatched_weights_do_not_create_configuration(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -6,13 +6,13 @@ import sys
 import tempfile
 from pathlib import Path
 
-from idol_memory import available_mib, iris_budget_gib
+from idol_memory import available_host_mib, available_mib, iris_budget_gib, plan_image_host
 
 
 class LocalImageGenerator:
     """Invoke a named local model, releasing its process before Idol starts."""
 
-    def __init__(self, config_path, *, run_process=None, memory_probe=None):
+    def __init__(self, config_path, *, run_process=None, memory_probe=None, host_probe=None):
         config = json.loads(Path(config_path).read_text(encoding='utf-8'))
         if config.get('version') != 1 or config.get('engine') != 'stable-diffusion.cpp':
             raise ValueError('Unsupported image-generator configuration')
@@ -34,7 +34,14 @@ class LocalImageGenerator:
         configured = config.get('max_vram_gib', 'auto')
         self.max_vram = None if configured == 'auto' else float(configured)
         self.memory_probe = memory_probe
+        # Whether the runner memory-maps its weights (`--mmap`): true or false fixes it; "auto" (the default) maps them
+        # only when the computer lacks the system memory the runner holds at this graphics budget.
+        self.mmap = config.get('mmap', 'auto')
+        if self.mmap != 'auto' and not isinstance(self.mmap, bool):
+            raise ValueError('The image-generator mmap setting must be "auto", true or false')
+        self.host_probe = host_probe
         self.last_budget_gib = None
+        self.last_mmap = None
         self.sampling_method = str(config.get('sampling_method', 'euler'))
         self.width, self.height = int(config.get('width', 1024)), int(config.get('height', 1024))
         if not 1 <= self.steps <= 100 or not math.isfinite(self.cfg) or not 0 <= self.cfg <= 20:
@@ -62,6 +69,15 @@ class LocalImageGenerator:
               file=sys.stderr, flush=True)
         return budget
 
+    def use_mmap(self, budget):
+        """Whether the runner gets `--mmap` for this image: the configured choice, or what the free memory calls for."""
+        if self.mmap != 'auto':
+            return self.mmap
+        plan = plan_image_host(budget, self.host_probe() if self.host_probe else available_host_mib())
+        print(f'Image generator weights: {"memory-mapped" if plan.mmap else "loaded normally"} ({plan.reason})',
+              file=sys.stderr, flush=True)
+        return plan.mmap
+
     def generate(self, prompt, seed):
         if not prompt or not prompt.strip() or len(prompt) > 4000:
             raise ValueError('Prompt must contain between 1 and 4000 characters')
@@ -79,6 +95,9 @@ class LocalImageGenerator:
                     '--steps', str(self.steps), '--cfg-scale', str(self.cfg),
                     '--sampling-method', self.sampling_method, '--width', str(self.width), '--height', str(self.height),
                     '--threads', '4', '--max-vram', str(budget)])
+            self.last_mmap = self.use_mmap(budget)
+            if self.last_mmap:
+                args.append('--mmap')
             runner = self._run_process or subprocess.run
             result = runner(args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                             timeout=1200, check=False)

@@ -33,7 +33,9 @@ def checked_file(path, expected):
     return path
 
 
-def prepare(runner, config, *, image_model=None, text_encoder=None, max_vram_gib=None):
+def prepare(runner, config, *, image_model=None, text_encoder=None, max_vram_gib=None, mmap=None):
+    if mmap is not None and mmap != 'auto' and not isinstance(mmap, bool):
+        raise ValueError('The mmap setting must be "auto", true or false')
     if max_vram_gib not in (None, 'auto') and (
             isinstance(max_vram_gib, bool) or not isinstance(max_vram_gib, (int, float))
             or not math.isfinite(max_vram_gib) or not 1 <= max_vram_gib <= 64):
@@ -60,6 +62,8 @@ def prepare(runner, config, *, image_model=None, text_encoder=None, max_vram_gib
                 'width': 1024, 'height': 1024}
     if max_vram_gib is not None:
         settings['max_vram_gib'] = max_vram_gib
+    if mmap is not None:
+        settings['mmap'] = mmap
     config.parent.mkdir(parents=True, exist_ok=True)
     with config.open('x', encoding='utf-8') as stream:
         json.dump(settings, stream, indent=2)
@@ -77,9 +81,15 @@ def main():
                         help='Graphics-memory budget in GiB for the runner, or "auto" (the default when omitted) to size '
                              'it from the free graphics memory for every image. A small budget makes the runner load '
                              'weights on demand and cut the graph into segments, which lowers peak memory and slows generation')
+    parser.add_argument('--mmap', choices=('auto', 'on', 'off'),
+                        help='Whether the runner memory-maps its weights: "auto" (the default when omitted) does so only '
+                             'when the computer lacks the system memory the runner holds at its graphics budget. Mapped '
+                             'weights are file pages the system can drop and read again, so they lower the memory the '
+                             'runner holds but are read from disk when memory is short')
     args = parser.parse_args()
     print('Image generator configuration:', prepare(args.runner, args.config,
-          image_model=args.image_model, text_encoder=args.text_encoder, max_vram_gib=args.max_vram_gib))
+          image_model=args.image_model, text_encoder=args.text_encoder, max_vram_gib=args.max_vram_gib,
+          mmap={None: None, 'auto': 'auto', 'on': True, 'off': False}[args.mmap]))
 
 
 if __name__ == '__main__':
