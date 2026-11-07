@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Measure the published `Idol-Q8_0.gguf` against a build without the denoiser's covariance calibration on 36 benchmark cases: the build without it is not better, so the published file is unchanged (`docs/data/q8-denoiser-calibration-ablation.json`).
+- Measure the staged low-memory path with the published file (`docs/data/idol-staged-memory.json`) and compare the native CPU decoder with the GPU decoders (`docs/data/decoder-cpu-vs-gpu.json`).
 - Ignore local build variants, the cloned upstream SDK, and test caches.
 - Build the Idol pipeline on the CPU and run the image encoders one at a time when inference is staged (`tools/idol_staging.py`, `tools/idol_generate_staged.py`, and the server's default mode), lowering peak graphics memory; add tests and a measurement record.
 - Add `--max-vram-gib` to `tools/setup_iris.py` and document how the image generator's graphics-memory budget affects peak memory and speed, with a measurement record.

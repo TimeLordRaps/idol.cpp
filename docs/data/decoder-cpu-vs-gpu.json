@@ -1,0 +1,175 @@
+{
+ "description": "Native CPU decoder versus GPU decoders (octree and Gaussian), decoding the same saved latents of the published Idol-Q8_0.gguf.",
+ "date": "2026-11-06",
+ "device": "NVIDIA GeForce RTX 4090 (24,564 MiB), 32 logical CPUs, Windows 11, PyTorch 2.10.0+cu128",
+ "model_sha256": "1f6875979bac8c8aecacf0c698662b7c63ff54ae1b6d7c06755297a05607e983",
+ "inputs": "The saved latents of three GSO32 objects (first, 13th and 25th in protocol order), seed 42, 262,144 Gaussians; three repeats per decoder after one warm-up for the GPU decoders.",
+ "decoders": {
+  "native_cpu": "build/idol_decode (build_fresh), IDOL_QUANT_KERNEL=float, 4 and 8 threads, decoder cache built in 2.84 s",
+  "gpu": "upstream mixed-precision decoders with fused packed kernels; load 1.88 s, 305.3 MiB of resident weights"
+ },
+ "objects": [
+  {
+   "object": "ASICS_GELLinksmaster_WhiteSilverCarolina_Blue",
+   "category": "shoe",
+   "gpu_decoder": {
+    "seconds": [
+     0.34,
+     0.58,
+     0.31
+    ],
+    "median_seconds": 0.34,
+    "peak_torch_allocated_mib": 523.3
+   },
+   "native_cpu_decoder": {
+    "threads_4": {
+     "seconds": [
+      61.61,
+      62.03,
+      55.58
+     ],
+     "median_seconds": 61.61,
+     "peak_working_set_mib": 818.2
+    },
+    "threads_8": {
+     "seconds": [
+      36.99,
+      37.78,
+      36.66
+     ],
+     "median_seconds": 36.99,
+     "peak_working_set_mib": 822.8
+    }
+   },
+   "mesh_agreement": {
+    "gpu_vs_original": {
+     "mean_over_diagonal": 0.0006492668926067546,
+     "f1_0.001": 0.8246192633015007,
+     "f1_0.005": 0.9951985530546623
+    },
+    "cpu_vs_original": {
+     "mean_over_diagonal": 0.0006359293479948201,
+     "f1_0.001": 0.825747953375719,
+     "f1_0.005": 0.9961994353543465
+    },
+    "cpu_vs_gpu": {
+     "mean_over_diagonal": 0.0004386547798861165,
+     "f1_0.001": 0.9153240652227351,
+     "f1_0.005": 0.9974998771929824
+    }
+   }
+  },
+  {
+   "object": "TURBOPROP_AIRPLANE_WITH_PILOT",
+   "category": "toy",
+   "gpu_decoder": {
+    "seconds": [
+     1.16,
+     1.14,
+     1.14
+    ],
+    "median_seconds": 1.14,
+    "peak_torch_allocated_mib": 523.3
+   },
+   "native_cpu_decoder": {
+    "threads_4": {
+     "seconds": [
+      57.05,
+      58.02,
+      58.81
+     ],
+     "median_seconds": 58.02,
+     "peak_working_set_mib": 818.2
+    },
+    "threads_8": {
+     "seconds": [
+      38.45,
+      37.42,
+      37.19
+     ],
+     "median_seconds": 37.42,
+     "peak_working_set_mib": 822.8
+    }
+   },
+   "mesh_agreement": {
+    "gpu_vs_original": {
+     "mean_over_diagonal": 0.0008713514285692482,
+     "f1_0.001": 0.6937969695877776,
+     "f1_0.005": 0.9941236112158934
+    },
+    "cpu_vs_original": {
+     "mean_over_diagonal": 0.0008833682041837964,
+     "f1_0.001": 0.686,
+     "f1_0.005": 0.9936734898231313
+    },
+    "cpu_vs_gpu": {
+     "mean_over_diagonal": 0.00037388146041000836,
+     "f1_0.001": 0.9388969219299179,
+     "f1_0.005": 0.9994999899949975
+    }
+   }
+  },
+  {
+   "object": "QHPomegranate",
+   "category": "bottles and cups",
+   "gpu_decoder": {
+    "seconds": [
+     2.73,
+     2.34,
+     1.88
+    ],
+    "median_seconds": 2.34,
+    "peak_torch_allocated_mib": 523.3
+   },
+   "native_cpu_decoder": {
+    "threads_4": {
+     "seconds": [
+      215.41,
+      212.55,
+      278.66
+     ],
+     "median_seconds": 215.41,
+     "peak_working_set_mib": 818.3
+    },
+    "threads_8": {
+     "seconds": [
+      776.56,
+      267.8,
+      394.3
+     ],
+     "median_seconds": 394.3,
+     "peak_working_set_mib": 822.8
+    }
+   },
+   "mesh_agreement": {
+    "gpu_vs_original": {
+     "mean_over_diagonal": 0.0007601219949655939,
+     "f1_0.001": 0.7376749584844274,
+     "f1_0.005": 0.998224949284981
+    },
+    "cpu_vs_original": {
+     "mean_over_diagonal": 0.0007586134832864978,
+     "f1_0.001": 0.7394234371302024,
+     "f1_0.005": 0.997424969295937
+    },
+    "cpu_vs_gpu": {
+     "mean_over_diagonal": 0.0005323525886644012,
+     "f1_0.001": 0.8685247920324688,
+     "f1_0.005": 0.997799959911806
+    }
+   },
+   "timing_note": "Native CPU timings for this object are not usable: another heavy Idol workload on the same machine was running at the time (the 8-thread median is slower than the 4-thread one)."
+  }
+ ],
+ "summary": {
+  "speed": "On the two objects measured without interference the GPU decoders took 0.3 to 1.2 s and the native decoder 57 to 62 s with 4 threads and 37 to 38 s with 8 threads, roughly 30 to 180 times slower.",
+  "memory": "The native decoder peaked at 818 MiB (4 threads) and 823 MiB (8 threads) of process working set. The GPU decoders peaked at 523 MiB of PyTorch-allocated device memory (305 MiB of it resident weights).",
+  "agreement": "Both decoders agree with the original-Idol mesh to the same degree: mean mesh distance / diagonal 0.065% (GPU) and 0.064% (CPU), 0.087% and 0.088%, and 0.076% and 0.076% on the three objects. They differ from each other by 0.037% to 0.053% of the diagonal, less than either differs from the original."
+ },
+ "limits": [
+  "The two decoders use different random number generators, so a fixed seed does not give identical point clouds; agreement is measured on meshes extracted with the protocol settings.",
+  "Timings come from a shared workstation and single sessions of three repeats; the GPU decoders ran with other GPU work active. They show the order of magnitude, not a latency distribution.",
+  "CPU peak is the process working set; GPU peak is PyTorch allocated memory, which excludes the CUDA context. They are not directly comparable figures.",
+  "Three objects at one seed, not a cohort."
+ ]
+}

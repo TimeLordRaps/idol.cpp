@@ -1,0 +1,200 @@
+{
+ "description": "Paired comparison of the published Idol-Q8_0.gguf with a local build that differs from it only in how 96 denoiser matrices are rounded (plain Q8_0 rounding instead of covariance-calibrated codes), scored against original Idol with the GSO32 fidelity protocol.",
+ "date": "2026-11-06",
+ "models": {
+  "published": {
+   "file": "Idol-Q8_0.gguf (TimeLordRaps/Idol-GGUF)",
+   "bytes": 967253440,
+   "sha256": "1f6875979bac8c8aecacf0c698662b7c63ff54ae1b6d7c06755297a05607e983"
+  },
+  "unrefined": {
+   "file": "Idol-experimental-Q8_0-octree-Q8_0-nov05.gguf (local, unpublished)",
+   "bytes": 967253024,
+   "sha256": "61a7b050d6afae4b46eacbe406849a61f04bc71cfe1e8268ae5d001493fd6f22"
+  }
+ },
+ "tensor_comparison": {
+  "tensors_in_each_file": 1690,
+  "identical": 1594,
+  "differing": 96,
+  "differing_type_or_shape": 0,
+  "differing_tensors": "24 denoiser blocks x (attn.qkv, attn.out, mlp.0, mlp.2) weights, all Q8_0 in both files",
+  "metadata_differences": "The published file records the denoiser calibration (idol.quantization.tier Q8_0_DENOISER_Q80_COV and the encoded and moment digests); the local file records tier Q8_0."
+ },
+ "protocol": {
+  "source": "benchmarks/gso32/protocol.json (same inputs, seeds 0, 42 and 2026, 50 steps, 262,144 Gaussians, synthetic input preprocessing, original encoders)",
+  "runtime": "resident GPU, batched guidance, cuDNN attention, fused packed kernels, as in the published run",
+  "reference": "the original-Idol latents and meshes retained from the published 96-case run",
+  "mesh": "idol_mesh with the protocol settings (resolution 176, sigma 1.5, iso 0.2, min piece 0.05); identical extractor binary (sha256 d43743c5...ac09)",
+  "cases_scored": 36,
+  "objects_scored": 12,
+  "objects": [
+   {
+    "id": "ASICS_GELLinksmaster_WhiteSilverCarolina_Blue",
+    "stratum": "footwear"
+   },
+   {
+    "id": "Unmellow_Yellow_Tieks_Neon_Patent_Leather_Ballet_Flats",
+    "stratum": "footwear"
+   },
+   {
+    "id": "Womens_Bluefish_2Eye_Boat_Shoe_in_Linen_Natural_Sparkle_Suede_w34KNQ41csH",
+    "stratum": "footwear"
+   },
+   {
+    "id": "Mens_ASV_Shock_Light_Bungee_in_Light_Grey_xGCOvtLDnQJ",
+    "stratum": "footwear"
+   },
+   {
+    "id": "Kanex_MultiSync_Wireless_Keyboard",
+    "stratum": "thin_and_flat"
+   },
+   {
+    "id": "Threshold_Bistro_Ceramic_Dinner_Plate_Ruby_Ring",
+    "stratum": "thin_and_flat"
+   },
+   {
+    "id": "Razer_Goliathus_Control_Edition_Small_Soft_Gaming_Mouse_Mat",
+    "stratum": "thin_and_flat"
+   },
+   {
+    "id": "Ecoforms_Quadra_Saucer_SQ1_Avocado",
+    "stratum": "thin_and_flat"
+   },
+   {
+    "id": "Cole_Hardware_Mug_Classic_Blue",
+    "stratum": "handles_and_cavities"
+   },
+   {
+    "id": "Threshold_Porcelain_Pitcher_White",
+    "stratum": "handles_and_cavities"
+   },
+   {
+    "id": "Threshold_Porcelain_Teapot_White",
+    "stratum": "handles_and_cavities"
+   },
+   {
+    "id": "Nordic_Ware_Original_Bundt_Pan",
+    "stratum": "handles_and_cavities"
+   }
+  ]
+ },
+ "harness_check": "The published file was regenerated through the same scoring script for 6 of its cases (2 objects x 3 seeds; 9 generations in all, because the first object was run twice): every latent was bit-identical to the retained one, and the mesh distances, F1 scores and latent errors of the 3 cases checked in full matched the published receipts exactly.",
+ "results": {
+  "relative latent Euclidean error (%)": {
+   "published": {
+    "mean": 7.8307,
+    "median": 6.4934,
+    "p95": 15.8335,
+    "p05": 4.1,
+    "min": 3.3347,
+    "max": 19.3734
+   },
+   "unrefined": {
+    "mean": 8.0242,
+    "median": 6.8083,
+    "p95": 16.4965,
+    "p05": 4.2798,
+    "min": 3.8809,
+    "max": 18.4587
+   },
+   "paired_difference_unrefined_minus_published": 0.1935,
+   "object_clustered_95_percent_interval": [
+    -0.2781,
+    0.6611
+   ],
+   "cases_where_unrefined_is_worse": 23,
+   "cases_where_unrefined_is_better": 13,
+   "sign_test_p": 0.132,
+   "wilcoxon_p": 0.112
+  },
+  "mean mesh distance / reference diagonal (%)": {
+   "published": {
+    "mean": 0.0962,
+    "median": 0.0921,
+    "p95": 0.182,
+    "p05": 0.034,
+    "min": 0.0322,
+    "max": 0.2692
+   },
+   "unrefined": {
+    "mean": 0.0957,
+    "median": 0.0887,
+    "p95": 0.1744,
+    "p05": 0.0342,
+    "min": 0.0287,
+    "max": 0.2545
+   },
+   "paired_difference_unrefined_minus_published": -0.0005,
+   "object_clustered_95_percent_interval": [
+    -0.0061,
+    0.0051
+   ],
+   "cases_where_unrefined_is_worse": 18,
+   "cases_where_unrefined_is_better": 18,
+   "sign_test_p": 1.0,
+   "wilcoxon_p": 0.846
+  },
+  "mesh F1 within 0.1% of diagonal (%)": {
+   "published": {
+    "mean": 72.2154,
+    "median": 70.3338,
+    "p95": 96.65,
+    "p05": 43.648,
+    "min": 26.2892,
+    "max": 97.4875
+   },
+   "unrefined": {
+    "mean": 72.4804,
+    "median": 74.862,
+    "p95": 96.358,
+    "p05": 45.3615,
+    "min": 27.1454,
+    "max": 98.4
+   },
+   "paired_difference_unrefined_minus_published": 0.2649,
+   "object_clustered_95_percent_interval": [
+    -1.8896,
+    2.6092
+   ],
+   "cases_where_unrefined_is_worse": 19,
+   "cases_where_unrefined_is_better": 17,
+   "sign_test_p": 0.868,
+   "wilcoxon_p": 0.715
+  },
+  "mesh F1 within 0.5% of diagonal (%)": {
+   "published": {
+    "mean": 97.9278,
+    "median": 98.9034,
+    "p95": 100.0,
+    "p05": 92.8709,
+    "min": 86.5478,
+    "max": 100.0
+   },
+   "unrefined": {
+    "mean": 98.0185,
+    "median": 98.8255,
+    "p95": 100.0,
+    "p05": 93.5634,
+    "min": 88.6187,
+    "max": 100.0
+   },
+   "paired_difference_unrefined_minus_published": 0.0907,
+   "object_clustered_95_percent_interval": [
+    -0.1652,
+    0.3581
+   ],
+   "cases_where_unrefined_is_worse": 14,
+   "cases_where_unrefined_is_better": 15,
+   "sign_test_p": 0.243,
+   "wilcoxon_p": 0.974
+  }
+ },
+ "conclusion": "No measure shows the local build to be better. Over these 36 cases it is statistically indistinguishable from the published file, with a small non-significant tendency to higher latent error (worse in 23 of 36 cases). The published file was kept and nothing was uploaded.",
+ "limits": [
+  "The run was stopped at 36 of 96 cases (the first 12 of 32 objects in protocol order, which cover three of the eight strata: footwear, thin and flat, and handles and cavities) once the comparison was clear; it is not the full cohort.",
+  "Agreement is with original Idol on a selected challenge cohort, not ground-truth 3D accuracy.",
+  "Only the Q8 builds at this size were compared. The larger local variants (for example F16 or mixed-precision denoisers, 1.6 to 1.9 GB) were not scored.",
+  "Timing was not compared: the GPU and CPU were shared with other workloads during the run."
+ ]
+}

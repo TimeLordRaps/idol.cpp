@@ -3,9 +3,16 @@
   "date": "2026-11-06",
   "device": "NVIDIA GeForce RTX 4090 (24,564 MiB), Windows 11, PyTorch 2.10.0+cu128",
   "model": {
-    "file": "local experimental Q8 build, Idol-experimental-Q8_0-octree-Q8_0-nov05.gguf (967 MB class)",
-    "sha256": "61a7b050d6afae4b46eacbe406849a61f04bc71cfe1e8268ae5d001493fd6f22",
-    "note": "Not the published Idol-Q8_0.gguf (sha256 1f6875979bac8c8aecacf0c698662b7c63ff54ae1b6d7c06755297a05607e983); the tensor layout and size are of the same class, so memory should be close, but this was not measured with the published file."
+    "published": {
+      "file": "Idol-Q8_0.gguf (TimeLordRaps/Idol-GGUF)",
+      "sha256": "1f6875979bac8c8aecacf0c698662b7c63ff54ae1b6d7c06755297a05607e983",
+      "note": "Measured once, in published_file_run below."
+    },
+    "earlier_runs": {
+      "file": "local build Idol-experimental-Q8_0-octree-Q8_0-nov05.gguf (967 MB), used for every other run in this record",
+      "sha256": "61a7b050d6afae4b46eacbe406849a61f04bc71cfe1e8268ae5d001493fd6f22",
+      "note": "Differs from the published file only in the rounding of 96 denoiser matrices (see q8-denoiser-calibration-ablation.json); tensor types, shapes and sizes are identical, and the published file gave the same PyTorch peaks."
+    }
   },
   "encoders": "original DINOv3 (facebook/dinov3-vith16plus-pretrain-lvd1689m) and FLUX.2 autoencoder, bfloat16",
   "inputs": {"image": "assets/gallery/axolotl.webp", "mode": "real", "steps": 50, "seed": 42, "gaussians": 262144,
@@ -33,6 +40,16 @@
       "cap_mib": 2560, "result": "completed", "peak_allocated_mib": 1957, "peak_reserved_mib": 2350, "peak_process_mib": 2704,
       "seconds_including_build": 79.9, "second_output_identical_to_first": true
     }
+  },
+  "published_file_run": {
+    "command": "tools/idol_generate_staged.py with the published Idol-Q8_0.gguf, same image, mode, steps, seed and Gaussian count as above, native CPU decoder with 8 threads",
+    "cap_mib": 2560,
+    "result": "completed",
+    "peak_allocated_mib": 1955,
+    "peak_reserved_mib": 2340,
+    "peak_process_mib": 2754,
+    "output": "262,144 Gaussians, all values finite",
+    "note": "PyTorch's allocated and reserved peaks equal those of the earlier build at the same cap. The whole-process figure is 114 MiB above the earlier 2,640 MiB; its cause was not investigated: the counter is sampled every 0.4 s, which can miss short peaks, and each figure is one run on a shared machine. The run took 749 s because the CPU was shared with another Idol workload; this is not a timing."
   },
   "output_comparison": {
     "staged_cap_2560_vs_staged_cap_3584_point_cloud": "byte-identical",
