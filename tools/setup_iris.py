@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 
@@ -32,7 +33,9 @@ def checked_file(path, expected):
     return path
 
 
-def prepare(runner, config, *, image_model=None, text_encoder=None):
+def prepare(runner, config, *, image_model=None, text_encoder=None, max_vram_gib=None):
+    if max_vram_gib is not None and (not math.isfinite(max_vram_gib) or not 1 <= max_vram_gib <= 64):
+        raise ValueError('The graphics-memory budget must be between 1 and 64 GiB')
     runner = Path(runner).expanduser().resolve(strict=True)
     if not runner.is_file() or (os.name != 'nt' and not os.access(runner, os.X_OK)):
         raise ValueError(f'The stable-diffusion.cpp runner is not executable: {runner}')
@@ -53,6 +56,8 @@ def prepare(runner, config, *, image_model=None, text_encoder=None):
                 'license_notice': 'Iris-3B and Qwen3-VL-4B: Apache-2.0',
                 'steps': 30, 'cfg': 3.0, 'sampling_method': 'dpm++2m',
                 'width': 1024, 'height': 1024}
+    if max_vram_gib is not None:
+        settings['max_vram_gib'] = max_vram_gib
     config.parent.mkdir(parents=True, exist_ok=True)
     with config.open('x', encoding='utf-8') as stream:
         json.dump(settings, stream, indent=2)
@@ -66,9 +71,12 @@ def main():
     parser.add_argument('--config', default=default_config_path(), help='New configuration path; existing files are preserved')
     parser.add_argument('--image-model', help='Use an existing tested Iris file instead of downloading it')
     parser.add_argument('--text-encoder', help='Use an existing tested Qwen file instead of downloading it')
+    parser.add_argument('--max-vram-gib', type=float,
+                        help='Graphics-memory budget in GiB for the runner. The runner then loads weights on demand and '
+                             'cuts the graph into segments, which lowers peak memory and slows generation')
     args = parser.parse_args()
     print('Image generator configuration:', prepare(args.runner, args.config,
-          image_model=args.image_model, text_encoder=args.text_encoder))
+          image_model=args.image_model, text_encoder=args.text_encoder, max_vram_gib=args.max_vram_gib))
 
 
 if __name__ == '__main__':

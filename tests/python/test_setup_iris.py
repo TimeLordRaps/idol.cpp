@@ -35,6 +35,28 @@ class IrisSetupTests(unittest.TestCase):
                     setup_iris.prepare(runner, config, image_model=image, text_encoder=encoder)
                 self.assertEqual(config.read_bytes(), before)
 
+    def test_graphics_memory_budget_is_recorded_and_validated(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            runner, image, encoder = (root / name for name in ('sd-cli', 'iris.gguf', 'qwen.gguf'))
+            runner.write_bytes(b'runner')
+            if os.name != 'nt':
+                runner.chmod(0o755)
+            image.write_bytes(b'iris')
+            encoder.write_bytes(b'qwen')
+            iris = (*setup_iris.IRIS[:3], hashlib.sha256(b'iris').hexdigest())
+            qwen = (*setup_iris.QWEN[:3], hashlib.sha256(b'qwen').hexdigest())
+            with patch.object(setup_iris, 'IRIS', iris), patch.object(setup_iris, 'QWEN', qwen):
+                for bad in (0.5, 65, float('nan'), float('inf')):
+                    with self.assertRaisesRegex(ValueError, 'budget'):
+                        setup_iris.prepare(runner, root / 'bad.json', image_model=image, text_encoder=encoder,
+                                           max_vram_gib=bad)
+                    self.assertFalse((root / 'bad.json').exists())
+                setup_iris.prepare(runner, root / 'low.json', image_model=image, text_encoder=encoder, max_vram_gib=2)
+                self.assertEqual(json.loads((root / 'low.json').read_text(encoding='utf-8'))['max_vram_gib'], 2)
+                setup_iris.prepare(runner, root / 'default.json', image_model=image, text_encoder=encoder)
+                self.assertNotIn('max_vram_gib', json.loads((root / 'default.json').read_text(encoding='utf-8')))
+
     def test_mismatched_weights_do_not_create_configuration(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

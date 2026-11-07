@@ -1,0 +1,26 @@
+{
+  "description": "Peak dedicated graphics memory of one stable-diffusion.cpp process generating one Iris-3B image under different --max-vram budgets.",
+  "date": "2026-11-06",
+  "runner": "stable-diffusion.cpp master-f5df5f8, Vulkan build for Windows (sd-master-f5df5f8-bin-win-vulkan-x64)",
+  "device": "NVIDIA GeForce RTX 4090 (24,564 MiB), Windows 11",
+  "models": {
+    "diffusion_model": "Sakura-Iris-3B-Q4_K_M-3.14GiB.gguf",
+    "text_encoder": "Qwen3VL-4B-Instruct-Q4_K_M.gguf"
+  },
+  "settings": {"prompt": "a red armchair", "seed": 42, "steps": 30, "cfg_scale": 3, "sampling_method": "dpm++2m",
+               "width": 1024, "height": 1024, "threads": 4},
+  "method": "The Windows 'GPU Process Memory' dedicated-usage counter for the runner's process, sampled about once per second. Other applications are excluded. Sub-second peaks can be missed, and the figure includes the driver's per-process allocations. One run per row.",
+  "results": [
+    {"max_vram_gib": 16, "note": "previous default", "peak_process_mib": 6710, "seconds": 24.7},
+    {"max_vram_gib": 3, "peak_process_mib": 3287, "seconds": 75.5},
+    {"max_vram_gib": 3, "extra": "--batched-cfg off", "peak_process_mib": 3287, "seconds": 84.0},
+    {"max_vram_gib": 2, "peak_process_mib": 2272, "seconds": 93.2},
+    {"max_vram_gib": 1, "result": "failed: diffusion sampling error"}
+  ],
+  "output_comparison": "For this prompt, the images from budgets 3, 3 with batched guidance off, and 2 were pixel-identical to the 16 GiB image (mean absolute difference 0 of 255). This is one prompt and seed and does not establish identical output in general.",
+  "limits": [
+    "Only the Vulkan runner build was measured; a CUDA build was not.",
+    "--max-vram is a budget for managed weights and runner buffers, not a hard cap; the measured peaks are the evidence.",
+    "A smaller budget streams weights and cuts the graph into segments, so generation is slower (about three to four times here)."
+  ]
+}

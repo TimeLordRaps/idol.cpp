@@ -68,7 +68,7 @@ An equivalent manual configuration uses absolute paths:
 }
 ```
 
-The `cfg` value controls classifier-free guidance, which adjusts how strongly generation follows the prompt. `max_vram_gib` is the runner's graphics-memory budget in gibibytes (one gibibyte is 2³⁰ bytes). Other image models can require a separate `vae` file and different sampling settings.
+The `cfg` value controls classifier-free guidance, which adjusts how strongly generation follows the prompt. `max_vram_gib` is the runner's graphics-memory budget in gibibytes (one gibibyte is 2³⁰ bytes). It is a budget for managed weights and runner buffers, not a hard limit. Lower values make the runner load weights on demand and run the graph in segments, which reduces peak memory and slows generation; see the [measurements](data/iris-memory-budget.json) for 16, 3, 2 and 1. Other image models can require a separate `vae` file and different sampling settings.
 
 The application programming interface (API) is available on the same port. `GET /health` reports whether the model is loaded. Send a multipart image to `POST /v1/reconstructions`, or JSON containing `prompt` to `POST /v1/text-to-3d` when an image generator is configured. Both return a PLY file and an `X-Idol-Metadata` header pointing to the result metadata; prompt results also include the URL-encoded `X-Idol-Image-Model` and generated-image `X-Idol-Input` headers. Optional fields are `mode`, `seed`, `steps`, and `gaussians`. The service has no authentication: its default loopback address keeps it local; exposing it on a network requires an authenticated proxy.
 

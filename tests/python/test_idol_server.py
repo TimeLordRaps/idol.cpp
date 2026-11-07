@@ -275,6 +275,7 @@ class ServerTests(unittest.TestCase):
             self.assertEqual(args[args.index('--llm') + 1], str(root / names[2]))
             self.assertEqual(args[args.index('--vae') + 1], str(root / names[3]))
             self.assertEqual(args[args.index('--seed') + 1], '42')
+            self.assertEqual(float(args[args.index('--max-vram') + 1]), 16.0)
             return type('Result', (), {'returncode': 0, 'stdout': b''})()
         with patch('idol_image.subprocess.run', side_effect=fake_run):
             image, model, components = generator.generate('a chair', 42)
@@ -291,6 +292,15 @@ class ServerTests(unittest.TestCase):
         with patch('idol_image.subprocess.run', side_effect=fake_iris):
             _, _, components = generator.generate('a chair', 42)
         self.assertNotIn('vae', components)
+        config['max_vram_gib'] = 2
+        path.write_text(json.dumps(config))
+        generator = LocalImageGenerator(path)
+        def fake_budget(args, **kwargs):
+            self.assertEqual(float(args[args.index('--max-vram') + 1]), 2.0)
+            Path(args[args.index('--output') + 1]).write_bytes(image_bytes())
+            return type('Result', (), {'returncode': 0, 'stdout': b''})()
+        with patch('idol_image.subprocess.run', side_effect=fake_budget):
+            generator.generate('a chair', 42)
 
 
 if __name__ == '__main__':

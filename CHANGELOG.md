@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Ignore local build variants, the cloned upstream SDK, and test caches.
+- Add `--max-vram-gib` to `tools/setup_iris.py` and document how the image generator's graphics-memory budget affects peak memory and speed, with a measurement record.
 - Install `python3-dev` in the Docker image so Triton can compile its CUDA helper and the fused-kernel path runs in the container.
 - Build a pinned GGML (v0.29.0) shared library in the Docker image so the K-block quantization tests run there instead of skipping.
 

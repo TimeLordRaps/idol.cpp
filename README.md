@@ -52,6 +52,8 @@ python tools/setup_iris.py --runner /path/to/sd-cli
 
 The setup downloads pinned files, checks their Secure Hash Algorithm 256-bit (SHA-256) digests, and does not overwrite an existing configuration. Use `--image-model` and `--text-encoder` to reuse the tested files on disk. The tested runner was stable-diffusion.cpp `master-1052-f5df5f8`; other versions have not been established as compatible. The generator exits before Idol loads, and the existing Idol session is released before a new prompt to reduce simultaneous GPU use. This adds loading time.
 
+To limit the generator's graphics memory, add `--max-vram-gib 2` (or `3`) to `setup_iris.py`, or set `max_vram_gib` in the configuration. The runner then loads only the weights it needs and cuts the graph into segments, so the text encoder and the image model are not resident together. In one run on an RTX 4090 with the Vulkan runner, the generator's process peaked at 6,710 MiB with the previous 16 GiB budget, 3,287 MiB with 3, and 2,272 MiB with 2, at about three to four times the generation time; a budget of 1 failed. The images matched the 16 GiB image pixel for pixel for that one prompt. This covers the image generator only, not Idol; see the [measurement record](docs/data/iris-memory-budget.json).
+
 The browser displays the configured image-model and text-encoder filenames and the generated image. For an external service, its reported model identity is displayed; filenames and service labels alone do not independently verify the loaded weights. See [development and configuration details](docs/development.md) for optional image services and manual settings.
 
 ## Mesh generation and comparison
