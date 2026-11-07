@@ -141,9 +141,67 @@
     "note": "The pairs disagree in sign because the graphics device was shared with another workload; they are not a measurement of lean mode's cost. A generation in lean mode restores about 3.7 GB, which took 3.5 s in the restore measurement above."
   },
   "not_established": [
-    "A run on a computer with little memory. No machine with 4, 6 or 8 GB was available; the figures are of the process on a 64 GiB computer, where Windows does not take memory back from it.",
+    "A run on a real computer with little memory. The Windows figures are of the process on a 64 GiB computer, where the system does not take memory back from it; the container test above limits the process but not an operating system beside it.",
     "The operating system's own use, which is why the thresholds add a 1,024 MiB headroom.",
     "Linux or macOS; the metric is a Windows one.",
     "Host memory of the separate image generator for text prompts."
-  ]
+  ],
+  "capped_container": {
+    "description": "The server's Runtime (tools/idol_server.py, default probes) building a session and generating twice inside a Linux container with a hard memory limit and no swap, to test the one thing the Windows figures cannot: whether the process survives a small memory limit.",
+    "date": "2026-11-07",
+    "method": "docker run --gpus all --memory=N --memory-swap=N (cgroup v2, Docker Desktop on WSL2, container image built from commit 98bf745), the model and the Hugging Face cache mounted read-only, HF_HUB_OFFLINE=1, Runtime(vram_budget_gib=4) so that the graphics plan is staged, and --memory-mode auto, staged or lean. Counters are the container's own (memory.stat, memory.events), sampled every 100 ms, so a shorter peak can be missed. 'anon' is the process's own memory; 'file' is page cache, which the kernel drops and reads again, and which fills the limit by design. Two generations of the axolotl image, seed 42, two steps, original encoders.",
+    "runs": [
+      {
+        "limit_mib": 6144,
+        "mode": "auto (chose lean because the cgroup limit left 6,128 MiB free, under the 6,207 MiB threshold)",
+        "exit": 0,
+        "completed_generations": 2,
+        "peak_anon_mib": 2301,
+        "peak_file_cache_mib": 4510,
+        "oom_kills": 0,
+        "seconds_per_generation": [
+          163.0,
+          83.1
+        ],
+        "output_sha256": "c6c7fd8d4bbb230e6d5b6c69d98a7242276719eb9d5de9a20addff45993f8ec2"
+      },
+      {
+        "limit_mib": 4096,
+        "mode": "lean",
+        "exit": 0,
+        "completed_generations": 2,
+        "peak_anon_mib": 2311,
+        "peak_file_cache_mib": 2802,
+        "oom_kills": 0,
+        "seconds_per_generation": [
+          66.0,
+          9.6
+        ],
+        "lean_cache_mib": 3703,
+        "output_sha256": "c6c7fd8d4bbb230e6d5b6c69d98a7242276719eb9d5de9a20addff45993f8ec2"
+      },
+      {
+        "limit_mib": 6144,
+        "mode": "staged",
+        "exit": 137,
+        "completed_generations": 1,
+        "anon_mib_after_first_generation": 5551,
+        "result": "killed for running out of memory during the second generation"
+      },
+      {
+        "limit_mib": 4096,
+        "mode": "staged",
+        "exit": 137,
+        "completed_generations": 0,
+        "result": "killed for running out of memory before the first generation finished (38 s in)"
+      }
+    ],
+    "reading": "Under a hard 4 GiB limit lean mode finished two generations and staged mode did not finish one; under 6 GiB lean mode finished and staged mode was killed in its second generation. The lean output was identical across the two limits and across the two generations. The process's own memory peaked at about 2.3 GB, below the 3.3 GB measured on Windows, because the Windows figure includes pages the driver and libraries hold that Linux counts elsewhere; the thresholds in tools/idol_memory.py use the Windows figures and are therefore conservative on Linux.",
+    "not_shown": [
+      "A real 4 GB computer. The limit applies to this process alone; an operating system, a desktop and other programs beside it are not counted, which is the reason the thresholds add 1,024 MiB.",
+      "The graphics side of a 4 GB card. The device was a 24 GB card with another workload on it, and the 4 GiB was a stated budget; the staged process's measured graphics peak (2,754 MiB, docs/data/idol-staged-memory.json) is what suggests it fits.",
+      "That lean and staged outputs are identical on Linux: staged mode was killed before it wrote its second result, and its first result was not hashed. Their equality was shown on Windows.",
+      "Speed. Both the graphics device and the Windows file-sharing layer under the mounted files were busy, and the first generation includes building the session."
+    ]
+  }
 }
