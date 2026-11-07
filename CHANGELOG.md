@@ -1,6 +1,10 @@
 # Changelog
 
-## 0.1.0
+## Unreleased
+
+- Ignore local build variants, the cloned upstream SDK, and test caches.
+
+## 0.1.0 (2026-11-06)
 
 - Added a 32-object, 96-case matched-seed fidelity benchmark, including mesh and approximate-view comparisons and the observed worst case.
 - Applied the Apache License 2.0 to the project source and retained separate third-party notices.

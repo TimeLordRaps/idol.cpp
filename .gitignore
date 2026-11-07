@@ -2,11 +2,15 @@
 /build/
 /out/
 cmake-build-*/
+/build_*/
 
 # Python
 .venv/
 __pycache__/
 *.pyc
+*.egg-info/
+.pytest_cache/
+.benchmarks/
 
 # Meshes and exports written by the tools
 *.obj
@@ -17,3 +21,7 @@ __pycache__/
 .idea/
 .vscode/
 CMakeUserPresets.json
+
+# Local clone of the upstream SDK (see README, Install) and downloaded model caches
+/idol-sdk/
+decoder-cache/
