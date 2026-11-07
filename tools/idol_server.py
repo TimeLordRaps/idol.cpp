@@ -10,6 +10,7 @@ import tempfile
 import threading
 import time
 import uuid
+from contextlib import nullcontext
 from pathlib import Path
 from urllib.parse import quote, urlsplit
 from urllib.request import Request, urlopen
@@ -94,15 +95,22 @@ class Runtime:
     def _get_session(self):
         if self.session is None:
             factory = self.session_factory
+            construction = nullcontext()
             if factory is None:
                 from idol_session import IdolSession
                 factory = IdolSession
-            self.session = factory(self.model, device=self.device,
-                                   packed_denoiser=self.packed_denoiser,
-                                   fused_kernels=self.fused_kernels,
-                                   resident_gpu=self.resident_gpu, batch_guidance=self.batch_guidance,
-                                   cudnn_attention=self.cudnn_attention,
-                                   dino_gguf=self.dino_gguf, flux_vae_gguf=self.flux_vae_gguf)
+                if not self.resident_gpu:
+                    # Staged inference moves each model to the GPU only while it is used; build them on the CPU
+                    # so they are never all on the GPU at once.
+                    from idol_staging import staged_construction
+                    construction = staged_construction()
+            with construction:
+                self.session = factory(self.model, device=self.device,
+                                       packed_denoiser=self.packed_denoiser,
+                                       fused_kernels=self.fused_kernels,
+                                       resident_gpu=self.resident_gpu, batch_guidance=self.batch_guidance,
+                                       cudnn_attention=self.cudnn_attention,
+                                       dino_gguf=self.dino_gguf, flux_vae_gguf=self.flux_vae_gguf)
         return self.session
 
     def preload(self):

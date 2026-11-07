@@ -1,4 +1,5 @@
 import base64
+import contextlib
 import hashlib
 import io
 import json
@@ -7,6 +8,7 @@ import sys
 import tempfile
 import threading
 import unittest
+from types import SimpleNamespace
 from unittest.mock import patch
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
@@ -90,6 +92,30 @@ class ServerTests(unittest.TestCase):
         self.assertTrue(self.client.get('/health').json()['model_loaded'])
         self.runtime.run(image=image_bytes())
         self.assertEqual(len(FakeSession.instances), 1)
+
+    def test_staged_sessions_are_built_on_the_cpu_and_resident_ones_are_not(self):
+        events = []
+
+        class Session:
+            def __init__(self, model, **kwargs):
+                events.append(('session', kwargs['resident_gpu']))
+
+        @contextlib.contextmanager
+        def staged_construction():
+            events.append(('enter',))
+            try:
+                yield
+            finally:
+                events.append(('exit',))
+
+        modules = {'idol_session': SimpleNamespace(IdolSession=Session),
+                   'idol_staging': SimpleNamespace(staged_construction=staged_construction)}
+        with patch.dict(sys.modules, modules):
+            Runtime('model.gguf', self.temp.name, resident_gpu=False).preload()
+            self.assertEqual(events, [('enter',), ('session', False), ('exit',)])
+            events.clear()
+            Runtime('model.gguf', self.temp.name, resident_gpu=True).preload()
+            self.assertEqual(events, [('session', True)])
 
     def test_encoder_files_are_forwarded_to_session(self):
         self.runtime.dino_gguf = Path('dino.gguf')
