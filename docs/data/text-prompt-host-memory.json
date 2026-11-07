@@ -1,0 +1,97 @@
+{
+  "description": "Host memory (system RAM) of the image generator that turns a text prompt into the image Idol reconstructs, alone at several graphics budgets, with and without memory-mapped weights, and of complete text-to-3D requests through the server. It fills the gap left by idol-lowram.json, which measured Idol alone.",
+  "date": "2026-11-07",
+  "device": "NVIDIA GeForce RTX 4090 (24,564 MiB) with 64 GiB of system memory, Windows 11. The device and the CPU were shared with unrelated heavy workloads during every run; memory counters are the measured processes' own, elapsed times are not meaningful and are not reported.",
+  "metric": {
+    "name": "private working set",
+    "definition": "Resident pages of the process (and of its child processes, summed) that are not shared or file-backed, from QueryWorkingSet read about every 0.25 s, so a shorter peak can be missed. Memory-mapped model files are not counted in it; the total working set, which counts them, is reported beside it. Pages of a mapped file can be dropped by the operating system and read again, which private memory cannot."
+  },
+  "models": {
+    "idol": "published Idol-Q8_0.gguf, sha256 1f6875979bac8c8aecacf0c698662b7c63ff54ae1b6d7c06755297a05607e983",
+    "image_generator": "stable-diffusion.cpp master-f5df5f8 (Vulkan) with Sakura-Iris-3B-Q4_K_M-3.14GiB.gguf and Qwen3VL-4B-Instruct-Q4_K_M.gguf"
+  },
+  "image_generator_alone": {
+    "settings": "prompt 'a red armchair', seed 42, 8 denoising steps, cfg scale 3, dpm++2m, 1024 x 1024, 4 threads; one run per row. Host memory does not depend on the step count.",
+    "default_loading": [
+      {
+        "max_vram_gib": 16,
+        "peak_private_working_set_mib": 1093,
+        "peak_total_working_set_mib": 1147
+      },
+      {
+        "max_vram_gib": 6,
+        "peak_private_working_set_mib": 3547,
+        "peak_total_working_set_mib": 3582
+      },
+      {
+        "max_vram_gib": 4,
+        "peak_private_working_set_mib": 6898,
+        "peak_total_working_set_mib": 6933
+      },
+      {
+        "max_vram_gib": 3,
+        "peak_private_working_set_mib": 6846,
+        "peak_total_working_set_mib": 6881
+      },
+      {
+        "max_vram_gib": 2,
+        "peak_private_working_set_mib": 6737,
+        "peak_total_working_set_mib": 6772
+      }
+    ],
+    "memory_mapped_weights": {
+      "option": "--mmap",
+      "runs": [
+        {
+          "max_vram_gib": 4,
+          "peak_private_working_set_mib": 1425,
+          "peak_total_working_set_mib": 6994
+        },
+        {
+          "max_vram_gib": 3,
+          "peak_private_working_set_mib": 1198,
+          "peak_total_working_set_mib": 6667
+        },
+        {
+          "max_vram_gib": 2,
+          "peak_private_working_set_mib": 2397,
+          "peak_total_working_set_mib": 7966
+        }
+      ]
+    },
+    "images": "All eight PNG files are byte-identical (SHA-256 ad6d97e4077773df6b70232911a73958dfab10924fd2dfc24ea143dd741124b2).",
+    "reading": "With the default loading the generator holds the weights it cannot fit in graphics memory as private host memory: about 1.1 GB when every weight is resident (a budget of 16 GiB), 3.5 GB at 6 GiB and 6.7 to 6.9 GB at 4 GiB and below. With --mmap the private memory stayed at 1.2 to 1.4 GB at budgets of 3 and 4 GiB and 2.4 GB at 2 GiB, while the total working set, which counts the mapped files, stayed near 6.7 to 8 GB."
+  },
+  "text_to_3d_through_the_server": {
+    "command": "tools/idol_server.py with the published Idol-Q8_0.gguf, the tested Iris and Qwen files, --vram-budget-gib 4 and --memory-mode staged or lean; one POST /v1/text-to-3d with the prompt 'a red armchair', 50 Idol steps, the configured 30 image steps",
+    "choices_made": "Image generator: --max-vram 3, default loading (the server does not pass --mmap). The Idol session was released while the image was generated and rebuilt afterwards.",
+    "runs": {
+      "staged": {
+        "idol_memory_mode": "staged",
+        "http_status": 200,
+        "peak_summed_private_working_set_mib": 6985,
+        "peak_summed_total_working_set_mib": 7924,
+        "peak_single_process_private_mib": 6846,
+        "peak_single_process": "sd-cli.exe",
+        "peak_summed_dedicated_graphics_mib": 3328
+      },
+      "lean": {
+        "idol_memory_mode": "lean",
+        "http_status": 200,
+        "peak_summed_private_working_set_mib": 6986,
+        "peak_summed_total_working_set_mib": 7058,
+        "peak_single_process_private_mib": 6846,
+        "peak_single_process": "sd-cli.exe",
+        "peak_summed_dedicated_graphics_mib": 3300
+      }
+    },
+    "same_point_cloud": "Both requests returned a 262,144-Gaussian point cloud of 17,826,208 bytes with the same SHA-256 (fd15b8ee656bbb46eaa1f6291d9ab763730686f77f39b739bb489ce10aee5dc8).",
+    "reading": "In both modes the host peak of the whole request was the image generator: its own private working set peaked at 6,846 MiB and the sum over the server and its children at 6,985 and 6,986 MiB. Idol's own peak is lower (staged 5,183 MiB, lean 3,286 MiB, idol-lowram.json), so lean mode lowered the host memory of Idol's stages but not of this request. Graphics memory summed over the process tree peaked at 3,328 MiB (staged) and 3,300 MiB (lean)."
+  },
+  "limits": [
+    "One RTX 4090 and one 64 GiB Windows computer with the Vulkan runner. No computer with 4 to 6 GB of system memory was tested, and no memory limit was applied, so how --mmap behaves when the mapped pages must really be read back from a disk, including how much slower it is, was not measured.",
+    "The server's --mmap behaviour was not measured: the server does not pass the option, so the end-to-end rows use the default loading.",
+    "One prompt and one seed. The 8-step runs of the generator alone and the 30-step requests through the server were not compared with each other.",
+    "The private working set misses peaks shorter than the sampling interval; the total working set includes pages the system keeps in its file cache."
+  ]
+}
