@@ -4,6 +4,7 @@
 
 - Ignore local build variants, the cloned upstream SDK, and test caches.
 - Install `python3-dev` in the Docker image so Triton can compile its CUDA helper and the fused-kernel path runs in the container.
+- Build a pinned GGML (v0.29.0) shared library in the Docker image so the K-block quantization tests run there instead of skipping.
 
 ## 0.1.0 (2026-11-06)
 

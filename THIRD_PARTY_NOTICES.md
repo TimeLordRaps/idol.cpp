@@ -62,6 +62,9 @@ protocol preserves each original object source URL and input digest. See the
 
 `tools/idol_packed.py` includes block-decoding formulas adapted from gguf-py.
 
+The Docker image also builds [GGML](https://github.com/ggml-org/ggml) v0.29.0 from source (MIT license, the
+notice below) so the K-block quantization tests can run. It is not part of the repository source or the shipped model.
+
 MIT License
 
 Copyright (c) 2023 Georgi Gerganov

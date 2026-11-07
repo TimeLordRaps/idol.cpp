@@ -227,4 +227,18 @@ In a separate [shared-anchor comparison](data/gaussian-q4-q6-shared-anchors.json
 
 One [full image-to-point-cloud run](data/gaussian-weighted-mixed-full-run.json) with the weighted mixed two-/four-bit Gaussian model produced the original-runtime latent and the same point-cloud bytes as the expanded-weight experiment. It took 49.9 seconds after Python imports on an NVIDIA GeForce RTX 4090; PyTorch reported 3.56 billion bytes of peak allocated graphics memory. This single run is not a latency distribution, and the PyTorch counter excludes other graphics-memory users and host memory.
 
+## Running every test in Docker
+
+`docker build` runs the CPU test suite, including the K-block quantization tests, which use the GGML library the
+image builds and exposes as `IDOL_GGML_LIB`. A build has no GPU, so the fused-kernel test is skipped there. On a machine
+with an NVIDIA GPU and the container toolkit, run it in the finished image:
+
+```bash
+docker run --rm --gpus all -e IDOL_TEST_GPU=1 idol-cpp \
+  ctest --test-dir build -R fused_packed_gpu --output-on-failure
+```
+
+Triton compiles a small CUDA helper on first use, so the container needs a writable `/root` and `/tmp`. A read-only
+root file system must mount both as `tmpfs`.
+
 The native library and this repository's source code are available under the [Apache License 2.0](../LICENSE). The upstream Idol model and its separately licensed dependencies have their own terms; consult their original repositories and the [third-party notices](../THIRD_PARTY_NOTICES.md).
