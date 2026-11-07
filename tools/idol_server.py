@@ -6,6 +6,7 @@ import binascii
 import hashlib
 import json
 import os
+import sys
 import tempfile
 import threading
 import time
@@ -14,6 +15,8 @@ from contextlib import nullcontext
 from pathlib import Path
 from urllib.parse import quote, urlsplit
 from urllib.request import Request, urlopen
+
+from idol_memory import available_mib, keep_idol_loaded, plan_idol
 
 MAX_IMAGE_BYTES = 20 * 1024 * 1024
 
@@ -69,10 +72,18 @@ def image_from_prompt(endpoint, prompt):
 
 
 class Runtime:
+    """Hold one Idol session and, optionally, an image generator.
+
+    `resident_gpu`, `batch_guidance` and `cudnn_attention` left as None are chosen from the graphics memory
+    that is free when the session is built (`idol_memory.plan_idol`): everything resident and fast when it
+    fits, otherwise staged through the device. A value that is set is used as given. `vram_budget_gib`
+    states how much graphics memory this program may count on instead of the amount measured free."""
+
     def __init__(self, model, output_dir, *, image_server=None, device='cuda',
-                 packed_denoiser=False, fused_kernels=False, resident_gpu=False, session_factory=None,
-                 image_generator=None, batch_guidance=False, cudnn_attention=False,
-                 dino_gguf=None, flux_vae_gguf=None, mesh_executable=None):
+                 packed_denoiser=False, fused_kernels=False, resident_gpu=None, session_factory=None,
+                 image_generator=None, batch_guidance=None, cudnn_attention=None,
+                 dino_gguf=None, flux_vae_gguf=None, mesh_executable=None,
+                 vram_budget_gib=None, memory_probe=None):
         self.model = str(model)
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
@@ -87,19 +98,35 @@ class Runtime:
         self.dino_gguf = dino_gguf
         self.flux_vae_gguf = flux_vae_gguf
         self.session_factory = session_factory
+        self.vram_budget_gib = vram_budget_gib
+        self.memory_probe = memory_probe or (lambda: available_mib(self.device, self.vram_budget_gib))
+        self.memory_mode = None
         self.session = None
         self.lock = threading.Lock()
         from idol_mesh_tools import find_mesh_executable
         self.mesh_executable = find_mesh_executable(mesh_executable)
 
+    def _session_settings(self):
+        """(resident, batch guidance, cuDNN attention) for the next session, and why."""
+        if self.resident_gpu is not None:
+            # An explicit mode is honored exactly: the speed options stay off unless they were asked for.
+            return self.resident_gpu, bool(self.batch_guidance), bool(self.cudnn_attention), 'set explicitly'
+        plan = plan_idol(self.memory_probe())
+        batch = plan.batch_guidance if self.batch_guidance is None else self.batch_guidance
+        cudnn = plan.cudnn_attention if self.cudnn_attention is None else self.cudnn_attention
+        return plan.resident, batch, cudnn, plan.reason
+
     def _get_session(self):
         if self.session is None:
+            resident, batch_guidance, cudnn_attention, reason = self._session_settings()
+            self.memory_mode = 'resident' if resident else 'staged'
+            print(f'Idol memory mode: {self.memory_mode} ({reason})', file=sys.stderr, flush=True)
             factory = self.session_factory
             construction = nullcontext()
             if factory is None:
                 from idol_session import IdolSession
                 factory = IdolSession
-                if not self.resident_gpu:
+                if not resident:
                     # Staged inference moves each model to the GPU only while it is used; build them on the CPU
                     # so they are never all on the GPU at once.
                     from idol_staging import staged_construction
@@ -108,10 +135,21 @@ class Runtime:
                 self.session = factory(self.model, device=self.device,
                                        packed_denoiser=self.packed_denoiser,
                                        fused_kernels=self.fused_kernels,
-                                       resident_gpu=self.resident_gpu, batch_guidance=self.batch_guidance,
-                                       cudnn_attention=self.cudnn_attention,
+                                       resident_gpu=resident, batch_guidance=batch_guidance,
+                                       cudnn_attention=cudnn_attention,
                                        dino_gguf=self.dino_gguf, flux_vae_gguf=self.flux_vae_gguf)
         return self.session
+
+    def _release_session_for_image_generator(self):
+        """Free the session before a prompt's image is generated, unless both comfortably fit together.
+
+        With a stated budget the session's own use cannot be separated from it, so it is always released."""
+        if self.session is None:
+            return
+        if self.vram_budget_gib is None and keep_idol_loaded(self.memory_probe()):
+            return
+        previous, self.session, self.memory_mode = self.session, None, None
+        previous.close()
 
     def preload(self):
         with self.lock:
@@ -133,9 +171,7 @@ class Runtime:
             model, model_components = None, None
             if prompt:
                 if self.image_generator:
-                    if self.session is not None:
-                        previous, self.session = self.session, None
-                        previous.close()
+                    self._release_session_for_image_generator()
                     image, model, model_components = self.image_generator.generate(prompt, seed)
                 else:
                     image, model, model_components = image_from_prompt(self.image_server, prompt)
@@ -267,6 +303,7 @@ def create_app(runtime, *, ui=True):
     def health():
         return {'status': 'busy' if runtime.lock.locked() else 'ready',
                 'model_loaded': runtime.session is not None,
+                'memory_mode': runtime.memory_mode,
                 'text_to_image_configured': bool(runtime.image_server or runtime.image_generator),
                 'image_model': runtime.image_generator.label if runtime.image_generator else None,
                 'mesh_generation_available': runtime.mesh_executable is not None}
@@ -517,13 +554,22 @@ def main():
     parser.add_argument('--preload', action='store_true', help='Load the model before accepting requests')
     parser.add_argument('--packed-denoiser', action='store_true')
     parser.add_argument('--fused-kernels', action='store_true')
-    parser.add_argument('--resident-gpu', action='store_true',
-                        help='Keep models on the graphics device between pipeline phases')
-    parser.add_argument('--batch-guidance', action='store_true',
-                        help='Batch the conditional and unconditional denoising passes')
-    parser.add_argument('--cudnn-attention', action='store_true',
-                        help='Use cuDNN attention, TF32 matmuls, and batched guidance while sampling')
+    parser.add_argument('--memory-mode', choices=('auto', 'resident', 'staged'), default='auto',
+                        help='auto (default) measures free graphics memory: with enough, every model stays on the '
+                             'device with batched guidance and cuDNN attention (fastest); otherwise models are built '
+                             'on the CPU and visit the device one stage at a time. resident and staged force a mode.')
+    parser.add_argument('--resident-gpu', dest='memory_mode', action='store_const', const='resident',
+                        help='Same as --memory-mode resident: keep models on the graphics device between pipeline phases')
+    parser.add_argument('--batch-guidance', action=argparse.BooleanOptionalAction, default=None,
+                        help='Batch the conditional and unconditional denoising passes (default: on in resident auto mode)')
+    parser.add_argument('--cudnn-attention', action=argparse.BooleanOptionalAction, default=None,
+                        help='Use cuDNN attention and TF32 matmuls while sampling (default: on in resident auto mode)')
+    parser.add_argument('--vram-budget-gib', type=float,
+                        help='Graphics memory, in GiB, this program may count on, instead of the amount measured free. '
+                             'Use it to leave room for other programs, or when the device cannot be measured')
     args = parser.parse_args()
+    if args.vram_budget_gib is not None and not 0.5 <= args.vram_budget_gib <= 1024:
+        parser.error('--vram-budget-gib must be between 0.5 and 1024')
     if args.repo and not args.file:
         parser.error('--file is required with --repo')
     if args.model and args.file:
@@ -550,17 +596,20 @@ def main():
     image_generator = None
     if args.image_config:
         from idol_image import LocalImageGenerator
-        image_generator = LocalImageGenerator(args.image_config)
+        image_generator = LocalImageGenerator(
+            args.image_config, memory_probe=lambda: available_mib(args.device, args.vram_budget_gib))
     if args.repo:
         from huggingface_hub import hf_hub_download
         args.model = hf_hub_download(args.repo, args.file, revision=args.revision)
     import uvicorn
     runtime = Runtime(args.model, args.output_dir, image_server=args.image_server,
                       device=args.device, packed_denoiser=args.packed_denoiser,
-                      fused_kernels=args.fused_kernels, resident_gpu=args.resident_gpu,
+                      fused_kernels=args.fused_kernels,
+                      resident_gpu={'auto': None, 'resident': True, 'staged': False}[args.memory_mode],
                       image_generator=image_generator, batch_guidance=args.batch_guidance,
                       cudnn_attention=args.cudnn_attention, dino_gguf=args.dino_gguf,
-                      flux_vae_gguf=args.flux_vae_gguf, mesh_executable=args.mesh_executable)
+                      flux_vae_gguf=args.flux_vae_gguf, mesh_executable=args.mesh_executable,
+                      vram_budget_gib=args.vram_budget_gib)
     try:
         if args.preload:
             runtime.preload()

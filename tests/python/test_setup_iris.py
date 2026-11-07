@@ -47,7 +47,7 @@ class IrisSetupTests(unittest.TestCase):
             iris = (*setup_iris.IRIS[:3], hashlib.sha256(b'iris').hexdigest())
             qwen = (*setup_iris.QWEN[:3], hashlib.sha256(b'qwen').hexdigest())
             with patch.object(setup_iris, 'IRIS', iris), patch.object(setup_iris, 'QWEN', qwen):
-                for bad in (0.5, 65, float('nan'), float('inf')):
+                for bad in (0.5, 65, float('nan'), float('inf'), 'low', True):
                     with self.assertRaisesRegex(ValueError, 'budget'):
                         setup_iris.prepare(runner, root / 'bad.json', image_model=image, text_encoder=encoder,
                                            max_vram_gib=bad)
@@ -56,6 +56,9 @@ class IrisSetupTests(unittest.TestCase):
                 self.assertEqual(json.loads((root / 'low.json').read_text(encoding='utf-8'))['max_vram_gib'], 2)
                 setup_iris.prepare(runner, root / 'default.json', image_model=image, text_encoder=encoder)
                 self.assertNotIn('max_vram_gib', json.loads((root / 'default.json').read_text(encoding='utf-8')))
+                setup_iris.prepare(runner, root / 'auto.json', image_model=image, text_encoder=encoder,
+                                   max_vram_gib='auto')
+                self.assertEqual(json.loads((root / 'auto.json').read_text(encoding='utf-8'))['max_vram_gib'], 'auto')
 
     def test_mismatched_weights_do_not_create_configuration(self):
         with tempfile.TemporaryDirectory() as directory:

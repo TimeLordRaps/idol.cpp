@@ -1,0 +1,51 @@
+{
+  "description": "Whole-process graphics memory of Idol in its resident and staged modes, and of the image generator at several --max-vram budgets. These figures set the thresholds in tools/idol_memory.py, which chooses a mode and a budget from the memory that is free.",
+  "date": "2026-11-06",
+  "device": "NVIDIA GeForce RTX 4090 (24,564 MiB), Windows 11, PyTorch 2.10.0+cu128",
+  "method": "The Windows 'GPU Process Memory' dedicated-usage counter of the measured process, sampled about every 0.4 s, so brief peaks can be missed and the figure includes the CUDA context. Other applications are excluded. PyTorch allocated and reserved peaks are PyTorch's counters. One run per row.",
+  "idol": {
+    "model": "published Idol-Q8_0.gguf, sha256 1f6875979bac8c8aecacf0c698662b7c63ff54ae1b6d7c06755297a05607e983",
+    "settings": "axolotl image, real mode, 50 steps, seed 42, 262,144 Gaussians, original encoders, GPU decoders (an IdolSession), two generations in the same session, no allocator cap, no fused kernels unless stated",
+    "runs": [
+      {"mode": "resident", "options": "resident GPU, batched guidance, cuDNN attention", "peak_process_mib": 5976, "peak_allocated_mib": 4918, "peak_reserved_mib": 5550},
+      {"mode": "resident, fused kernels", "options": "as above with --fused-kernels", "peak_process_mib": 5622, "peak_allocated_mib": 4508, "peak_reserved_mib": 5194},
+      {"mode": "staged", "options": "built on the CPU, one stage on the device at a time", "peak_process_mib": 3016, "peak_allocated_mib": 1957, "peak_reserved_mib": 2606}
+    ],
+    "note": "Under a 2.5 GiB allocator cap the staged mode peaked at 2,704 to 2,754 MiB (idol-staged-memory.json); the server sets no cap, so the uncapped figure is the one used."
+  },
+  "image_generator": {
+    "runner": "stable-diffusion.cpp master-f5df5f8, Vulkan build for Windows",
+    "models": "Sakura-Iris-3B-Q4_K_M-3.14GiB.gguf and Qwen3VL-4B-Instruct-Q4_K_M.gguf",
+    "settings": "prompt 'a red armchair', seed 42, 30 steps, cfg scale 3, dpm++2m, 1024 x 1024, 4 threads",
+    "runs": [
+      {"max_vram_gib": 16, "peak_process_mib": 6710},
+      {"max_vram_gib": 8, "peak_process_mib": 6710},
+      {"max_vram_gib": 6, "peak_process_mib": 4395},
+      {"max_vram_gib": 5, "peak_process_mib": 4402},
+      {"max_vram_gib": 4, "peak_process_mib": 4342}
+    ],
+    "earlier_runs": "iris-memory-budget.json: 3 GiB peaked at 3,287 MiB, 2 GiB at 2,272 MiB, and 1 GiB failed.",
+    "images": "The images at 8, 6, 5 and 4 GiB were pixel-identical to the 16 GiB image (mean absolute difference 0 of 255). One prompt and seed.",
+    "shape": "Peak memory does not follow the budget linearly: 4, 5 and 6 GiB all peak near 4.4 GiB, and 8 GiB and above hold every weight at 6,710 MiB."
+  },
+  "end_to_end_small_budget": {
+    "command": "tools/idol_server.py with the published Idol-Q8_0.gguf, the tested Iris and Qwen files, and --vram-budget-gib 4; one POST /v1/text-to-3d with the prompt 'a red armchair', 50 steps",
+    "choices_made": "Idol: staged (4,096 MiB counted as free). Image generator: --max-vram 3 (largest measured budget whose 3,287 MiB peak fits in 4,096 - 512 MiB). The Idol session was released while the image was generated and rebuilt afterwards.",
+    "result": "HTTP 200 with a valid 262,144-Gaussian point cloud; /health afterwards reported memory_mode staged and model_loaded true.",
+    "peak_summed_dedicated_mib": 3332,
+    "how_measured": "The server process and its child processes (the image generator) were sampled together through the Windows 'GPU Process Memory' counter, 250 samples over 399 s (about every 1.6 s), and summed at each sample. Short peaks between samples can be missed.",
+    "limits": "The device was a 24 GB RTX 4090 with other work running on it, so the 4 GiB was a stated budget, not a card's capacity; a real 4 GB card also gives some memory to the display, which the automatic choice would see as less free and answer with a smaller budget. The 399 s is not a timing: the device was shared with another heavy workload."
+  },
+  "thresholds": {
+    "headroom_mib": 512,
+    "idol_resident_needs_free_mib": "5,976 + 512 = 6,488",
+    "idol_staged_needs_free_mib": "3,016 (staging is tried even when less is free)",
+    "image_generator_full_size_needs_free_mib": "6,710 + 512 = 7,222; below that, the largest measured budget whose peak fits",
+    "session_kept_loaded_during_a_prompt_when_free_mib_at_least": "7,222 with the session still loaded"
+  },
+  "limits": [
+    "Generation times are not reported: another heavy GPU workload shared the device during these runs (the 16 GiB image took 230 s here against 24.7 s in the earlier, quieter run), so the times say nothing about speed. The speed ordering (more resident is faster) rests on iris-memory-budget.json and the earlier resident and staged timings in the README.",
+    "One RTX 4090 on Windows with the Vulkan runner. Other drivers, resolutions, model files and operating systems move these figures, which is why every choice keeps a headroom.",
+    "Budgets of 7 and the fractional budgets between the measured ones were not measured."
+  ]
+}

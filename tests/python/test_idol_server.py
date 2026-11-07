@@ -67,7 +67,7 @@ class ServerTests(unittest.TestCase):
     def setUp(self):
         FakeSession.instances.clear()
         self.temp = tempfile.TemporaryDirectory()
-        self.runtime = Runtime('model.gguf', self.temp.name, session_factory=FakeSession)
+        self.runtime = Runtime('model.gguf', self.temp.name, session_factory=FakeSession, memory_probe=lambda: None)
         self.client = TestClient(create_app(self.runtime, ui=False))
 
     def tearDown(self):
@@ -327,6 +327,149 @@ class ServerTests(unittest.TestCase):
             return type('Result', (), {'returncode': 0, 'stdout': b''})()
         with patch('idol_image.subprocess.run', side_effect=fake_budget):
             generator.generate('a chair', 42)
+
+
+class AutomaticMemoryTests(unittest.TestCase):
+    """The memory mode and the image generator's budget follow the free graphics memory."""
+
+    def setUp(self):
+        FakeSession.instances.clear()
+        self.temp = tempfile.TemporaryDirectory()
+        self.probed = []
+
+    def tearDown(self):
+        self.temp.cleanup()
+
+    def runtime(self, free, **kwargs):
+        def probe():
+            self.probed.append(free)
+            return free
+        kwargs.setdefault('session_factory', FakeSession)
+        return Runtime('model.gguf', self.temp.name, memory_probe=probe, **kwargs)
+
+    def options(self, runtime):
+        runtime.preload()
+        options = FakeSession.instances[-1].options
+        return options['resident_gpu'], options['batch_guidance'], options['cudnn_attention']
+
+    def test_plenty_of_memory_keeps_everything_resident_and_fast(self):
+        from idol_memory import HEADROOM_MIB, IDOL_RESIDENT_MIB
+        runtime = self.runtime(IDOL_RESIDENT_MIB + HEADROOM_MIB)
+        self.assertEqual(self.options(runtime), (True, True, True))
+        self.assertEqual(runtime.memory_mode, 'resident')
+        runtime.close()
+
+    def test_short_or_unknown_memory_stages_the_models(self):
+        from idol_memory import HEADROOM_MIB, IDOL_RESIDENT_MIB
+        for free in (IDOL_RESIDENT_MIB + HEADROOM_MIB - 1, 3500, None):
+            runtime = self.runtime(free)
+            self.assertEqual(self.options(runtime), (False, False, False), free)
+            self.assertEqual(runtime.memory_mode, 'staged')
+            runtime.close()
+
+    def test_a_stated_mode_is_used_as_given_without_measuring(self):
+        for resident in (True, False):
+            runtime = self.runtime(10**6, resident_gpu=resident)
+            self.assertEqual(self.options(runtime), (resident, False, False))
+            runtime.close()
+        self.assertEqual(self.probed, [])
+
+    def test_a_stated_speed_option_overrides_the_automatic_one(self):
+        runtime = self.runtime(10**6, batch_guidance=False)
+        self.assertEqual(self.options(runtime), (True, False, True))
+        runtime.close()
+        runtime = self.runtime(100, cudnn_attention=True)
+        self.assertEqual(self.options(runtime), (False, False, True))
+        runtime.close()
+
+    def test_health_reports_the_mode(self):
+        runtime = self.runtime(10**6)
+        client = TestClient(create_app(runtime, ui=False))
+        self.assertIsNone(client.get('/health').json()['memory_mode'])
+        runtime.preload()
+        self.assertEqual(client.get('/health').json()['memory_mode'], 'resident')
+        client.close()
+        runtime.close()
+
+    def prompt_runtime(self, free, **kwargs):
+        class Generator:
+            license_notice = ''
+            label = 'generator'
+            prompts = []
+
+            def generate(self, prompt, seed):
+                self.prompts.append(prompt)
+                return image_bytes(), 'iris.gguf', {'diffusion_model': 'iris.gguf'}
+
+        return self.runtime(free, image_generator=Generator(), **kwargs)
+
+    def test_the_session_stays_loaded_for_a_prompt_when_the_generator_fits_beside_it(self):
+        from idol_memory import HEADROOM_MIB, IRIS_FULL_MIB
+        runtime = self.prompt_runtime(IRIS_FULL_MIB + HEADROOM_MIB)
+        runtime.preload()
+        first = runtime.session
+        runtime.run(prompt='a chair')
+        self.assertIs(runtime.session, first)
+        self.assertFalse(first.closed)
+        self.assertEqual(len(FakeSession.instances), 1)
+        runtime.close()
+
+    def test_the_session_is_released_for_a_prompt_when_memory_is_short(self):
+        from idol_memory import HEADROOM_MIB, IRIS_FULL_MIB
+        runtime = self.prompt_runtime(IRIS_FULL_MIB + HEADROOM_MIB - 1)
+        runtime.preload()
+        first = runtime.session
+        runtime.run(prompt='a chair')
+        self.assertTrue(first.closed)
+        self.assertEqual(len(FakeSession.instances), 2)
+        self.assertIsNot(runtime.session, first)
+        runtime.close()
+
+    def test_a_stated_budget_always_releases_the_session(self):
+        runtime = self.prompt_runtime(10**6, vram_budget_gib=16)
+        runtime.preload()
+        first = runtime.session
+        runtime.run(prompt='a chair')
+        self.assertTrue(first.closed)
+        runtime.close()
+
+    def test_image_budget_follows_the_free_memory_unless_configured(self):
+        import idol_memory
+        config = {'version': 1, 'engine': 'stable-diffusion.cpp'}
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for name in ('sd-cli', 'iris.gguf', 'qwen.gguf'):
+                (root / name).write_bytes(b'x')
+            config.update(executable=str(root / 'sd-cli'), diffusion_model=str(root / 'iris.gguf'),
+                          text_encoder=str(root / 'qwen.gguf'))
+            path = root / 'config.json'
+
+            def budget(extra, free):
+                path.write_text(json.dumps({**config, **extra}))
+                generator = LocalImageGenerator(path, memory_probe=lambda: free)
+                seen = []
+
+                def fake_run(args, **kwargs):
+                    seen.append(float(args[args.index('--max-vram') + 1]))
+                    Path(args[args.index('--output') + 1]).write_bytes(image_bytes())
+                    return type('Result', (), {'returncode': 0, 'stdout': b''})()
+                with patch('idol_image.subprocess.run', side_effect=fake_run):
+                    generator.generate('a chair', 1)
+                self.assertEqual(generator.last_budget_gib, seen[0])
+                return seen[0]
+
+            full = idol_memory.IRIS_FULL_MIB + idol_memory.HEADROOM_MIB
+            self.assertEqual(budget({}, full), 16.0)
+            self.assertEqual(budget({'max_vram_gib': 'auto'}, full), 16.0)
+            self.assertEqual(budget({}, None), 16.0)
+            small = budget({}, 4096)
+            self.assertEqual(small, idol_memory.iris_budget_gib(4096))
+            self.assertLess(small, 16.0)
+            self.assertEqual(budget({'max_vram_gib': 3}, 10**6), 3.0, 'a configured number is never overridden')
+            for bad in (0, 100, 'low', float('nan')):
+                path.write_text(json.dumps({**config, 'max_vram_gib': bad}))
+                with self.assertRaises(ValueError):
+                    LocalImageGenerator(path)
 
 
 if __name__ == '__main__':

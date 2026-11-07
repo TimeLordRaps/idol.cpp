@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Choose memory use automatically (`tools/idol_memory.py`): the server measures the free graphics memory with `nvidia-smi` (or PyTorch) and keeps every model resident, with batched guidance and cuDNN attention, when it fits, otherwise stages them; the image generator's budget is sized for each image from the free memory, and the Idol session is kept loaded during a prompt when both fit. New `--memory-mode`, `--[no-]batch-guidance`, `--[no-]cudnn-attention` and `--vram-budget-gib` options; `max_vram_gib` and `setup_iris.py --max-vram-gib` accept `auto`, now the default. `/health` reports `memory_mode`. Measured peaks are in `docs/data/memory-tiers.json`.
 - Measure the published `Idol-Q8_0.gguf` against a build without the denoiser's covariance calibration on 36 benchmark cases: the build without it is not better, so the published file is unchanged (`docs/data/q8-denoiser-calibration-ablation.json`).
 - Measure the staged low-memory path with the published file (`docs/data/idol-staged-memory.json`) and compare the native CPU decoder with the GPU decoders (`docs/data/decoder-cpu-vs-gpu.json`).
 - Ignore local build variants, the cloned upstream SDK, and test caches.

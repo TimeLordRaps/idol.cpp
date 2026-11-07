@@ -142,6 +142,9 @@ if(IDOL_BUILD_TESTS)
         add_test(NAME resident_session_routing COMMAND Python3::Interpreter
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/python/test_resident_session_routing.py")
 
+        add_test(NAME idol_memory COMMAND Python3::Interpreter
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/python/test_idol_memory.py")
+
         add_test(NAME idol_staging COMMAND Python3::Interpreter
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/python/test_idol_staging.py")
         set_tests_properties(idol_staging PROPERTIES SKIP_RETURN_CODE 77)

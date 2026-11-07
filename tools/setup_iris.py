@@ -34,8 +34,10 @@ def checked_file(path, expected):
 
 
 def prepare(runner, config, *, image_model=None, text_encoder=None, max_vram_gib=None):
-    if max_vram_gib is not None and (not math.isfinite(max_vram_gib) or not 1 <= max_vram_gib <= 64):
-        raise ValueError('The graphics-memory budget must be between 1 and 64 GiB')
+    if max_vram_gib not in (None, 'auto') and (
+            isinstance(max_vram_gib, bool) or not isinstance(max_vram_gib, (int, float))
+            or not math.isfinite(max_vram_gib) or not 1 <= max_vram_gib <= 64):
+        raise ValueError('The graphics-memory budget must be "auto" or between 1 and 64 GiB')
     runner = Path(runner).expanduser().resolve(strict=True)
     if not runner.is_file() or (os.name != 'nt' and not os.access(runner, os.X_OK)):
         raise ValueError(f'The stable-diffusion.cpp runner is not executable: {runner}')
@@ -71,9 +73,10 @@ def main():
     parser.add_argument('--config', default=default_config_path(), help='New configuration path; existing files are preserved')
     parser.add_argument('--image-model', help='Use an existing tested Iris file instead of downloading it')
     parser.add_argument('--text-encoder', help='Use an existing tested Qwen file instead of downloading it')
-    parser.add_argument('--max-vram-gib', type=float,
-                        help='Graphics-memory budget in GiB for the runner. The runner then loads weights on demand and '
-                             'cuts the graph into segments, which lowers peak memory and slows generation')
+    parser.add_argument('--max-vram-gib', type=lambda text: text if text == 'auto' else float(text),
+                        help='Graphics-memory budget in GiB for the runner, or "auto" (the default when omitted) to size '
+                             'it from the free graphics memory for every image. A small budget makes the runner load '
+                             'weights on demand and cut the graph into segments, which lowers peak memory and slows generation')
     args = parser.parse_args()
     print('Image generator configuration:', prepare(args.runner, args.config,
           image_model=args.image_model, text_encoder=args.text_encoder, max_vram_gib=args.max_vram_gib))
