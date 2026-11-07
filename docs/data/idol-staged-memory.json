@@ -1,65 +1,125 @@
 {
-  "description": "Peak graphics memory of the Idol stage (image to latent to point cloud) with models built on the CPU and run one stage at a time, compared with the previous construction.",
-  "date": "2026-11-06",
-  "device": "NVIDIA GeForce RTX 4090 (24,564 MiB), Windows 11, PyTorch 2.10.0+cu128",
+  "description": "Peak graphics memory of the Idol stage (image to latent to point cloud) with models built on the CPU and run one stage at a time, compared with the previous construction, all with the published Idol-Q8_0.gguf.",
+  "date": "2026-11-07",
+  "device": "NVIDIA GeForce RTX 4090 (24,564 MiB), Windows 11, PyTorch 2.10.0+cu128. The device and the CPU were shared with unrelated work during every run; the PyTorch memory counters below are the process's own and are not affected by that, the elapsed times are.",
   "model": {
-    "published": {
-      "file": "Idol-Q8_0.gguf (TimeLordRaps/Idol-GGUF)",
-      "sha256": "1f6875979bac8c8aecacf0c698662b7c63ff54ae1b6d7c06755297a05607e983",
-      "note": "Measured once, in published_file_run below."
-    },
-    "earlier_runs": {
-      "file": "local build Idol-experimental-Q8_0-octree-Q8_0-nov05.gguf (967 MB), used for every other run in this record",
-      "sha256": "61a7b050d6afae4b46eacbe406849a61f04bc71cfe1e8268ae5d001493fd6f22",
-      "note": "Differs from the published file only in the rounding of 96 denoiser matrices (see q8-denoiser-calibration-ablation.json); tensor types, shapes and sizes are identical, and the published file gave the same PyTorch peaks."
-    }
+    "file": "Idol-Q8_0.gguf (TimeLordRaps/Idol-GGUF)",
+    "sha256": "1f6875979bac8c8aecacf0c698662b7c63ff54ae1b6d7c06755297a05607e983"
   },
+  "provenance": "An earlier version of this record, dated 2026-11-06, took the comparison below from an unpublished local build that differed from the published file in the rounding of 96 denoiser matrices. Every run of it was repeated on 2026-11-07 with the published file, and the PyTorch peaks agreed (previous construction at a 3.5 GiB cap: 3,093 and 3,556 MiB; staged at 2.5 GiB: 1,955 and 2,340 MiB). Only the published file is used here.",
   "encoders": "original DINOv3 (facebook/dinov3-vith16plus-pretrain-lvd1689m) and FLUX.2 autoencoder, bfloat16",
-  "inputs": {"image": "assets/gallery/axolotl.webp", "mode": "real", "steps": 50, "seed": 42, "gaussians": 262144,
-             "decoder": "native CPU decoder for the command-line runs; GPU decoders for the session run"},
-  "method": "PyTorch's CUDA allocator was limited with torch.cuda.set_per_process_memory_fraction; peak allocated and reserved memory are PyTorch's counters. Whole-process dedicated graphics memory, which includes the CUDA context, is the Windows 'GPU Process Memory' counter for the process, sampled roughly every 0.4 to 1 second, so brief peaks can be missed. One run per row.",
+  "inputs": {
+    "image": "assets/gallery/axolotl.webp",
+    "mode": "real",
+    "steps": 50,
+    "seed": 42,
+    "gaussians": 262144,
+    "decoder": "GPU decoders (--decoder-backend gpu) in the cap runs and the session run; the whole-process run at the end used the native CPU decoder"
+  },
+  "method": "PyTorch's CUDA allocator was limited with torch.cuda.set_per_process_memory_fraction; peak allocated and reserved memory are PyTorch's counters (reset before each run). One run per row. 'out of memory' rows report the peak reached before the failure and where it failed.",
   "previous_construction": {
     "command": "tools/idol_generate.py --stage-encoders",
     "note": "make_pipeline puts the denoiser, background remover and both encoders on the GPU while building, before staging parks anything.",
     "runs": [
-      {"cap_mib": 3584, "result": "completed", "peak_allocated_mib": 3093, "peak_reserved_mib": 3556},
-      {"cap_mib": 3328, "result": "out of memory while building (2.77 GiB allocated)"},
-      {"cap_mib": 3072, "extra": "--packed-denoiser", "result": "out of memory while building (2.52 GiB allocated)"},
-      {"cap_mib": 2560, "result": "out of memory while moving DINOv3 to the GPU (2.35 GiB allocated)"}
+      {
+        "cap_mib": 6144,
+        "result": "completed",
+        "peak_allocated_mib": 3349,
+        "peak_reserved_mib": 4392,
+        "output_sha256": "5b9003943d66d3ef32da948de73923b877d85dd9cd6698886aa89fdac69acc7a"
+      },
+      {
+        "cap_mib": 3584,
+        "result": "completed",
+        "peak_allocated_mib": 3093,
+        "peak_reserved_mib": 3556,
+        "output_sha256": "919ca0b4d935ef3d20c9b2aa8129bc9e080ac12bcb35a2d476c27a535f10ae08"
+      },
+      {
+        "cap_mib": 3328,
+        "result": "out of memory",
+        "peak_allocated_mib_before_failure": 2957,
+        "failed_in": "main > image_to_latent > __call__ > _flux2_tokens",
+        "message": "CUDA out of memory. Tried to allocate 256.00 MiB"
+      },
+      {
+        "cap_mib": 2560,
+        "result": "out of memory",
+        "peak_allocated_mib_before_failure": 2407,
+        "failed_in": "main > make_pipeline > __init__",
+        "message": "CUDA out of memory. Tried to allocate 14.00 MiB"
+      },
+      {
+        "cap_mib": 3072,
+        "result": "out of memory",
+        "peak_allocated_mib_before_failure": 2606,
+        "failed_in": "main > image_to_latent > __call__ > _flux2_tokens",
+        "message": "CUDA out of memory. Tried to allocate 256.00 MiB",
+        "extra": "--packed-denoiser"
+      }
     ]
   },
   "staged_construction": {
     "command": "tools/idol_generate_staged.py",
     "runs": [
-      {"cap_mib": 3584, "result": "completed", "peak_allocated_mib": 1955, "peak_reserved_mib": 2596, "peak_process_mib": 2640},
-      {"cap_mib": 2560, "result": "completed", "peak_allocated_mib": 1955, "peak_reserved_mib": 2340, "peak_process_mib": 2640, "seconds": 128},
-      {"cap_mib": 2048, "result": "out of memory in the autoencoder or denoiser stage (1.83 GiB allocated, 21 s in)"}
+      {
+        "cap_mib": 6144,
+        "result": "completed",
+        "peak_allocated_mib": 1955,
+        "peak_reserved_mib": 2596,
+        "output_sha256": "5b9003943d66d3ef32da948de73923b877d85dd9cd6698886aa89fdac69acc7a"
+      },
+      {
+        "cap_mib": 3584,
+        "result": "completed",
+        "peak_allocated_mib": 1955,
+        "peak_reserved_mib": 2596,
+        "output_sha256": "5b9003943d66d3ef32da948de73923b877d85dd9cd6698886aa89fdac69acc7a"
+      },
+      {
+        "cap_mib": 2560,
+        "result": "completed",
+        "peak_allocated_mib": 1955,
+        "peak_reserved_mib": 2340,
+        "output_sha256": "5b9003943d66d3ef32da948de73923b877d85dd9cd6698886aa89fdac69acc7a"
+      },
+      {
+        "cap_mib": 2048,
+        "result": "out of memory",
+        "peak_allocated_mib_before_failure": 1871,
+        "failed_in": "main > image_to_latent > __call__ > _dinov3_tokens",
+        "message": "CUDA out of memory. Tried to allocate 10.00 MiB"
+      }
     ],
     "session": {
       "description": "IdolSession built under staged_construction(), two generations in a row, GPU decoders",
-      "cap_mib": 2560, "result": "completed", "peak_allocated_mib": 1957, "peak_reserved_mib": 2350, "peak_process_mib": 2704,
-      "seconds_including_build": 79.9, "second_output_identical_to_first": true
+      "cap_mib": 2560,
+      "result": "completed",
+      "peak_allocated_mib": 1957,
+      "peak_reserved_mib": 2350,
+      "second_output_identical_to_first": true,
+      "output_sha256": "5b9003943d66d3ef32da948de73923b877d85dd9cd6698886aa89fdac69acc7a"
     }
   },
-  "published_file_run": {
-    "command": "tools/idol_generate_staged.py with the published Idol-Q8_0.gguf, same image, mode, steps, seed and Gaussian count as above, native CPU decoder with 8 threads",
+  "whole_process_run": {
+    "command": "tools/idol_generate_staged.py with the published Idol-Q8_0.gguf, same image, mode, steps, seed and Gaussian count, native CPU decoder with 8 threads",
     "cap_mib": 2560,
     "result": "completed",
     "peak_allocated_mib": 1955,
     "peak_reserved_mib": 2340,
     "peak_process_mib": 2754,
     "output": "262,144 Gaussians, all values finite",
-    "note": "PyTorch's allocated and reserved peaks equal those of the earlier build at the same cap. The whole-process figure is 114 MiB above the earlier 2,640 MiB; its cause was not investigated: the counter is sampled every 0.4 s, which can miss short peaks, and each figure is one run on a shared machine. The run took 749 s because the CPU was shared with another Idol workload; this is not a timing."
+    "note": "The only run that recorded the whole-process dedicated graphics memory (the Windows 'GPU Process Memory' counter, sampled about every 0.4 s, so brief peaks can be missed); it is the figure quoted for the whole process. It took 749 s because the CPU was shared with another workload; this is not a timing."
   },
   "output_comparison": {
-    "staged_cap_2560_vs_staged_cap_3584_point_cloud": "byte-identical",
-    "staged_vs_previous_construction_with_cap_6144_point_cloud": "byte-identical",
-    "previous_construction_cap_3584_vs_cap_6144": "latents differ (relative L2 difference 2.3e-2) and the point clouds differ",
-    "note": "In this test the previous construction's result depended on how tight the memory cap was. The staged construction gave the same result at both caps it completed at. One image and one seed, so this does not establish identical output in general."
+    "identical_point_clouds": "Staged at caps of 6,144, 3,584 and 2,560 MiB, the staged session's two generations, and the previous construction at a 6,144 MiB cap all produced the same point cloud (SHA-256 5b9003943d66d3ef32da948de73923b877d85dd9cd6698886aa89fdac69acc7a).",
+    "different_point_cloud": "The previous construction at a 3,584 MiB cap produced a different point cloud (SHA-256 919ca0b4d935ef3d20c9b2aa8129bc9e080ac12bcb35a2d476c27a535f10ae08).",
+    "note": "In this test the previous construction's result depended on how tight the memory cap was; the staged construction's did not. One image and one seed, so this does not establish identical output in general."
   },
   "limits": [
     "The floor for the staged construction is between a 2.0 and a 2.5 GiB allocator cap for this image and model; it was not searched more finely.",
     "These are Idol-stage figures only. The image generator was measured separately (iris-memory-budget.json). A prompt-to-3D run on an actual 4 GB card was not performed.",
-    "Staged inference moves models between host and device memory each request, so it needs host memory for all of them and is slower than resident inference."
+    "Staged inference moves models between host and device memory each request, so it needs host memory for all of them and is slower than resident inference; lean mode (idol-lowram.json) keeps them on disk instead.",
+    "Elapsed times were not recorded as results: the device and CPU were shared."
   ]
 }

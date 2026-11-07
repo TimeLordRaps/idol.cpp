@@ -11,7 +11,7 @@
       {"mode": "resident, fused kernels", "options": "as above with --fused-kernels", "peak_process_mib": 5622, "peak_allocated_mib": 4508, "peak_reserved_mib": 5194},
       {"mode": "staged", "options": "built on the CPU, one stage on the device at a time", "peak_process_mib": 3016, "peak_allocated_mib": 1957, "peak_reserved_mib": 2606}
     ],
-    "note": "Under a 2.5 GiB allocator cap the staged mode peaked at 2,704 to 2,754 MiB (idol-staged-memory.json); the server sets no cap, so the uncapped figure is the one used."
+    "note": "Under a 2.5 GiB allocator cap the staged mode peaked at 2,754 MiB with the native decoder (idol-staged-memory.json); the server sets no cap, so the uncapped figure is the one used."
   },
   "image_generator": {
     "runner": "stable-diffusion.cpp master-f5df5f8, Vulkan build for Windows",
