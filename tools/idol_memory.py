@@ -19,6 +19,8 @@ import math
 import os
 import shutil
 import subprocess
+import sys
+import tempfile
 from dataclasses import dataclass
 
 # Whole-process peaks in MiB, measured (docs/data/memory-tiers.json, docs/data/idol-staged-memory.json,
@@ -32,6 +34,15 @@ IRIS_BUDGET_PEAKS_MIB = ((2.0, 2272), (3.0, 3287), (4.0, 4342), (5.0, 4402), (6.
 IRIS_MIN_BUDGET_GIB = 2.0  # a budget of 1 GiB fails
 IRIS_MAX_BUDGET_GIB = 16.0
 HEADROOM_MIB = 512
+# Host memory (RAM) of the Idol process, in MiB: the peak of its private working set (resident pages that are not
+# memory-mapped model files, which the system can drop and read again) over building a session and generating once.
+# Measured on Windows with PyTorch 2.10 (docs/data/idol-lowram.json); a smaller number is not possible without
+# changing what PyTorch itself holds.
+IDOL_STAGED_HOST_MIB = 5183  # staged: the waiting models sit in memory
+IDOL_LEAN_HOST_MIB = 3286  # lean: the waiting models sit in files
+LEAN_CACHE_MIB = 3704  # disk space those files take
+HOST_HEADROOM_MIB = 1024  # the operating system and other programs
+DISK_HEADROOM_MIB = 1024
 
 
 @dataclass(frozen=True)
@@ -122,6 +133,73 @@ def query_gpu_memory(device='cuda', *, run=subprocess.run, which=shutil.which, e
     return torch_probe(index)
 
 
+@dataclass(frozen=True)
+class HostMemory:
+    total_mib: int
+    available_mib: int
+    source: str
+
+
+def parse_meminfo(text):
+    """`(total, available)` in MiB from Linux `/proc/meminfo` text, or None."""
+    values = {}
+    for line in text.splitlines():
+        name, _, rest = line.partition(':')
+        fields = rest.split()
+        if name in ('MemTotal', 'MemAvailable') and len(fields) >= 1 and fields[0].isdigit():
+            values[name] = int(fields[0]) // 1024  # the file is in kB
+    if 'MemTotal' not in values or 'MemAvailable' not in values or values['MemTotal'] <= 0:
+        return None
+    return values['MemTotal'], min(values['MemAvailable'], values['MemTotal'])
+
+
+def _read_text(path):
+    try:
+        with open(path, encoding='ascii') as stream:
+            return stream.read()
+    except (OSError, UnicodeDecodeError):
+        return None
+
+
+def _windows_host_memory():
+    import ctypes
+
+    class Status(ctypes.Structure):
+        _fields_ = [('length', ctypes.c_ulong), ('load', ctypes.c_ulong), ('total', ctypes.c_ulonglong),
+                    ('available', ctypes.c_ulonglong), ('total_page_file', ctypes.c_ulonglong),
+                    ('available_page_file', ctypes.c_ulonglong), ('total_virtual', ctypes.c_ulonglong),
+                    ('available_virtual', ctypes.c_ulonglong), ('available_extended', ctypes.c_ulonglong)]
+
+    status = Status()
+    status.length = ctypes.sizeof(status)
+    if not ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(status)) or not status.total:
+        return None
+    return status.total // 2**20, status.available // 2**20
+
+
+def query_host_memory(*, platform=sys.platform, read_text=_read_text, windows_reader=_windows_host_memory):
+    """Physical memory of this computer and how much is free to use, or None when it cannot be measured.
+
+    "Available" counts memory the system can take back (file cache) as free, so a memory-mapped model file
+    does not make the computer look full. Inside a Linux container the cgroup limit applies when it is lower."""
+    try:
+        if platform == 'win32':
+            found, source = windows_reader(), 'GlobalMemoryStatusEx'
+        elif platform.startswith('linux'):
+            text = read_text('/proc/meminfo')
+            found, source = (parse_meminfo(text) if text else None), '/proc/meminfo'
+            limit, used = read_text('/sys/fs/cgroup/memory.max'), read_text('/sys/fs/cgroup/memory.current')
+            if found and limit and used and limit.strip().isdigit() and used.strip().isdigit():
+                room = max(0, (int(limit) - int(used)) // 2**20)
+                found = (min(found[0], int(limit) // 2**20), min(found[1], room))
+                source += ' and the cgroup limit'
+        else:
+            return None
+    except (OSError, ValueError, AttributeError):
+        return None
+    return HostMemory(found[0], found[1], source) if found else None
+
+
 def available_mib(device='cuda', budget_gib=None, **kwargs):
     """Graphics memory this program may use, in MiB, or None when unknown.
 
@@ -147,6 +225,47 @@ def plan_idol(available):
         # Staging is the smallest configuration there is, so it is still tried; the estimate may be pessimistic.
         reason += f' (about {IDOL_STAGED_MIB} MiB were needed when measured, so this may run out of memory)'
     return IdolPlan(False, False, False, reason)
+
+
+@dataclass(frozen=True)
+class HostPlan:
+    lean: bool
+    reason: str
+
+
+def available_host_mib(**kwargs):
+    """Memory this computer has free to use, in MiB, or None when it cannot be measured."""
+    found = query_host_memory(**kwargs)
+    return None if found is None else found.available_mib
+
+
+def free_disk_mib(directory=None, *, usage=shutil.disk_usage):
+    """Free disk space where `directory` (default: the system temporary directory) is, in MiB, or None."""
+    try:
+        return usage(directory or tempfile.gettempdir()).free // 2**20
+    except OSError:
+        return None
+
+
+def plan_host(available, disk_free):
+    """Pick where a staged Idol session keeps the models that are waiting, from the free memory and disk space.
+
+    In memory (the default) is faster. On disk ("lean") is chosen only when the computer lacks the memory and
+    has the space, because it adds about fifteen seconds to every generation."""
+    if available is None:
+        return HostPlan(False, 'free system memory could not be measured; keeping the waiting models in memory')
+    need = IDOL_STAGED_HOST_MIB + HOST_HEADROOM_MIB
+    if available >= need:
+        return HostPlan(False, f'{available} MiB of system memory is free, enough to keep the waiting models in it')
+    space = LEAN_CACHE_MIB + DISK_HEADROOM_MIB
+    if disk_free is not None and disk_free < space:
+        return HostPlan(False, f'only {available} MiB of system memory is free (about {need} MiB are needed to keep the '
+                               f'models in it), but the {disk_free} MiB of free disk space is too little to keep '
+                               f'them in files ({space} MiB); this may run out of memory')
+    reason = f'{available} MiB of system memory is free; keeping the waiting models in files on disk'
+    if available < IDOL_LEAN_HOST_MIB:
+        reason += f' (about {IDOL_LEAN_HOST_MIB} MiB were needed when measured, so this may run out of memory)'
+    return HostPlan(True, reason)
 
 
 def iris_budget_gib(available):

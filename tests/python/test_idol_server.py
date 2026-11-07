@@ -67,7 +67,8 @@ class ServerTests(unittest.TestCase):
     def setUp(self):
         FakeSession.instances.clear()
         self.temp = tempfile.TemporaryDirectory()
-        self.runtime = Runtime('model.gguf', self.temp.name, session_factory=FakeSession, memory_probe=lambda: None)
+        self.runtime = Runtime('model.gguf', self.temp.name, session_factory=FakeSession, memory_probe=lambda: None,
+                               host_probe=lambda: None)
         self.client = TestClient(create_app(self.runtime, ui=False))
 
     def tearDown(self):
@@ -282,6 +283,35 @@ class ServerTests(unittest.TestCase):
         download.assert_called_once_with('example/idol', 'model.gguf', revision='abc123')
         self.assertEqual(serve.call_args.kwargs['port'], 8127)
 
+    def run_cli(self, *options):
+        model = Path(self.temp.name) / 'model.gguf'
+        model.write_bytes(b'x')
+        argv = ['idol-server', '--model', str(model), '--output-dir', self.temp.name,
+                '--image-server', 'http://127.0.0.1:1', *options]
+        with patch.object(sys, 'argv', argv),              patch('idol_server.Runtime') as runtime,              patch('idol_server.create_app', return_value=object()),              patch('uvicorn.run'):
+            main()
+        return runtime.call_args.kwargs
+
+    def test_cli_memory_modes_map_to_where_the_models_wait(self):
+        expected = {'auto': (None, None), 'resident': (True, None), 'staged': (False, False), 'lean': (False, True)}
+        for mode, (resident, lean) in expected.items():
+            options = self.run_cli('--memory-mode', mode)
+            self.assertEqual((options['resident_gpu'], options['lean']), (resident, lean), mode)
+        self.assertEqual((self.run_cli('--resident-gpu')['resident_gpu']), True)
+
+    def test_cli_passes_the_lean_directory_and_checks_it(self):
+        self.assertEqual(self.run_cli('--memory-mode', 'lean', '--lean-directory', self.temp.name)['lean_directory'],
+                         Path(self.temp.name))
+        self.assertIsNone(self.run_cli()['lean_directory'])
+        with self.assertRaises(SystemExit), patch('sys.stderr', io.StringIO()):
+            self.run_cli('--lean-directory', str(Path(self.temp.name) / 'missing'))
+
+    def test_cli_refuses_lean_with_packed_or_fused_models(self):
+        for option in ('--packed-denoiser', '--fused-kernels'):
+            with self.assertRaises(SystemExit), patch('sys.stderr', io.StringIO()):
+                self.run_cli('--memory-mode', 'lean', option)
+            self.run_cli('--memory-mode', 'staged', option)  # the same options are fine in memory
+
     def test_local_runner_uses_configured_files_and_releases_process(self):
         root = Path(self.temp.name)
         names = ('sd-cli.exe', 'fixture-image-Q8_0.gguf', 'qwen.safetensors', 'vae.safetensors')
@@ -292,7 +322,7 @@ class ServerTests(unittest.TestCase):
                   'vae': str(root / names[3]), 'license_notice': 'fixture license'}
         path = root / 'config.json'
         path.write_text(json.dumps(config))
-        generator = LocalImageGenerator(path)
+        generator = LocalImageGenerator(path, memory_probe=lambda: None)
         self.assertIn(names[1], generator.label)
         self.assertIn(names[2], generator.label)
         def fake_run(args, **kwargs):
@@ -310,7 +340,7 @@ class ServerTests(unittest.TestCase):
         self.assertEqual(components['text_encoder'], names[2])
         config.pop('vae')
         path.write_text(json.dumps(config))
-        generator = LocalImageGenerator(path)
+        generator = LocalImageGenerator(path, memory_probe=lambda: None)
         def fake_iris(args, **kwargs):
             self.assertNotIn('--vae', args)
             Path(args[args.index('--output') + 1]).write_bytes(image_bytes())
@@ -329,6 +359,186 @@ class ServerTests(unittest.TestCase):
             generator.generate('a chair', 42)
 
 
+class LeanModeTests(unittest.TestCase):
+    """Staged sessions keep the waiting models on disk when the computer lacks the memory to hold them."""
+
+    def setUp(self):
+        FakeSession.instances.clear()
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+
+    def runtime(self, host, disk=10**6, gpu=3500, **kwargs):
+        kwargs.setdefault('session_factory', FakeSession)
+        runtime = Runtime('model.gguf', self.temp.name, memory_probe=lambda: gpu,
+                          host_probe=lambda: host, disk_probe=lambda: disk, **kwargs)
+        self.addCleanup(runtime.close)
+        return runtime
+
+    def test_little_free_memory_with_room_on_disk_chooses_lean(self):
+        from idol_memory import HOST_HEADROOM_MIB, IDOL_STAGED_HOST_MIB
+        runtime = self.runtime(IDOL_STAGED_HOST_MIB + HOST_HEADROOM_MIB - 1)
+        runtime.preload()
+        self.assertEqual(runtime.memory_mode, 'lean')
+        self.assertIs(FakeSession.instances[-1].options['resident_gpu'], False)
+
+    def test_enough_unknown_or_unmeasurable_memory_keeps_the_models_in_memory(self):
+        from idol_memory import HOST_HEADROOM_MIB, IDOL_STAGED_HOST_MIB
+        for host in (IDOL_STAGED_HOST_MIB + HOST_HEADROOM_MIB, 10**6, None):
+            runtime = self.runtime(host)
+            runtime.preload()
+            self.assertEqual(runtime.memory_mode, 'staged', host)
+
+    def test_too_little_disk_space_keeps_the_models_in_memory(self):
+        from idol_memory import DISK_HEADROOM_MIB, LEAN_CACHE_MIB
+        runtime = self.runtime(1000, disk=LEAN_CACHE_MIB + DISK_HEADROOM_MIB - 1)
+        runtime.preload()
+        self.assertEqual(runtime.memory_mode, 'staged')
+        runtime = self.runtime(1000, disk=LEAN_CACHE_MIB + DISK_HEADROOM_MIB)
+        runtime.preload()
+        self.assertEqual(runtime.memory_mode, 'lean')
+        runtime = self.runtime(1000, disk=None)  # unmeasurable: the temporary directory is normally roomy enough
+        runtime.preload()
+        self.assertEqual(runtime.memory_mode, 'lean')
+
+    def test_a_stated_choice_is_used_without_measuring(self):
+        calls = []
+        runtime = self.runtime(10**6, lean=True)
+        runtime.host_probe = lambda: calls.append('host')
+        runtime.preload()
+        self.assertEqual(runtime.memory_mode, 'lean')
+        runtime = self.runtime(1, lean=False)
+        runtime.host_probe = lambda: calls.append('host')
+        runtime.preload()
+        self.assertEqual(runtime.memory_mode, 'staged')
+        self.assertEqual(calls, [])
+
+    def test_resident_sessions_have_no_waiting_models_to_keep_on_disk(self):
+        runtime = self.runtime(1, gpu=10**6)
+        runtime.host_probe = lambda: self.fail('memory of the computer does not matter to a resident session')
+        runtime.preload()
+        self.assertEqual(runtime.memory_mode, 'resident')
+        runtime = self.runtime(1, resident_gpu=True, lean=True)
+        runtime.preload()
+        self.assertEqual(runtime.memory_mode, 'resident')
+
+    def test_packed_and_fused_models_cannot_be_lean(self):
+        for option in ('packed_denoiser', 'fused_kernels'):
+            runtime = self.runtime(1, **{option: True})
+            runtime.preload()
+            self.assertEqual(runtime.memory_mode, 'staged', 'chosen automatically, they stay in memory')
+            runtime = self.runtime(1, lean=True, **{option: True})
+            with self.assertRaisesRegex(ValueError, 'does not support'):
+                runtime.preload()
+            self.assertIsNone(runtime.session)
+
+    def test_health_reports_the_lean_mode(self):
+        runtime = self.runtime(1)
+        client = TestClient(create_app(runtime, ui=False))
+        self.addCleanup(client.close)
+        runtime.preload()
+        self.assertEqual(client.get('/health').json()['memory_mode'], 'lean')
+
+    def test_a_lean_session_is_built_in_lean_construction_and_its_files_removed_after_it(self):
+        events = []
+
+        class Cache:
+            def close(self):
+                events.append('cache closed')
+
+        class Session:
+            def __init__(self, model, **kwargs):
+                events.append('session built')
+
+            def close(self):
+                events.append('session closed')
+
+        @contextlib.contextmanager
+        def lean_construction(directory=None):
+            events.append(('enter', directory))
+            yield Cache()
+            events.append('exit')
+
+        @contextlib.contextmanager
+        def staged_construction():
+            self.fail('a lean session is not built by staged construction as well')
+            yield
+
+        modules = {'idol_session': SimpleNamespace(IdolSession=Session),
+                   'idol_lowram': SimpleNamespace(lean_construction=lean_construction),
+                   'idol_staging': SimpleNamespace(staged_construction=staged_construction)}
+        with patch.dict(sys.modules, modules):
+            runtime = Runtime('model.gguf', self.temp.name, lean=True, lean_directory='cache-dir',
+                              memory_probe=lambda: 3500)
+            runtime.preload()
+            self.assertEqual(events, [('enter', 'cache-dir'), 'session built', 'exit'])
+            events.clear()
+            runtime.close()
+            self.assertEqual(events, ['session closed', 'cache closed'], 'the models are read until the session ends')
+            self.assertIsNone(runtime.session)
+            self.assertIsNone(runtime.lean_cache)
+            self.assertIsNone(runtime.memory_mode)
+            runtime.close()  # closing twice is harmless
+            self.assertEqual(events, ['session closed', 'cache closed'])
+
+    def test_a_failed_generation_removes_the_files_too(self):
+        class Cache:
+            closed = False
+
+            def close(self):
+                self.closed = True
+
+        class Failing(FakeSession):
+            def generate(self, image, output, **kwargs):
+                raise RuntimeError('inference failed')
+
+        runtime = self.runtime(1, session_factory=Failing)
+        runtime.preload()
+        cache = runtime.lean_cache = Cache()
+        failed = runtime.session
+        with self.assertRaisesRegex(RuntimeError, 'inference failed'):
+            runtime.run(image=image_bytes())
+        self.assertTrue(failed.closed)
+        self.assertTrue(cache.closed, 'files of a failed session are not left behind')
+        self.assertIsNone(runtime.session)
+        self.assertIsNone(runtime.lean_cache)
+
+    def test_the_files_are_removed_even_when_the_session_fails_to_close(self):
+        class Cache:
+            closed = False
+
+            def close(self):
+                self.closed = True
+
+        class Stuck(FakeSession):
+            def close(self):
+                raise RuntimeError('cannot close')
+
+        runtime = self.runtime(1, session_factory=Stuck)
+        runtime.preload()
+        cache = runtime.lean_cache = Cache()
+        with self.assertRaisesRegex(RuntimeError, 'cannot close'):
+            runtime.close()
+        self.assertTrue(cache.closed)
+        self.assertIsNone(runtime.session)
+
+    def test_releasing_the_session_for_the_image_generator_removes_the_files_too(self):
+        class Cache:
+            closed = False
+
+            def close(self):
+                self.closed = True
+
+        cache = Cache()
+        runtime = self.runtime(1)
+        runtime.preload()
+        runtime.lean_cache = cache
+        first = runtime.session
+        runtime._release_session_for_image_generator()
+        self.assertTrue(first.closed)
+        self.assertTrue(cache.closed)
+        self.assertIsNone(runtime.lean_cache)
+
+
 class AutomaticMemoryTests(unittest.TestCase):
     """The memory mode and the image generator's budget follow the free graphics memory."""
 
@@ -345,6 +555,7 @@ class AutomaticMemoryTests(unittest.TestCase):
             self.probed.append(free)
             return free
         kwargs.setdefault('session_factory', FakeSession)
+        kwargs.setdefault('host_probe', lambda: None)
         return Runtime('model.gguf', self.temp.name, memory_probe=probe, **kwargs)
 
     def options(self, runtime):

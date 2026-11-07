@@ -1,6 +1,7 @@
 """Check free-memory detection and the choices made from it, without a GPU."""
 import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
@@ -107,6 +108,49 @@ class PlanningTests(unittest.TestCase):
         self.assertFalse(memory.plan_idol(enough - 1).resident, 'staging is still tried when it may not fit')
         self.assertFalse(memory.plan_idol(0).resident)
 
+    def test_waiting_models_go_to_disk_only_when_memory_is_short_and_disk_is_roomy(self):
+        need = memory.IDOL_STAGED_HOST_MIB + memory.HOST_HEADROOM_MIB
+        space = memory.LEAN_CACHE_MIB + memory.DISK_HEADROOM_MIB
+        self.assertFalse(memory.plan_host(need, space).lean)
+        self.assertFalse(memory.plan_host(10**6, 0).lean, 'plenty of memory needs no disk')
+        self.assertTrue(memory.plan_host(need - 1, space).lean)
+        self.assertTrue(memory.plan_host(need - 1, None).lean, 'unmeasurable disk space is not a reason to refuse')
+        refused = memory.plan_host(need - 1, space - 1)
+        self.assertFalse(refused.lean)
+        self.assertIn('may run out of memory', refused.reason)
+        unknown = memory.plan_host(None, space)
+        self.assertFalse(unknown.lean)
+        self.assertIn('could not be measured', unknown.reason)
+
+    def test_lean_is_chosen_for_every_amount_of_memory_below_the_threshold(self):
+        need = memory.IDOL_STAGED_HOST_MIB + memory.HOST_HEADROOM_MIB
+        choices = [memory.plan_host(mib, 10**6).lean for mib in range(0, need + 512, 128)]
+        self.assertEqual(choices, sorted(choices, reverse=True), 'more memory never switches the disk on')
+        self.assertTrue(choices[0])
+        self.assertFalse(choices[-1])
+
+    def test_a_lean_plan_warns_when_even_it_may_not_fit(self):
+        self.assertIn('may run out of memory', memory.plan_host(memory.IDOL_LEAN_HOST_MIB - 1, 10**6).reason)
+        self.assertNotIn('may run out of memory', memory.plan_host(memory.IDOL_LEAN_HOST_MIB, 10**6).reason)
+
+    def test_the_measurements_are_ordered(self):
+        self.assertLess(memory.IDOL_LEAN_HOST_MIB, memory.IDOL_STAGED_HOST_MIB)
+
+    def test_free_disk_space_is_measured_where_the_files_go(self):
+        calls = []
+
+        def usage(path):
+            calls.append(path)
+            return SimpleNamespace(free=5 * 2**30)
+        self.assertEqual(memory.free_disk_mib('/cache', usage=usage), 5120)
+        self.assertEqual(calls, ['/cache'])
+        self.assertEqual(memory.free_disk_mib(usage=usage), 5120)
+        self.assertEqual(calls[-1], tempfile.gettempdir())
+
+        def broken(_path):
+            raise FileNotFoundError('gone')
+        self.assertIsNone(memory.free_disk_mib('/missing', usage=broken))
+
     def test_image_budget_is_the_largest_that_fits(self):
         full = memory.IRIS_FULL_MIB + memory.HEADROOM_MIB
         self.assertEqual(memory.iris_budget_gib(full), 16.0)
@@ -132,6 +176,56 @@ class PlanningTests(unittest.TestCase):
         self.assertTrue(memory.keep_idol_loaded(need))
         self.assertFalse(memory.keep_idol_loaded(need - 1))
         self.assertFalse(memory.keep_idol_loaded(None))
+
+
+MEMINFO = 'MemTotal:        8000000 kB\nMemFree:          100000 kB\nMemAvailable:    3000000 kB\nBuffers: 1 kB\n'
+
+
+class HostMemoryTests(unittest.TestCase):
+    def test_meminfo_gives_total_and_available_in_mib(self):
+        self.assertEqual(memory.parse_meminfo(MEMINFO), (7812, 2929))
+        for text in ('', 'MemTotal: 100 kB\n', 'MemAvailable: 100 kB\n', 'MemTotal: x kB\nMemAvailable: 1 kB\n',
+                     'MemTotal: 0 kB\nMemAvailable: 0 kB\n'):
+            self.assertIsNone(memory.parse_meminfo(text), text)
+        self.assertEqual(memory.parse_meminfo('MemTotal: 1024 kB\nMemAvailable: 4096 kB\n'), (1, 1),
+                         'available is never more than the total')
+
+    def test_linux_reads_proc_meminfo(self):
+        files = {'/proc/meminfo': MEMINFO}
+        found = memory.query_host_memory(platform='linux', read_text=files.get)
+        self.assertEqual((found.total_mib, found.available_mib, found.source), (7812, 2929, '/proc/meminfo'))
+
+    def test_a_container_limit_below_the_computers_memory_applies(self):
+        files = {'/proc/meminfo': MEMINFO, '/sys/fs/cgroup/memory.max': str(4096 * 2**20) + '\n',
+                 '/sys/fs/cgroup/memory.current': str(3000 * 2**20) + '\n'}
+        found = memory.query_host_memory(platform='linux', read_text=files.get)
+        self.assertEqual((found.total_mib, found.available_mib), (4096, 1096))
+        self.assertIn('cgroup', found.source)
+        files['/sys/fs/cgroup/memory.max'] = 'max\n'  # no limit
+        self.assertEqual(memory.query_host_memory(platform='linux', read_text=files.get).available_mib, 2929)
+        files['/sys/fs/cgroup/memory.max'] = str(10**13)  # a limit above the computer's memory changes nothing
+        files['/sys/fs/cgroup/memory.current'] = '0'
+        self.assertEqual(memory.query_host_memory(platform='linux', read_text=files.get).available_mib, 2929)
+
+    def test_unreadable_or_unsupported_systems_give_none(self):
+        self.assertIsNone(memory.query_host_memory(platform='linux', read_text=lambda _path: None))
+        self.assertIsNone(memory.query_host_memory(platform='darwin'))
+        self.assertIsNone(memory.query_host_memory(platform='win32', windows_reader=lambda: None))
+
+        def broken():
+            raise OSError('no such library')
+        self.assertIsNone(memory.query_host_memory(platform='win32', windows_reader=broken))
+
+    def test_windows_uses_the_system_call(self):
+        found = memory.query_host_memory(platform='win32', windows_reader=lambda: (8192, 3000))
+        self.assertEqual((found.total_mib, found.available_mib, found.source), (8192, 3000, 'GlobalMemoryStatusEx'))
+
+    def test_this_computer_is_measurable_when_it_is_windows_or_linux(self):
+        found = memory.query_host_memory()
+        if sys.platform == 'win32' or sys.platform.startswith('linux'):
+            self.assertIsNotNone(found)
+            self.assertGreater(found.total_mib, 0)
+            self.assertLessEqual(found.available_mib, found.total_mib)
 
 
 if __name__ == '__main__':

@@ -16,7 +16,8 @@ from pathlib import Path
 from urllib.parse import quote, urlsplit
 from urllib.request import Request, urlopen
 
-from idol_memory import available_mib, keep_idol_loaded, plan_idol
+from idol_memory import (available_host_mib, available_mib, free_disk_mib, keep_idol_loaded, plan_host,
+                         plan_idol)
 
 MAX_IMAGE_BYTES = 20 * 1024 * 1024
 
@@ -77,13 +78,18 @@ class Runtime:
     `resident_gpu`, `batch_guidance` and `cudnn_attention` left as None are chosen from the graphics memory
     that is free when the session is built (`idol_memory.plan_idol`): everything resident and fast when it
     fits, otherwise staged through the device. A value that is set is used as given. `vram_budget_gib`
-    states how much graphics memory this program may count on instead of the amount measured free."""
+    states how much graphics memory this program may count on instead of the amount measured free.
+
+    A staged session keeps the models that are waiting in memory, unless `lean` is true, or is None and the
+    computer has too little free memory (`idol_memory.plan_host`): then they wait in files in `lean_directory`
+    (the system temporary directory by default), which is slower to switch between and needs the disk space."""
 
     def __init__(self, model, output_dir, *, image_server=None, device='cuda',
                  packed_denoiser=False, fused_kernels=False, resident_gpu=None, session_factory=None,
                  image_generator=None, batch_guidance=None, cudnn_attention=None,
                  dino_gguf=None, flux_vae_gguf=None, mesh_executable=None,
-                 vram_budget_gib=None, memory_probe=None):
+                 vram_budget_gib=None, memory_probe=None, lean=None, lean_directory=None,
+                 host_probe=None, disk_probe=None):
         self.model = str(model)
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
@@ -100,6 +106,11 @@ class Runtime:
         self.session_factory = session_factory
         self.vram_budget_gib = vram_budget_gib
         self.memory_probe = memory_probe or (lambda: available_mib(self.device, self.vram_budget_gib))
+        self.lean = lean
+        self.lean_directory = lean_directory
+        self.host_probe = host_probe or available_host_mib
+        self.disk_probe = disk_probe or (lambda: free_disk_mib(self.lean_directory))
+        self.lean_cache = None
         self.memory_mode = None
         self.session = None
         self.lock = threading.Lock()
@@ -116,29 +127,65 @@ class Runtime:
         cudnn = plan.cudnn_attention if self.cudnn_attention is None else self.cudnn_attention
         return plan.resident, batch, cudnn, plan.reason
 
+    def _host_settings(self, resident):
+        """Whether the next session keeps its waiting models on disk instead of in memory, and why.
+
+        Only staged sessions have waiting models, so a resident session never does. A stated `lean` value is
+        used as given; otherwise it is chosen from the memory and disk space that are free now."""
+        if resident:
+            return False, ''
+        unsupported = self.packed_denoiser or self.fused_kernels
+        if self.lean is not None:
+            if self.lean and unsupported:
+                raise ValueError('lean memory mode does not support the packed denoiser or fused kernels')
+            return self.lean, 'set explicitly'
+        if unsupported:
+            return False, 'packed and fused models stay in memory'
+        plan = plan_host(self.host_probe(), self.disk_probe())
+        return plan.lean, plan.reason
+
     def _get_session(self):
         if self.session is None:
             resident, batch_guidance, cudnn_attention, reason = self._session_settings()
-            self.memory_mode = 'resident' if resident else 'staged'
+            lean, host_reason = self._host_settings(resident)
+            self.memory_mode = 'resident' if resident else 'lean' if lean else 'staged'
+            if host_reason:
+                reason += f'; {host_reason}'
             print(f'Idol memory mode: {self.memory_mode} ({reason})', file=sys.stderr, flush=True)
             factory = self.session_factory
             construction = nullcontext()
             if factory is None:
                 from idol_session import IdolSession
                 factory = IdolSession
-                if not resident:
+                if lean:
+                    # Each model is written to disk as soon as it is built and read back only while it is used.
+                    from idol_lowram import lean_construction
+                    construction = lean_construction(self.lean_directory)
+                elif not resident:
                     # Staged inference moves each model to the GPU only while it is used; build them on the CPU
                     # so they are never all on the GPU at once.
                     from idol_staging import staged_construction
                     construction = staged_construction()
-            with construction:
+            with construction as cache:
                 self.session = factory(self.model, device=self.device,
                                        packed_denoiser=self.packed_denoiser,
                                        fused_kernels=self.fused_kernels,
                                        resident_gpu=resident, batch_guidance=batch_guidance,
                                        cudnn_attention=cudnn_attention,
                                        dino_gguf=self.dino_gguf, flux_vae_gguf=self.flux_vae_gguf)
+                self.lean_cache = cache
         return self.session
+
+    def _drop_session(self):
+        """Close the session and, for a lean one, delete the files that held its models."""
+        previous, cache, self.session, self.lean_cache, self.memory_mode = (
+            self.session, self.lean_cache, None, None, None)
+        try:
+            if previous is not None:
+                previous.close()
+        finally:
+            if cache is not None:  # after the session: its models read their files until it is closed
+                cache.close()
 
     def _release_session_for_image_generator(self):
         """Free the session before a prompt's image is generated, unless both comfortably fit together.
@@ -148,8 +195,7 @@ class Runtime:
             return
         if self.vram_budget_gib is None and keep_idol_loaded(self.memory_probe()):
             return
-        previous, self.session, self.memory_mode = self.session, None, None
-        previous.close()
+        self._drop_session()
 
     def preload(self):
         with self.lock:
@@ -194,9 +240,8 @@ class Runtime:
                                           steps=steps, gaussians=gaussians)
                 except Exception:
                     # IdolSession explicitly invalidates itself after failed inference.
-                    failed_session, self.session = self.session, None
                     try:
-                        failed_session.close()
+                        self._drop_session()
                     except Exception:
                         pass
                     raise
@@ -247,9 +292,7 @@ class Runtime:
             self.lock.release()
 
     def close(self):
-        if self.session is not None:
-            self.session.close()
-            self.session = None
+        self._drop_session()
 
 
 def create_app(runtime, *, ui=True):
@@ -554,10 +597,15 @@ def main():
     parser.add_argument('--preload', action='store_true', help='Load the model before accepting requests')
     parser.add_argument('--packed-denoiser', action='store_true')
     parser.add_argument('--fused-kernels', action='store_true')
-    parser.add_argument('--memory-mode', choices=('auto', 'resident', 'staged'), default='auto',
+    parser.add_argument('--memory-mode', choices=('auto', 'resident', 'staged', 'lean'), default='auto',
                         help='auto (default) measures free graphics memory: with enough, every model stays on the '
                              'device with batched guidance and cuDNN attention (fastest); otherwise models are built '
-                             'on the CPU and visit the device one stage at a time. resident and staged force a mode.')
+                             'on the CPU and visit the device one stage at a time, waiting in memory, or in files on '
+                             'disk when the computer has too little free memory. resident, staged (waiting in memory) '
+                             'and lean (waiting in files, read back for every generation; needs ~4 GB of disk '
+                             'space) force a mode.')
+    parser.add_argument('--lean-directory', type=Path,
+                        help='Directory for the files of the lean memory mode (default: the system temporary directory)')
     parser.add_argument('--resident-gpu', dest='memory_mode', action='store_const', const='resident',
                         help='Same as --memory-mode resident: keep models on the graphics device between pipeline phases')
     parser.add_argument('--batch-guidance', action=argparse.BooleanOptionalAction, default=None,
@@ -580,6 +628,10 @@ def main():
         parser.error('image-encoder GGUF paths must name existing files')
     if args.mesh_executable is not None and not args.mesh_executable.is_file():
         parser.error('--mesh-executable must name an existing idol_mesh executable')
+    if args.lean_directory is not None and not args.lean_directory.is_dir():
+        parser.error('--lean-directory must name an existing directory')
+    if args.memory_mode == 'lean' and (args.packed_denoiser or args.fused_kernels):
+        parser.error('--memory-mode lean does not support --packed-denoiser or --fused-kernels')
     if not 1 <= args.port <= 65535:
         parser.error('--port must be between 1 and 65535')
     if args.image_server:
@@ -605,7 +657,9 @@ def main():
     runtime = Runtime(args.model, args.output_dir, image_server=args.image_server,
                       device=args.device, packed_denoiser=args.packed_denoiser,
                       fused_kernels=args.fused_kernels,
-                      resident_gpu={'auto': None, 'resident': True, 'staged': False}[args.memory_mode],
+                      resident_gpu={'auto': None, 'resident': True, 'staged': False, 'lean': False}[args.memory_mode],
+                      lean={'auto': None, 'resident': None, 'staged': False, 'lean': True}[args.memory_mode],
+                      lean_directory=args.lean_directory,
                       image_generator=image_generator, batch_guidance=args.batch_guidance,
                       cudnn_attention=args.cudnn_attention, dino_gguf=args.dino_gguf,
                       flux_vae_gguf=args.flux_vae_gguf, mesh_executable=args.mesh_executable,

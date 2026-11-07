@@ -1,0 +1,149 @@
+{
+  "description": "Host memory (RAM) of an Idol session built and run in staged mode, whose waiting models sit in memory, compared with lean mode, whose waiting models sit in files on disk (tools/idol_lowram.py). Also the speed of restoring a model from disk, and what remains when everything is on disk.",
+  "date": "2026-11-07",
+  "machine": "Windows 11 Home, 64 GiB RAM (about 22 GiB free), NVIDIA GeForce RTX 4090 (24,564 MiB), PyTorch 2.10.0+cu128. The graphics device was shared throughout with an unrelated workload at 100% utilization using 16 to 20 GiB, so every elapsed time here is contaminated; memory figures are not affected by that.",
+  "model": {
+    "file": "Idol-Q8_0.gguf (TimeLordRaps/Idol-GGUF)",
+    "sha256": "1f6875979bac8c8aecacf0c698662b7c63ff54ae1b6d7c06755297a05607e983"
+  },
+  "inputs": {
+    "image": "assets/gallery/axolotl.webp",
+    "mode": "real",
+    "steps": 2,
+    "seed": 42,
+    "gaussians": 262144,
+    "encoders": "original DINOv3 and FLUX.2 autoencoder, bfloat16",
+    "decoders": "GPU decoders",
+    "note": "Two denoising steps instead of 50 keep each run short; host memory does not depend on the step count, but the point cloud compared below is a two-step result."
+  },
+  "metric": {
+    "name": "private working set",
+    "definition": "Pages resident in the process that are not file-backed or shareable (the Windows Task Manager 'Memory' column), read from QueryWorkingSet every 200 ms, so a shorter peak can be missed. The process working set (RSS) also counts memory-mapped model files and PyTorch's mapped libraries, which the system can drop and read again; it was 7,799 to 7,918 MiB in staged mode and 5,494 to 7,907 MiB in lean mode, and is not the memory that must fit.",
+    "phases": "Peaks are labelled by the last pipeline checkpoint passed: 'checkpoint 1' to '3' are the denoiser, background remover and image encoders being built, 'checkpoint 5' the decoders, 'checkpoint 6' onward one generation."
+  },
+  "peaks_mib": {
+    "staged": {
+      "whole_run": [
+        5175,
+        5183
+      ],
+      "building_the_image_encoders": [
+        4079,
+        4105
+      ],
+      "building_the_decoders": [
+        4661,
+        4792
+      ],
+      "one_generation": [
+        5175,
+        5183
+      ]
+    },
+    "lean": {
+      "whole_run": [
+        3274,
+        3286
+      ],
+      "building_the_image_encoders": [
+        2578,
+        2580
+      ],
+      "building_the_decoders": [
+        2188,
+        2280
+      ],
+      "one_generation": [
+        3274,
+        3286
+      ]
+    },
+    "note": "Two runs of each, in the order given; the pairs agree within 0.3%. The thresholds in tools/idol_memory.py use the larger value."
+  },
+  "lean_cache_mib": 3704,
+  "output": {
+    "result": "The point cloud (17,826,208 bytes, SHA-256 528eddebadb2b446332be0fca994faf2fcf10129bb551a3789b5841f07813bce) was byte-identical in 2 staged runs and 5 lean runs, including runs before and after the faster reader below.",
+    "limit": "One image, one seed, two steps."
+  },
+  "floor": {
+    "description": "Private working set at steps of a lean session, in MiB (two separate processes).",
+    "bare_process": {
+      "torch imported": 358,
+      "CUDA initialised": 472,
+      "after one matrix multiply": 604,
+      "after one cuDNN convolution": 650,
+      "after cleanup": 674
+    },
+    "lean_session_built": [
+      1640,
+      2238
+    ],
+    "after_one_generation": 3350,
+    "after_closing_session_and_cache": 3348,
+    "live_cpu_tensor_storage_mib": 0,
+    "reading": "Nothing in the process accounts for the memory above the 674 MiB of a bare PyTorch and CUDA process: no CPU tensor of any size was alive after a generation (6 tiny storages), and closing the session and deleting the cache did not lower it. A walk of the address space after the build found 3,724 MiB committed in private regions, 1,057 MiB of it in regions of 64 to 128 MiB and 1,961 MiB in regions of 16 to 64 MiB, which is the pattern of driver and allocator reservations; committed is not resident, and no further attribution was made. This is why lean mode stops at about 3.3 GB: the remaining memory is held by PyTorch, CUDA and the graphics driver, not by the models."
+  },
+  "restore": {
+    "description": "Reading the real lean cache files back, best of two repeats, into buffers of the stored types. The graphics device was busy with another workload, which slows copies to it.",
+    "safetensors_get_tensor_seconds": {
+      "host": 2.06,
+      "device": 7.04
+    },
+    "in_order_double_buffered_seconds": {
+      "host": 0.98,
+      "device": 3.45
+    },
+    "per_model_device_seconds": {
+      "denoiser": [
+        1.52,
+        0.66
+      ],
+      "background remover": [
+        1.8,
+        0.89
+      ],
+      "image encoders": [
+        2.73,
+        1.41
+      ],
+      "image autoencoder": [
+        0.24,
+        0.18
+      ],
+      "octree decoder": [
+        0.2,
+        0.09
+      ],
+      "Gaussian decoder": [
+        0.55,
+        0.21
+      ]
+    },
+    "per_model_note": "[safetensors, in order]. Sizes in MiB as stored: denoiser 741, background remover 844 (stored in full precision; the session runs it in half precision, so a real restore converts it), image encoders 1,603, image autoencoder 160, octree decoder 113, Gaussian decoder 241.",
+    "single_buffered_reader_device_seconds": {
+      "safetensors_get_tensor": 15.8,
+      "in_order": 7.85,
+      "note": "An earlier run with one buffer, while the device was busier."
+    },
+    "many_small_tensors": "On a synthetic model of 1,560 tensors (492 MiB) get_tensor ran at 72 to 84 MiB/s and the in-order reader at 929 to 1,042 MiB/s, because get_tensor costs milliseconds per tensor on Windows. On 250 large tensors (1,600 MiB) the in-order reader was 1.4 to 1.5 times faster."
+  },
+  "elapsed_seconds_unreliable": {
+    "staged_vs_lean_two_step_generation": {
+      "first_pair_with_the_slower_reader": [
+        7.7,
+        21.7
+      ],
+      "second_pair": [
+        49.5,
+        28.2
+      ]
+    },
+    "note": "The pairs disagree in sign because the graphics device was shared with another workload; they are not a measurement of lean mode's cost. A generation in lean mode restores about 3.7 GB, which took 3.5 s in the restore measurement above."
+  },
+  "not_established": [
+    "A run on a computer with little memory. No machine with 4, 6 or 8 GB was available; the figures are of the process on a 64 GiB computer, where Windows does not take memory back from it.",
+    "The operating system's own use, which is why the thresholds add a 1,024 MiB headroom.",
+    "Linux or macOS; the metric is a Windows one.",
+    "Host memory of the separate image generator for text prompts."
+  ]
+}

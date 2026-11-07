@@ -149,6 +149,10 @@ if(IDOL_BUILD_TESTS)
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/python/test_idol_staging.py")
         set_tests_properties(idol_staging PROPERTIES SKIP_RETURN_CODE 77)
 
+        add_test(NAME idol_lowram COMMAND Python3::Interpreter
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/python/test_idol_lowram.py")
+        set_tests_properties(idol_lowram PROPERTIES SKIP_RETURN_CODE 77)
+
         add_test(NAME render_splats_preview COMMAND Python3::Interpreter
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/python/test_render_splats_preview.py")
         set_tests_properties(render_splats_preview PROPERTIES SKIP_RETURN_CODE 77)
