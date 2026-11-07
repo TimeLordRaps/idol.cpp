@@ -5,7 +5,7 @@ ARG TORCH_INDEX_URL=https://download.pytorch.org/whl/cu128
 ARG IDOL_SDK_REVISION=4702a7f00850e34b6e83a2170cc123c3e9570744
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential ca-certificates cmake git ninja-build python3 python3-venv \
+    build-essential ca-certificates cmake git ninja-build python3 python3-dev python3-venv \
     && rm -rf /var/lib/apt/lists/*
 RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:${PATH}" IDOL_SDK=/opt/idol-sdk

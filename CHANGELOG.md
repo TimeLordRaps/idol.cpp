@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Ignore local build variants, the cloned upstream SDK, and test caches.
+- Install `python3-dev` in the Docker image so Triton can compile its CUDA helper and the fused-kernel path runs in the container.
 
 ## 0.1.0 (2026-11-06)
 
