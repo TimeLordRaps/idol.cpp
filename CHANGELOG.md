@@ -1,6 +1,13 @@
 # Changelog
 
-## Unreleased
+## 0.1.1 (2026-11-08)
+
+- Add automated multi-platform release workflow (`.github/workflows/release.yml`) building precompiled binaries and complete bundles for Windows x64 (MSVC), Linux x64 (GCC), and macOS x64 (Rosetta 2 with AVX2), with checksum generation (`SHA256SUMS.txt`) and automatic GitHub Release publication.
+- Add zero-friction launchers and setup scripts (`run.bat`, `run.sh`, `setup.bat`, `setup.sh`) that automatically detect hardware, create virtual environments, install CUDA or CPU PyTorch, and run the server without requiring CMake, a C++ compiler, or manual git clones.
+- Automatically resolve native binaries in `bin/`, root `.`, and `build/` in `tools/idol_mesh_tools.py` and `tools/idol_generate.py`, removing the need for explicit `--mesh-executable` or `--decoder` parameters.
+- Update `idol-server` and `idol-server.cmd` to automatically detect and run using `.venv` when present.
+- Add Windows CI job (`windows-latest`, MSVC) to `.github/workflows/ci.yml` to continuously test native build, C++ unit tests, and server integration on Windows.
+- Add CPack integration to `CMakeLists.txt` for standard package generation.
 
 - Add a low-memory "lean" mode that keeps the Idol models that are waiting on disk instead of in host memory (`tools/idol_lowram.py`, `tools/idol_generate_lean.py`, `--memory-mode lean`, `--lean-directory`): on Windows the process peaked at 3,286 MiB of private working set instead of 5,183 MiB, with byte-identical output. `--memory-mode auto` chooses it when the computer has less than 6,207 MiB of free memory and 4,728 MiB of free disk space (`idol_memory.plan_host`, `query_host_memory`, `free_disk_mib`). In a container with a hard 4 GB memory limit and no swap, lean mode completed two generations and staged mode was killed. Measurements, including what was not established, are in `docs/data/idol-lowram.json`.
 - Measure the host memory of the image generator and of complete text-to-3D requests (`docs/data/text-prompt-host-memory.json`): the generator needs about 6.8 GB of private host memory at graphics budgets of 4 GiB and below and sets the peak of a text prompt (7.0 GB in staged and lean mode alike); its `--mmap` option kept private memory at 1.2 to 1.4 GB with a byte-identical image. The server now passes `--mmap` to the generator when the free system memory is below what it holds at the graphics budget in use (`idol_memory.plan_image_host`, configuration key `mmap`, `setup_iris.py --mmap`); a whole text-to-3D request in lean mode with mapping peaked at 3.8 GB of private host memory instead of 7.0 GB, with the same point cloud.

@@ -18,6 +18,27 @@ DINOv3 is the third generation of the self-distillation with no labels vision-mo
 
 ## Install
 
+### Quickstart with Prebuilt Releases (No C++ compiler required)
+
+Precompiled releases are available under [GitHub Releases](https://github.com/TimeLordRaps/idol.cpp/releases) for Windows, Linux, and macOS. These archives include the native C++ decoders (`idol_mesh`, `idol_decode`, `idol_octree_compare`) and automated setup/launch scripts:
+
+| Platform | Recommended package | Minimal binaries | Notes |
+|---|---|---|---|
+| **Windows (x64)** | `idol-v*-win-x64.zip` | `idol-v*-bin-win-x64.zip` | Extract and run `run.bat`. Automatically detects NVIDIA GPU / CUDA. |
+| **Linux (x64)** | `idol-v*-linux-x64.tar.gz` | `idol-v*-bin-linux-x64.tar.gz` | Extract and run `./run.sh`. Compatible with glibc 2.35+ (Ubuntu 22.04+, Debian 12+, Arch, Fedora). |
+| **macOS (x64)** | `idol-v*-macos-x64.tar.gz` | `idol-v*-bin-macos-x64.tar.gz` | Extract and run `./run.sh`. On Apple Silicon, runs via Rosetta 2 (requires macOS 15+ for AVX2 support). |
+
+1. Download and extract the archive for your operating system.
+2. Start the local server:
+   - **Windows**: Double-click `run.bat` (or execute `run.bat` in Command Prompt / PowerShell).
+   - **Linux / macOS**: Run `./run.sh`.
+   The launcher checks for `.venv`, creates it if needed, installs dependencies (detecting CUDA if an NVIDIA GPU is present), and starts the server.
+3. Open **http://127.0.0.1:8127** in your web browser.
+
+---
+
+### Building from Source
+
 Requirements: Python 3.10 or newer; CMake 3.21 or newer; a C++17 compiler; and an x86-64 processor supporting Advanced Vector Extensions 2 (AVX2), fused multiply-add (FMA), and 16-bit floating-point conversion (F16C). An NVIDIA graphics processing unit (GPU) with a compatible Compute Unified Device Architecture (CUDA) PyTorch installation is recommended. The native decoders run on the central processing unit (CPU).
 
 From a fresh checkout, create and activate a virtual environment, then follow [PyTorch's installation instructions](https://pytorch.org/get-started/locally/) for your device. On Windows, use `.venv\Scripts\Activate.ps1` instead of the activation command shown.
@@ -31,6 +52,8 @@ python -m pip install ./idol-sdk -r requirements-runtime.txt -r requirements-ser
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --config Release --parallel
 ```
+
+Or run `setup.bat` (Windows) / `./setup.sh` (Linux/macOS) to automate the virtual environment and dependency setup.
 
 Authenticate with Hugging Face after obtaining access to the original image encoders, then start the local server:
 

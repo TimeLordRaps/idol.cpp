@@ -252,6 +252,24 @@ def decode_gpu(model, latent, device, seed, num_gaussians, output, fused_kernels
     output_cloud.save_ply(str(output))
 
 
+def find_decoder_executable(explicit=None):
+    if explicit:
+        path = Path(explicit).resolve()
+        if not path.is_file():
+            return None
+        return str(path)
+    found = shutil.which("idol_decode")
+    if found:
+        return str(Path(found).resolve())
+    root = Path(__file__).resolve().parents[1]
+    for directory in ('', 'bin', 'build', 'build/Release'):
+        for filename in ('idol_decode', 'idol_decode.exe'):
+            path = root / directory / filename if directory else root / filename
+            if path.is_file():
+                return str(path.resolve())
+    return None
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     source = parser.add_mutually_exclusive_group(required=True)
@@ -304,7 +322,7 @@ def main():
             args.threads < 1 or args.seed < 0 or args.seed >= 2**64 or args.gaussians < 32 or args.gaussians > 1048576 or
             args.gaussians % 32 or args.rescale_t <= 0 or not np.isfinite([args.cfg_strength, args.rescale_t]).all()):
         parser.error("invalid input, output, sampling or thread parameters")
-    decoder = str(args.decoder) if args.decoder else shutil.which("idol_decode")
+    decoder = find_decoder_executable(args.decoder)
     if args.decoder_backend == 'native' and (not decoder or not Path(decoder).is_file()):
         parser.error("build idol_decode and pass --decoder or add it to PATH")
     if args.decoder_backend == 'gpu' and (torch.device(args.device).type != 'cuda' or not torch.cuda.is_available()):

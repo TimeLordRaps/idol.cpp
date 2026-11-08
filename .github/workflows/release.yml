@@ -1,0 +1,229 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag or version name (e.g. v0.1.0)'
+        required: false
+        default: 'snapshot'
+      publish_release:
+        description: 'Publish as GitHub Release'
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    name: build-windows (x64)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Determine tag name
+        shell: pwsh
+        run: |
+          $tag = if ($env:GITHUB_REF -match '^refs/tags/(.+)$') { $matches[1] } else { "${{ inputs.tag_name }}" }
+          if (-not $tag) { $tag = "snapshot" }
+          Add-Content -Path $env:GITHUB_ENV -Value "TAG=$tag"
+
+      - name: Configure CMake
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --config Release --parallel
+
+      - name: Run C++ tests
+        run: ctest --test-dir build -C Release --output-on-failure -R "^(kernels|mesh|ply|octree_compare)$"
+
+      - name: Package Windows releases
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist/bin-stage | Out-Null
+          Copy-Item build/Release/idol_mesh.exe dist/bin-stage/
+          Copy-Item build/Release/idol_decode.exe dist/bin-stage/
+          Copy-Item build/Release/idol_octree_compare.exe dist/bin-stage/
+          Copy-Item LICENSE dist/bin-stage/
+          Copy-Item README.md dist/bin-stage/
+
+          # 1. Standalone binaries zip
+          Compress-Archive -Force -Path dist/bin-stage/* -DestinationPath "dist/idol-$env:TAG-bin-win-x64.zip"
+
+          # 2. Complete package zip
+          $pkgDir = "dist/full-stage/idol-$env:TAG-win-x64"
+          New-Item -ItemType Directory -Force -Path "$pkgDir/bin" | Out-Null
+          Copy-Item build/Release/idol_mesh.exe "$pkgDir/"
+          Copy-Item build/Release/idol_decode.exe "$pkgDir/"
+          Copy-Item build/Release/idol_octree_compare.exe "$pkgDir/"
+          Copy-Item build/Release/idol_mesh.exe "$pkgDir/bin/"
+          Copy-Item build/Release/idol_decode.exe "$pkgDir/bin/"
+          Copy-Item build/Release/idol_octree_compare.exe "$pkgDir/bin/"
+          Copy-Item -Recurse tools "$pkgDir/tools"
+          Copy-Item -Recurse assets "$pkgDir/assets"
+          Copy-Item setup.bat, run.bat, setup.sh, run.sh, idol-server, idol-server.cmd "$pkgDir/"
+          Copy-Item requirements-runtime.txt, requirements-server.txt, LICENSE, README.md, THIRD_PARTY_NOTICES.md "$pkgDir/"
+
+          Compress-Archive -Force -Path "$pkgDir" -DestinationPath "dist/idol-$env:TAG-win-x64.zip"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-artifacts
+          path: dist/*.zip
+
+  build-linux:
+    name: build-linux (x64)
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Determine tag name
+        run: |
+          if [[ "$GITHUB_REF" =~ ^refs/tags/(.+)$ ]]; then
+            TAG="${BASH_REMATCH[1]}"
+          else
+            TAG="${{ inputs.tag_name }}"
+          fi
+          [ -z "$TAG" ] && TAG="snapshot"
+          echo "TAG=$TAG" >> "$GITHUB_ENV"
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y libomp-dev
+
+      - name: Configure CMake
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Run C++ tests
+        run: ctest --test-dir build --output-on-failure -R "^(kernels|mesh|ply|octree_compare)$"
+
+      - name: Package Linux releases
+        run: |
+          mkdir -p dist/bin-stage
+          cp build/idol_mesh build/idol_decode build/idol_octree_compare dist/bin-stage/
+          cp LICENSE README.md dist/bin-stage/
+          chmod +x dist/bin-stage/idol_*
+
+          # 1. Standalone binaries tar.gz
+          tar -C dist/bin-stage -czvf "dist/idol-${TAG}-bin-linux-x64.tar.gz" .
+
+          # 2. Complete package tar.gz
+          PKG_DIR="dist/full-stage/idol-${TAG}-linux-x64"
+          mkdir -p "$PKG_DIR/bin"
+          cp build/idol_mesh build/idol_decode build/idol_octree_compare "$PKG_DIR/"
+          cp build/idol_mesh build/idol_decode build/idol_octree_compare "$PKG_DIR/bin/"
+          cp -r tools assets "$PKG_DIR/"
+          cp setup.bat run.bat setup.sh run.sh idol-server idol-server.cmd "$PKG_DIR/"
+          cp requirements-runtime.txt requirements-server.txt LICENSE README.md THIRD_PARTY_NOTICES.md "$PKG_DIR/"
+          chmod +x "$PKG_DIR"/idol_* "$PKG_DIR"/bin/idol_* "$PKG_DIR"/setup.sh "$PKG_DIR"/run.sh "$PKG_DIR"/idol-server
+
+          tar -C dist/full-stage -czvf "dist/idol-${TAG}-linux-x64.tar.gz" "idol-${TAG}-linux-x64"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-artifacts
+          path: dist/*.tar.gz
+
+  build-macos:
+    name: build-macos (x64 Rosetta/Intel)
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Determine tag name
+        run: |
+          if [[ "$GITHUB_REF" =~ ^refs/tags/(.+)$ ]]; then
+            TAG="${BASH_REMATCH[1]}"
+          else
+            TAG="${{ inputs.tag_name }}"
+          fi
+          [ -z "$TAG" ] && TAG="snapshot"
+          echo "TAG=$TAG" >> "$GITHUB_ENV"
+
+      - name: Configure CMake
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES=x86_64 -DCMAKE_SYSTEM_PROCESSOR=x86_64 -DIDOL_USE_OPENMP=OFF
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Run C++ tests
+        run: ctest --test-dir build --output-on-failure -R "^(kernels|mesh|ply|octree_compare)$"
+
+      - name: Package macOS releases
+        run: |
+          mkdir -p dist/bin-stage
+          cp build/idol_mesh build/idol_decode build/idol_octree_compare dist/bin-stage/
+          cp LICENSE README.md dist/bin-stage/
+          chmod +x dist/bin-stage/idol_*
+
+          # 1. Standalone binaries tar.gz
+          tar -C dist/bin-stage -czvf "dist/idol-${TAG}-bin-macos-x64.tar.gz" .
+
+          # 2. Complete package tar.gz
+          PKG_DIR="dist/full-stage/idol-${TAG}-macos-x64"
+          mkdir -p "$PKG_DIR/bin"
+          cp build/idol_mesh build/idol_decode build/idol_octree_compare "$PKG_DIR/"
+          cp build/idol_mesh build/idol_decode build/idol_octree_compare "$PKG_DIR/bin/"
+          cp -r tools assets "$PKG_DIR/"
+          cp setup.bat run.bat setup.sh run.sh idol-server idol-server.cmd "$PKG_DIR/"
+          cp requirements-runtime.txt requirements-server.txt LICENSE README.md THIRD_PARTY_NOTICES.md "$PKG_DIR/"
+          chmod +x "$PKG_DIR"/idol_* "$PKG_DIR"/bin/idol_* "$PKG_DIR"/setup.sh "$PKG_DIR"/run.sh "$PKG_DIR"/idol-server
+
+          tar -C dist/full-stage -czvf "dist/idol-${TAG}-macos-x64.tar.gz" "idol-${TAG}-macos-x64"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-artifacts
+          path: dist/*.tar.gz
+
+  publish:
+    name: publish release
+    needs: [build-windows, build-linux, build-macos]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Determine tag name
+        run: |
+          if [[ "$GITHUB_REF" =~ ^refs/tags/(.+)$ ]]; then
+            TAG="${BASH_REMATCH[1]}"
+          else
+            TAG="${{ inputs.tag_name }}"
+          fi
+          [ -z "$TAG" ] && TAG="snapshot"
+          echo "TAG=$TAG" >> "$GITHUB_ENV"
+
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Prepare release assets and compute checksums
+        run: |
+          mkdir -p release-assets
+          find artifacts -type f \( -name "*.zip" -o -name "*.tar.gz" \) -exec cp {} release-assets/ \;
+          cd release-assets
+          sha256sum * > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+          cd ..
+
+      - name: Upload aggregated assets artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: idol-all-release-assets
+          path: release-assets/*
+
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.publish_release)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.TAG }}
+          files: |
+            release-assets/*
+          generate_release_notes: true
+          draft: false
+          prerelease: false

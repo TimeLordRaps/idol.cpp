@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.21)
 
 project(idol
-    VERSION 0.1.0
+    VERSION 0.1.1
     DESCRIPTION "Idol image-to-3D inference and splat-to-mesh conversion"
     LANGUAGES CXX)
 
@@ -210,3 +210,15 @@ install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/idolConfig.cmake
     ${CMAKE_CURRENT_BINARY_DIR}/idolConfigVersion.cmake
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/idol)
+
+# Package generation with CPack
+set(CPACK_PACKAGE_NAME "idol")
+set(CPACK_PACKAGE_VENDOR "TimeLordRaps")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Idol image-to-3D inference and splat-to-mesh conversion")
+set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
+include(CPack)
+

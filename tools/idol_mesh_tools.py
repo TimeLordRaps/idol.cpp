@@ -33,9 +33,9 @@ def find_mesh_executable(explicit=None):
     if found:
         return Path(found).resolve()
     root = Path(__file__).resolve().parents[1]
-    for directory in ('build', 'build/Release'):
+    for directory in ('', 'bin', 'build', 'build/Release'):
         for filename in ('idol_mesh', 'idol_mesh.exe'):
-            path = root / directory / filename
+            path = root / directory / filename if directory else root / filename
             if path.is_file():
                 return path
     return None
