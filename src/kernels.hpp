@@ -9,6 +9,13 @@
 
 #include <immintrin.h>
 
+#if defined(_MSC_VER) && !defined(_cvtss_sh)
+#define _cvtss_sh(v, imm) static_cast<std::uint16_t>(_mm_cvtsi128_si32(_mm_cvtps_ph(_mm_set_ss(v), (imm))))
+inline float _cvtsh_ss(std::uint16_t h) {
+    return _mm_cvtss_f32(_mm_cvtph_ps(_mm_cvtsi32_si128(h)));
+}
+#endif
+
 #include <cstddef>
 #include <cstdint>
 #include <vector>
